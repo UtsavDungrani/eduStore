@@ -74,7 +74,7 @@
     </div>
 
     <!-- Static Bottom Checkout -->
-    <div class="mt-8 mb-8 md:mb-0 md:mt-12" x-show="cart.length > 0">
+    <div class="mt-8 mb-8 md:mb-0 md:mt-12" x-show="cart.length > 0" x-cloak>
         <div class="max-w-3xl mx-auto">
             <div class="bg-gray-900 text-white p-6 rounded-3xl shadow-2xl flex items-center justify-between">
                 <div>

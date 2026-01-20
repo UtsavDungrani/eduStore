@@ -17,7 +17,8 @@ class CartController extends Controller
         $user = auth()->user();
         $productIds = $user->getPurchasedProductIds();
         $products = \App\Models\Product::whereIn('id', $productIds)->with('category')->get();
+        $allProductIds = \App\Models\Product::pluck('id');
 
-        return view('user.library', compact('products'));
+        return view('user.library', compact('products', 'allProductIds'));
     }
 }

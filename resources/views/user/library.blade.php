@@ -220,7 +220,7 @@
                                  data-category="{{ $product->category->name ?? 'Uncategorized' }}" 
                                  data-title="{{ strtolower($product->title) }}">
                                 <div class="transform scale-90 origin-bottom">
-                                    @include('user.partials.book-card', ['product' => $product])
+                                    @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-1'])
                                 </div>
                             </div>
                         @endforeach
@@ -240,12 +240,12 @@
             @foreach($products->chunk(4) as $chunk)
                 <div class="relative shelf-container">
                     <!-- Books Row -->
-                    <div class="flex flex-wrap justify-center gap-8 md:gap-12 relative z-10 items-end px-8">
+                    <div class="flex flex-wrap justify-between gap-4 relative z-10 items-end px-12 md:px-20">
                         @foreach($chunk as $product)
                             <div class="purchased-item" 
                                  data-category="{{ $product->category->name ?? 'Uncategorized' }}" 
                                  data-title="{{ strtolower($product->title) }}">
-                                @include('user.partials.book-card', ['product' => $product])
+                                @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-6'])
                             </div>
                         @endforeach
                     </div>
@@ -322,6 +322,10 @@
     }
 </style>
 <script>
+    @if(isset($allProductIds))
+        window.VALID_PRODUCT_IDS = @json($allProductIds);
+    @endif
+
     document.addEventListener('DOMContentLoaded', function() {
         const swiperOptions = {
             slidesPerView: 1,

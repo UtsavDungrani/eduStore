@@ -67,8 +67,22 @@ class ContentController extends Controller
 
     public function download(Request $request, Product $product)
     {
-        // Check permission for download
-        if ((!$product->is_downloadable && !$product->is_demo) || !auth()->user()->can('download content')) {
+        $user = auth()->user();
+        
+        // Authorization logic:
+        // - Super Admin can always download
+        // - Users with 'download content' permission can always download
+        // - Regular users can download if it's a demo
+        // - Regular users can download if they purchased it AND it's marked as downloadable
+        // - Regular users can download if it's free AND it's marked as downloadable
+        
+        $canDownload = $user->hasRole('Super Admin') || 
+                       $user->can('download content') ||
+                       $product->is_demo ||
+                       ($user->hasPurchased($product->id) && $product->is_downloadable) ||
+                       ($product->price == 0 && $product->is_downloadable);
+
+        if (!$canDownload) {
             abort(403, 'Downloading this content is restricted.');
         }
 

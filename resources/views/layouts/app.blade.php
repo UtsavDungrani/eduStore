@@ -174,7 +174,7 @@
             left: 0;
             right: 0;
             width: 100%;
-            min-height: 72px;
+            height: 72px; /* Fixed height for stability */
             z-index: 2147483647 !important;
             background-color: white !important;
             border-top: 1px solid #e5e7eb !important;
@@ -183,10 +183,7 @@
             flex-direction: row !important;
             justify-content: center !important;
             align-items: stretch !important;
-            padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
-            padding-top: 8px !important;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
+            padding: 8px 0 max(20px, env(safe-area-inset-bottom)) 0 !important;
             visibility: visible !important;
             opacity: 1 !important;
             transform: translateZ(0) !important;
@@ -230,6 +227,24 @@
             line-height: 1;
             display: block;
         }
+
+        /* Critical Utilities (Tailwind Polyfills for Initial Render) */
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .gap-1 { gap: 0.25rem; }
+        .hidden { display: none; }
+        .blur-sm { filter: blur(4px); }
+        .rounded-full { border-radius: 9999px; }
+        .bg-primary\/10 { background-color: rgba(var(--primary-rgb, 59, 130, 246), 0.1); }
+        .bg-red-500 { background-color: #ef4444 !important; }
+        .text-white { color: #ffffff !important; }
+        .font-bold { font-weight: 700 !important; }
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
 
         /* Critical Colors & Utilities */
         .text-primary {
@@ -322,7 +337,19 @@
                 },
                 loadBooks() {
                     try {
-                        const stored = JSON.parse(localStorage.getItem('my_library_books') || '[]');
+                        let stored = JSON.parse(localStorage.getItem('my_library_books') || '[]');
+                        
+                        // Backend Validation (Active on Library Page)
+                        if (window.VALID_PRODUCT_IDS && Array.isArray(window.VALID_PRODUCT_IDS)) {
+                            const initialCount = stored.length;
+                            stored = stored.filter(book => window.VALID_PRODUCT_IDS.includes(book.id));
+                            
+                            // If items were removed, update storage immediately
+                            if (stored.length !== initialCount) {
+                                localStorage.setItem('my_library_books', JSON.stringify(stored));
+                            }
+                        }
+
                         this.books = stored.reverse();
                         this.hasBooks = this.books.length > 0;
                     } catch (e) {
@@ -384,7 +411,9 @@
                     nav.style.display = 'flex';
                     nav.style.position = 'fixed';
                     nav.style.bottom = '0';
+                    nav.style.height = '72px';
                     nav.style.zIndex = '2147483647';
+                    nav.style.overflow = 'hidden';
                 }
             })();
     </script>
@@ -431,7 +460,7 @@
                             <span>Cart</span>
                             <span x-data="{ count: 0 }"
                                 x-init="count = JSON.parse(localStorage.getItem(window.CART_KEY) || '[]').length; window.addEventListener('cart-updated', () => count = JSON.parse(localStorage.getItem(window.CART_KEY) || '[]').length)"
-                                x-show="count > 0" x-text="count"
+                                x-show="count > 0" x-text="count" x-cloak
                                 class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white"></span>
                         </a>
 

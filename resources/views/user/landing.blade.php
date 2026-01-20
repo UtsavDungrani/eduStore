@@ -70,27 +70,54 @@
     </div>
 
     @if($featuredProducts->count() > 0)
-        <!-- Auto-Sliding Bookshelf (All Devices) -->
-        <div class="relative shelf-container mt-12 mb-12 w-full max-w-[100vw]">
-            <div class="swiper featuredSwiper w-full !overflow-visible" style="padding-bottom: 20px;">
-                <div class="swiper-wrapper relative z-10">
-                    @foreach($featuredProducts as $product)
-                        <div class="swiper-slide flex justify-center items-end" style="height: auto;">
-                            <!-- Scale wrapper to ensure book fits well on shelf -->
-                            <div class="transform scale-90 origin-bottom transition-transform duration-300 hover:scale-100 hover:z-20">
-                                @include('user.partials.book-card', ['product' => $product])
+        <!-- Mobile Slider (Featured Content) -->
+        <div class="md:hidden">
+            <div class="relative shelf-container mb-12">
+                <div class="swiper featuredMobileSwiper w-full !overflow-visible">
+                    <div class="swiper-wrapper relative z-10">
+                        @foreach($featuredProducts as $product)
+                            <div class="swiper-slide flex justify-center items-end pb-4" 
+                                 data-category="{{ $product->category->name ?? 'Uncategorized' }}" 
+                                 data-title="{{ strtolower($product->title) }}">
+                                <div class="transform scale-90 origin-bottom">
+                                    @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-1'])
+                                </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
+                <!-- Shelf Board -->
+                <div class="absolute bottom-0 left-0 right-0 h-8 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
+                    <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
+                </div>
+                <!-- Shelf Shadow/Depth -->
+                <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
             </div>
-            
-            <!-- Shelf Board -->
-            <div class="absolute bottom-0 left-0 right-0 h-8 md:h-12 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
-            </div>
-            <!-- Shelf Shadow/Depth -->
-            <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
+        </div>
+
+        <!-- Desktop Shelf (Featured Content) -->
+        <div class="hidden md:block space-y-20 mt-12" id="featured-content-desktop">
+            @foreach($featuredProducts->chunk(4) as $chunk)
+                <div class="relative shelf-container">
+                    <!-- Books Row -->
+                    <div class="flex flex-wrap justify-between gap-4 relative z-10 items-end px-12 md:px-20">
+                        @foreach($chunk as $product)
+                            <div class="featured-item" 
+                                 data-category="{{ $product->category->name ?? 'Uncategorized' }}" 
+                                 data-title="{{ strtolower($product->title) }}">
+                                @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-6'])
+                            </div>
+                        @endforeach
+                    </div>
+                    
+                    <!-- Shelf Board -->
+                    <div class="absolute bottom-0 left-0 right-0 h-8 md:h-12 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden">
+                        <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
+                    </div>
+                    <!-- Shelf Shadow/Depth -->
+                    <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
+                </div>
+            @endforeach
         </div>
     @else
         <div class="bg-gray-50 rounded-xl p-12 text-center border border-dashed border-gray-200">
@@ -126,6 +153,15 @@
         margin-right: auto;
     }
 
+    /* Centering Override for Slider (Match Library) */
+    .featuredMobileSwiper .book-container {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        transform: translateX(22px); /* Compensation for spine */
+    }
+
     /* Shelf Wooden Texture */
     .shelf-container::before {
         content: '';
@@ -150,33 +186,15 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Optimization: Defer heavy Swiper initialization to allow Critical CSS (Navbar) to paint first
         setTimeout(() => {
-            var featuredSwiper = new Swiper(".featuredSwiper", {
+            var featuredMobileSwiper = new Swiper(".featuredMobileSwiper", {
                 slidesPerView: 1,
-                spaceBetween: 10,
+                centeredSlides: true,
                 loop: true,
                 autoplay: {
-                    delay: 3000,
+                    delay: 2500,
                     disableOnInteraction: false,
-                    pauseOnMouseEnter: true
                 },
-                breakpoints: {
-                    640: {
-                        slidesPerView: 2,
-                        spaceBetween: 20,
-                    },
-                    768: {
-                        slidesPerView: 3,
-                        spaceBetween: 40,
-                    },
-                    1024: {
-                        slidesPerView: 4,
-                        spaceBetween: 50,
-                    },
-                },
-                // Performance: disable observer if not needed, but keep watchSlidesProgress for 3D
-                watchSlidesProgress: true,
-                observer: true,
-                observeParents: true,
+                // Removed breakpoints as desktop is now grid
             });
         }, 50); // Small 50ms delay for paint
 

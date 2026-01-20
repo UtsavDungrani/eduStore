@@ -1,4 +1,4 @@
-<div class="book-container group relative w-48 h-72 perspective-1000 mx-auto my-4 cursor-pointer" 
+<div class="book-container group relative w-48 h-72 perspective-1000 mx-auto {{ $marginClass ?? 'my-4' }} cursor-pointer" 
      onclick="window.location.href='{{ route('products.show', $product->slug) }}'">
     <div class="book relative w-full h-full transform-style-3d transition-transform duration-500 group-hover:rotate-y-[-20deg] shadow-xl">
         
