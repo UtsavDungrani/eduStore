@@ -116,7 +116,7 @@
                             <div class="swiper-wrapper relative z-10">
                                 <template x-for="book in books" :key="book.id">
                                     <div class="swiper-slide flex justify-center items-end pb-4 cont-read-item" :data-title="book.title.toLowerCase()" :data-category="book.category">
-                                         <div class="book-container group relative w-40 h-60 perspective-1000 z-20 cursor-pointer transform scale-90 origin-bottom" 
+                                         <div class="book-container group relative w-40 h-60 perspective-1000 z-20 cursor-pointer origin-bottom" 
                                              @click="window.location.href = book.url"
                                              :data-title="book.title.toLowerCase()">
                                             <div class="book relative w-full h-full transform-style-3d transition-transform duration-500 group-hover:rotate-y-[-20deg] shadow-xl">
@@ -173,8 +173,8 @@
                             </div>
     
                             <!-- Navigation Buttons -->
-                            <div class="swiper-button-prev !text-primary !w-8 !h-8 bg-white/80 backdrop-blur shadow-md rounded-full after:!text-sm hover:bg-white transition-all transform -translate-x-2"><i class="fas fa-chevron-left"></i></div>
-                            <div class="swiper-button-next !text-primary !w-8 !h-8 bg-white/80 backdrop-blur shadow-md rounded-full after:!text-sm hover:bg-white transition-all transform translate-x-2"><i class="fas fa-chevron-right"></i></div>
+                            <div x-show="books.length > 1" class="swiper-button-prev !text-primary !w-8 !h-8 bg-white/80 backdrop-blur shadow-md rounded-full after:!text-sm hover:bg-white transition-all transform -translate-x-2"><i class="fas fa-chevron-left"></i></div>
+                            <div x-show="books.length > 1" class="swiper-button-next !text-primary !w-8 !h-8 bg-white/80 backdrop-blur shadow-md rounded-full after:!text-sm hover:bg-white transition-all transform translate-x-2"><i class="fas fa-chevron-right"></i></div>
                         </div>
                         <!-- Shelf Board -->
                         <div class="absolute bottom-0 left-0 right-0 h-8 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
@@ -279,12 +279,17 @@
                                     <div class="swiper-slide flex justify-center items-end pb-4" 
                                          data-category="{{ $product->category->name ?? 'Uncategorized' }}" 
                                          data-title="{{ strtolower($product->title) }}">
-                                        <div class="transform scale-90 origin-bottom">
+                                        <div class="origin-bottom">
                                             @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-1'])
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
+                            <!-- Navigation Buttons -->
+                            @if($products->count() > 1)
+                                <div class="swiper-button-prev !text-primary !w-8 !h-8 bg-white/80 backdrop-blur shadow-md rounded-full after:!text-sm hover:bg-white transition-all transform -translate-x-2"><i class="fas fa-chevron-left"></i></div>
+                                <div class="swiper-button-next !text-primary !w-8 !h-8 bg-white/80 backdrop-blur shadow-md rounded-full after:!text-sm hover:bg-white transition-all transform translate-x-2"><i class="fas fa-chevron-right"></i></div>
+                            @endif
                         </div>
                         <!-- Shelf Board -->
                         <div class="absolute bottom-0 left-0 right-0 h-8 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
@@ -408,7 +413,7 @@
         margin-right: auto !important;
         margin-top: 0 !important;
         margin-bottom: 0 !important;
-        transform: translateX(22px); /* Compensation for spine */
+        transform: translateX(20px); /* Compensation for spine */
     }
     
     /* 3D Book Effects */
@@ -486,10 +491,8 @@
         setTimeout(() => {
             recentSwiper = new Swiper(".recentSwiper", swiperOptions);
             
-            // Purchased Swiper without navigation unless requested
-            const purchasedOptions = { ...swiperOptions };
-            delete purchasedOptions.navigation;
-            purchasedSwiper = new Swiper(".purchasedSwiper", purchasedOptions);
+            // Purchased Swiper
+            purchasedSwiper = new Swiper(".purchasedSwiper", swiperOptions);
         }, 100);
 
         // Search and Filtering Logic

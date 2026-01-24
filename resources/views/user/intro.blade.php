@@ -73,20 +73,35 @@
     <div class="parchment-texture"></div>
 
     <!-- Content -->
-    <div class="relative z-10 text-center p-8 transition-opacity duration-1000" id="intro-content">
-        <!-- Logo/Icon Placeholder (Open Book) -->
-        <div class="mb-6 opacity-0 animate-[fadeIn_1s_ease-out_forwards]">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto text-[#2C1810]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
+    <div class="relative z-10 text-center p-6 md:p-12 transition-opacity duration-1000" id="intro-content">
+        <!-- Logo/Icon (Open Book) -->
+        <div class="mb-8 opacity-0 animate-[fadeIn_1.2s_ease-out_forwards]">
+            <div class="relative inline-block">
+                <div class="absolute inset-0 bg-academic-gold blur-3xl opacity-20 animate-pulse"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-28 w-28 md:h-36 md:w-36 mx-auto text-academic-base relative z-10 drop-shadow-2xl" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
         </div>
 
-        <h1 class="text-4xl md:text-6xl font-bold text-[#2C1810] mb-4 opacity-0 animate-[fadeIn_1s_ease-out_0.5s_forwards] text-glow">
-            Upgrade your learning <br/>
-            <span class="text-[#D4AF37] italic">with EduStore</span>
-        </h1>
+        <div class="space-y-6 opacity-0 animate-[fadeIn_1.2s_ease-out_0.6s_forwards]">
+            <h1 class="text-5xl md:text-8xl font-bold text-academic-base tracking-tight leading-[1.1] text-glow font-serif">
+                Upgrade your learning <br/>
+                <span class="text-academic-gold italic block mt-2 md:mt-4">with {{ config('app.name', 'EduStore') }}</span>
+            </h1>
+            
+            <div class="h-1 w-24 md:w-32 bg-academic-gold mx-auto rounded-full opacity-60"></div>
+            
+            <p class="text-academic-base/70 text-xl md:text-2xl font-medium tracking-wide max-w-2xl mx-auto">
+                Premium assignments, E-books, and study notes at your fingertips.
+            </p>
+        </div>
         
-        <p class="text-[#8B4513] mt-8 text-lg animate-pulse">Click anywhere to skip</p>
+        <div class="mt-16 opacity-0 animate-[fadeIn_1.2s_ease-out_1.2s_forwards]">
+            <p class="text-[#8B4513] text-sm md:text-base font-bold uppercase tracking-[0.3em] animate-pulse">
+                Click anywhere to enter
+            </p>
+        </div>
     </div>
 
     <script>

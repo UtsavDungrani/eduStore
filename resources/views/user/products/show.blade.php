@@ -42,32 +42,60 @@
 
             <h1 class="text-4xl font-extrabold text-gray-900 mb-4 leading-tight">{{ $product->title }}</h1>
             
-            <!-- Pricing & Badges -->
-            <div class="flex items-center gap-4 mb-8">
-                @if($product->on_sale)
-                    <div class="flex items-baseline gap-3">
-                        <span class="text-5xl font-black text-red-600">₹{{ number_format($product->selling_price, 2) }}</span>
-                        @if($product->original_price > $product->selling_price)
-                            <span class="text-2xl text-gray-400 line-through font-bold">₹{{ number_format($product->original_price, 2) }}</span>
+            <!-- Pricing & Badges (Refined) -->
+            @php
+                $isDiscounted = ($product->original_price > $product->selling_price);
+                $savings = $isDiscounted ? ($product->original_price - $product->selling_price) : 0;
+                $saleTag = $product->sale_tag;
+                if ($saleTag && str_contains($saleTag, '%') && !str_contains(strtoupper($saleTag), 'OFF')) {
+                    $saleTag .= ' OFF';
+                }
+            @endphp
+
+            <div class="bg-white border border-gray-100 rounded-3xl p-6 mb-10 shadow-sm relative overflow-hidden group">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 items-start relative z-10">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Exclusive Access</span>
+                             @if($isDiscounted)
+                                <span class="bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded-sm uppercase transform -skew-x-12">
+                                    Special Deal
+                                </span>
+                             @endif
+                        </div>
+
+                        <div class="flex items-baseline gap-4">
+                            <span class="text-5xl font-black text-primary">₹{{ number_format($product->selling_price, 2) }}</span>
+                            @if($isDiscounted)
+                                <span class="text-xl text-gray-400 line-through font-bold decoration-red-500/50">₹{{ number_format($product->original_price, 2) }}</span>
+                            @endif
+                        </div>
+
+                        @if($isDiscounted)
+                            <p class="text-emerald-700 font-bold mt-2 flex items-center gap-2 text-sm">
+                                <i class="fas fa-circle-check"></i> Instant Savings: ₹{{ number_format($savings, 2) }}
+                            </p>
                         @endif
                     </div>
-                     <span class="bg-red-100 text-red-700 text-sm font-bold px-4 py-2 rounded-full uppercase tracking-wider self-start mt-2 animate-bounce flex items-center gap-2">
-                        <i class="fas fa-tag"></i> {{ $product->sale_tag ?? 'Special Offer' }}
-                    </span>
-                @elseif($product->original_price && $product->original_price > $product->price)
-                    <div class="flex items-baseline gap-3">
-                        <span class="text-5xl font-black text-red-600">₹{{ number_format($product->price, 2) }}</span>
-                        <span class="text-2xl text-gray-400 line-through font-bold">₹{{ number_format($product->original_price, 2) }}</span>
-                    </div>
-                    @if($product->sale_tag)
-                        <span class="bg-red-100 text-red-700 text-sm font-bold px-4 py-2 rounded-full uppercase tracking-wider self-start mt-2 animate-bounce">{{ $product->sale_tag }}</span>
+
+                    @if($saleTag)
+                        <div class="flex flex-col items-center gap-1 bg-red-50 border border-red-100 px-6 py-3 rounded-2xl shadow-sm animate-bounce">
+                            <span class="text-2xl font-black text-red-600 leading-none">{{ $saleTag }}</span>
+                            <span class="text-[10px] uppercase font-bold text-red-700 tracking-tighter opacity-70 italic whitespace-nowrap">Offer Applied</span>
+                        </div>
                     @else
-                        <span class="bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider self-start mt-3">Sale Offer</span>
+                        <div class="bg-green-50 text-green-700 border border-green-100 px-5 py-3 rounded-2xl">
+                            <span class="text-xs font-bold uppercase tracking-widest flex items-center gap-2 whitespace-nowrap">
+                                <i class="fas fa-check-circle"></i> Lifetime Access
+                            </span>
+                        </div>
                     @endif
-                @else
-                    <span class="text-5xl font-black text-primary">₹{{ number_format($product->price, 2) }}</span>
-                    <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider self-center">Available Now</span>
-                @endif
+                </div>
+                
+                <!-- Background Decoration -->
+                <div class="absolute -right-4 -bottom-4 opacity-[0.02] text-8xl transform -rotate-12 group-hover:scale-110 transition-transform duration-700">
+                    <i class="fas fa-certificate text-primary"></i>
+                </div>
             </div>
 
             <div class="prose prose-blue max-w-none text-gray-600 mb-10">
