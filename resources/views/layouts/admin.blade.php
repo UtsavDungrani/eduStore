@@ -159,9 +159,26 @@
                         <i class="fas fa-chart-line w-6"></i>
                         <span class="ml-3">Dashboard</span>
                     </a>
+                    <a href="{{ route('admin.analytics') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.analytics') ? 'bg-blue-50 text-primary' : '' }}">
+                        <i class="fas fa-chart-pie w-6"></i>
+                        <span class="ml-3">Analytics</span>
+                    </a>
+                    <a href="{{ route('admin.instructors.payouts') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.instructors.payouts') ? 'bg-blue-50 text-primary' : '' }}">
+                        <i class="fas fa-hand-holding-usd w-6"></i>
+                        <span class="ml-3">Payouts</span>
+                    </a>
                     <a href="{{ route('admin.products.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.products.*') ? 'bg-blue-50 text-primary' : '' }}">
                         <i class="fas fa-box w-6"></i>
                         <span class="ml-3">Products</span>
+                    </a>
+                    @role('Super Admin')
+                    <a href="{{ route('admin.featured.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.featured.*') ? 'bg-blue-50 text-primary' : '' }}">
+                        <i class="fas fa-star w-6"></i>
+                        <span class="ml-3">Featured Content</span>
+                    </a>
+                    <a href="{{ route('admin.recent.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.recent.*') ? 'bg-blue-50 text-primary' : '' }}">
+                        <i class="fas fa-plus-circle w-6"></i>
+                        <span class="ml-3">Recently Added</span>
                     </a>
                     <a href="{{ route('admin.categories.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.categories.*') ? 'bg-blue-50 text-primary' : '' }}">
                         <i class="fas fa-tags w-6"></i>
@@ -175,11 +192,18 @@
                         <i class="fas fa-image w-6"></i>
                         <span class="ml-3">Banners</span>
                     </a>
+                    @endrole
 
                     <a href="{{ route('admin.orders.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.orders.*') ? 'bg-blue-50 text-primary' : '' }}">
                         <i class="fas fa-shopping-basket w-6"></i>
                         <span class="ml-3">Cart Orders</span>
                     </a>
+                    <a href="{{ route('admin.payment-requests.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.payment-requests.*') ? 'bg-blue-50 text-primary' : '' }}">
+                        <i class="fas fa-receipt w-6"></i>
+                        <span class="ml-3">Single Orders</span>
+                    </a>
+
+                    @role('Super Admin')
                     <a href="{{ route('admin.logs') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.logs') ? 'bg-blue-50 text-primary' : '' }}">
                         <i class="fas fa-history w-6"></i>
                         <span class="ml-3">Access Logs</span>
@@ -188,6 +212,7 @@
                         <i class="fas fa-cog w-6"></i>
                         <span class="ml-3">Settings</span>
                     </a>
+                    @endrole
                 </nav>
 
                 <!-- Footer -->

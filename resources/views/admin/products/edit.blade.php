@@ -11,10 +11,31 @@
         @csrf
         @method('PATCH')
         
+        @if ($errors->any())
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-circle text-red-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-bold text-red-800">There were {{ $errors->count() }} errors with your submission</h3>
+                        <div class="mt-2 text-sm text-red-700">
+                            <ul class="list-disc pl-5 space-y-1">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+        
         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="md:col-span-2">
                 <label class="block text-sm font-bold text-gray-700 mb-2">Product Title</label>
-                <input type="text" name="title" value="{{ old('title', $product->title) }}" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="e.g. Engineering Drawing Assignment">
+                <input type="text" name="title" value="{{ old('title', $product->title) }}" required class="w-full px-4 py-3 rounded-xl border {{ $errors->has('title') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary" placeholder="e.g. Engineering Drawing Assignment">
+                @error('title')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
             </div>
 
             <div>
@@ -27,9 +48,11 @@
                 </select>
             </div>
 
+
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2">Current Selling Price (INR)</label>
-                <input type="number" step="0.01" name="price" value="{{ old('price', $product->price) }}" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
+                <input type="number" step="0.01" name="price" value="{{ old('price', $product->price) }}" required class="w-full px-4 py-3 rounded-xl border {{ $errors->has('price') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary">
+                @error('price')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
             </div>
 
             <div>
@@ -49,7 +72,8 @@
 
             <div class="md:col-span-2">
                 <label class="block text-sm font-bold text-gray-700 mb-2">Description</label>
-                <textarea name="description" rows="5" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="Full details about the content...">{{ old('description', $product->description) }}</textarea>
+                <textarea name="description" rows="5" class="w-full px-4 py-3 rounded-xl border {{ $errors->has('description') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary" placeholder="Full details about the content...">{{ old('description', $product->description) }}</textarea>
+                @error('description')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
             </div>
 
             <div class="md:col-span-2">
@@ -68,6 +92,7 @@
                     </div>
                 </div>
                 <div id="file-name" class="mt-2 text-sm font-bold text-primary italic">Current: {{ basename($product->file_path) }}</div>
+                @error('product_file')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
             </div>
 
             <div class="md:col-span-2">
@@ -93,6 +118,7 @@
                             </div>
                         </div>
                         <div id="image-name" class="mt-2 text-sm font-bold text-primary italic">@if($product->image_path) Keep current image @else No image set @endif</div>
+                        @error('cover_image')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
                     </div>
                 </div>
             </div>
@@ -105,6 +131,10 @@
                 <label class="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" name="is_downloadable" value="1" {{ $product->is_downloadable ? 'checked' : '' }} class="rounded text-primary focus:ring-primary">
                     <span class="text-sm font-bold text-gray-700">Allow Download</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="is_featured" value="1" {{ $product->is_featured ? 'checked' : '' }} class="rounded text-primary focus:ring-primary">
+                    <span class="text-sm font-bold text-gray-700">Is Featured</span>
                 </label>
                  <label class="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" name="is_demo" value="1" {{ $product->is_demo ? 'checked' : '' }} class="rounded text-primary focus:ring-primary">

@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 
 // User Routes
 Route::get('/', [UserProduct::class, 'home'])->name('home');
+Route::get('/intro', function () {
+    return view('user.intro');
+})->name('intro');
 Route::get('/products', [UserProduct::class, 'index'])->name('products.index');
 Route::get('/products/{product:slug}', [UserProduct::class, 'show'])->name('products.show');
 
@@ -55,23 +58,40 @@ Route::get('/banner/{banner}', [UserContent::class, 'serveBanner'])->name('banne
 Route::get('/product-cover/{product}', [UserContent::class, 'serveCover'])->name('product.cover.serve');
 
 // Admin Routes (using roles)
-Route::middleware(['auth', 'role:Super Admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:Super Admin|Instructor'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminDashboard::class, 'index'])->name('dashboard');
-    Route::get('/logs', [AdminDashboard::class, 'logs'])->name('logs');
     
-    Route::resource('users', AdminUser::class);
+    // Analytics
+    Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('analytics');
+
+    // Instructor Payouts
+    Route::get('/instructors/payouts', [\App\Http\Controllers\Admin\PayoutController::class, 'index'])->name('instructors.payouts');
+    
     Route::resource('products', AdminProduct::class);
-    Route::resource('categories', AdminCategory::class);
-    Route::resource('banners', AdminBanner::class);
-    Route::post('banners/reorder', [AdminBanner::class, 'reorder'])->name('banners.reorder');
-
-
-
     Route::resource('orders', AdminOrder::class)->only(['index', 'show']);
+    Route::resource('payment-requests', \App\Http\Controllers\Admin\PaymentRequestController::class)->only(['index', 'show', 'update']);
 
-    // Setting Management
-    Route::get('settings', [AdminSetting::class, 'index'])->name('settings.index');
-    Route::post('settings', [AdminSetting::class, 'update'])->name('settings.update');
+    // Super Admin Only
+    Route::middleware('role:Super Admin')->group(function () {
+        Route::get('/logs', [AdminDashboard::class, 'index'])->name('logs');
+        
+        // Featured Content Management
+        Route::get('/featured', [\App\Http\Controllers\Admin\FeaturedContentController::class, 'index'])->name('featured.index');
+        Route::post('/featured', [\App\Http\Controllers\Admin\FeaturedContentController::class, 'update'])->name('featured.update');
+
+        // Recently Added Management
+        Route::get('/recent', [\App\Http\Controllers\Admin\RecentContentController::class, 'index'])->name('recent.index');
+        Route::post('/recent', [\App\Http\Controllers\Admin\RecentContentController::class, 'update'])->name('recent.update');
+
+        Route::resource('users', AdminUser::class);
+        Route::resource('categories', AdminCategory::class);
+        Route::resource('banners', AdminBanner::class);
+        Route::post('banners/reorder', [AdminBanner::class, 'reorder'])->name('banners.reorder');
+
+        // Setting Management
+        Route::get('settings', [AdminSetting::class, 'index'])->name('settings.index');
+        Route::post('settings', [AdminSetting::class, 'update'])->name('settings.update');
+    });
 });
 
 require __DIR__.'/auth.php';

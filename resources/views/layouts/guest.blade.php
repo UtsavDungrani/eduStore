@@ -47,16 +47,22 @@
         </style>
         <script src="{{ asset('js/security.js') }}"></script>
     </head>
-    <body class="font-sans text-gray-900 antialiased no-select">
-        <div class="min-h-screen flex flex-col justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+    <body class="font-sans text-[#2C1810] antialiased no-select">
+        <div class="min-h-screen flex flex-col justify-center items-center pt-6 sm:pt-0" style="background: linear-gradient(135deg, #2C1810 0%, #3E2723 50%, #1A0D00 100%);">
             <div>
                 <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                    <x-application-logo class="w-24 h-24 fill-current text-[#D4AF37] drop-shadow-md" style="color: #D4AF37;" />
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
+            <div class="w-full sm:max-w-md mt-6 px-8 py-8 shadow-2xl overflow-hidden sm:rounded-[2rem] border relative group" 
+                 style="background-color: #FDF6E3; border-color: rgba(139, 69, 19, 0.3);">
+                 <!-- Shine Effect -->
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#D4AF37]/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 pointer-events-none"></div>
+                
+                <div class="relative z-10">
+                    {{ $slot }}
+                </div>
             </div>
         </div>
     </body>

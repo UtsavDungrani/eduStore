@@ -13,7 +13,7 @@
             <!-- Title Overlay (Refined) -->
             <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent text-white rounded-br-md">
                 <h3 class="font-serif font-bold text-lg leading-tight line-clamp-2 shadow-sm">{{ $product->title }}</h3>
-                <p class="text-xs text-gray-300 mt-1 font-sans">{{ $product->category->name }}</p>
+                <p class="text-xs text-gray-200 mt-1 font-sans font-medium">{{ $product->category->name }}</p>
             </div>
             
             <!-- Sale Tag -->

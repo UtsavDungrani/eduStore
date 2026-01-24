@@ -8,6 +8,7 @@ class Product extends Model
 {
     protected $fillable = [
         'category_id',
+        'user_id',
         'title',
         'slug',
         'description',
@@ -19,8 +20,15 @@ class Product extends Model
         'image_path',
         'is_active',
         'is_downloadable',
+        'is_featured',
+        'is_recent',
         'is_demo',
     ];
+
+    public function instructor()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     protected $appends = ['image_url'];
 
@@ -30,6 +38,8 @@ class Product extends Model
         'offer_price' => 'decimal:2',
         'is_active' => 'boolean',
         'is_downloadable' => 'boolean',
+        'is_featured' => 'boolean',
+        'is_recent' => 'boolean',
         'is_demo' => 'boolean',
     ];
 

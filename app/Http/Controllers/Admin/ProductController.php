@@ -13,7 +13,13 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->latest()->paginate(10);
+        $query = Product::with('category');
+        
+        if (auth()->user()->hasRole('Instructor')) {
+            $query->where('user_id', auth()->id());
+        }
+
+        $products = $query->latest()->paginate(10);
         return view('admin.products.index', compact('products'));
     }
 
@@ -27,24 +33,33 @@ class ProductController extends Controller
     {
         $request->validate([
             'category_id' => 'required|exists:categories,id',
+            'user_id' => 'nullable|exists:users,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'nullable|numeric|min:0',
             'original_price' => 'nullable|numeric|min:0',
             'offer_price' => 'nullable|numeric|min:0',
             'sale_tag' => 'nullable|string|max:50',
-            'product_file' => 'required|file|mimes:pdf,zip,jpg,png,doc,docx|max:20480', // 20MB
+            'product_file' => 'required|file|mimes:pdf,zip,jpg,png,doc,docx|max:307200', // 300MB
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB
             'is_active' => 'boolean',
             'is_downloadable' => 'boolean',
+            'is_featured' => 'boolean',
             'is_demo' => 'boolean',
         ]);
 
         $filePath = $request->file('product_file')->store('products', 'private');
         $imagePath = $request->hasFile('cover_image') ? $request->file('cover_image')->store('product_covers', 'public') : null;
 
+        if (auth()->user()->hasRole('Instructor')) {
+            $user_id = auth()->id();
+        } else {
+            $user_id = $request->user_id;
+        }
+
         Product::create([
             'category_id' => $request->category_id,
+            'user_id' => $user_id,
             'title' => $request->title,
             'slug' => Str::slug($request->title) . '-' . rand(1000, 9999),
             'description' => $request->description,
@@ -56,6 +71,7 @@ class ProductController extends Controller
             'image_path' => $imagePath,
             'is_active' => $request->has('is_active'),
             'is_downloadable' => $request->has('is_downloadable'),
+            'is_featured' => $request->has('is_featured'),
             'is_demo' => $request->has('is_demo'),
         ]);
 
@@ -64,6 +80,10 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        if (auth()->user()->hasRole('Instructor') && $product->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $categories = Category::all();
         return view('admin.products.edit', compact('product', 'categories'));
     }
@@ -72,21 +92,34 @@ class ProductController extends Controller
     {
         $request->validate([
             'category_id' => 'required|exists:categories,id',
+            'user_id' => 'nullable|exists:users,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'nullable|numeric|min:0',
             'original_price' => 'nullable|numeric|min:0',
             'offer_price' => 'nullable|numeric|min:0',
             'sale_tag' => 'nullable|string|max:50',
-            'product_file' => 'nullable|file|mimes:pdf,zip,jpg,png,doc,docx|max:20480',
+            'product_file' => 'nullable|file|mimes:pdf,zip,jpg,png,doc,docx|max:307200',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'is_active' => 'boolean',
             'is_downloadable' => 'boolean',
+            'is_featured' => 'boolean',
             'is_demo' => 'boolean',
         ]);
 
+        if (auth()->user()->hasRole('Instructor') && $product->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        if (auth()->user()->hasRole('Instructor')) {
+            $user_id = auth()->id();
+        } else {
+            $user_id = $request->user_id;
+        }
+
         $data = [
             'category_id' => $request->category_id,
+            'user_id' => $user_id,
             'title' => $request->title,
             'slug' => Str::slug($request->title) . '-' . $product->id,
             'description' => $request->description,
@@ -96,6 +129,7 @@ class ProductController extends Controller
             'sale_tag' => $request->sale_tag,
             'is_active' => $request->has('is_active'),
             'is_downloadable' => $request->has('is_downloadable'),
+            'is_featured' => $request->has('is_featured'),
             'is_demo' => $request->has('is_demo'),
         ];
 
@@ -120,6 +154,10 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        if (auth()->user()->hasRole('Instructor') && $product->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         Storage::disk('private')->delete($product->file_path);
         if ($product->image_path) {
             Storage::disk('public')->delete($product->image_path);

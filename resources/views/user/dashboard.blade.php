@@ -11,7 +11,7 @@
     <!-- App-Like Shortcuts -->
     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-10 overflow-x-auto pb-4 -mx-1 px-1 snap-x">
         <!-- My Library -->
-        <a href="{{ route('library') }}" class="flex flex-col items-center p-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg border border-white/10 hover:shadow-xl transition-all duration-300 snap-start shrink-0 min-w-[160px]">
+        <a href="{{ route('library', ['tab' => 'library']) }}" class="flex flex-col items-center p-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg border border-white/10 hover:shadow-xl transition-all duration-300 snap-start shrink-0 min-w-[160px]">
             <div class="bg-white/20 p-3 rounded-xl mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" class="w-8 h-8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
@@ -22,7 +22,7 @@
         </a>
 
         <!-- Continue Reading -->
-        <a href="#" @click.prevent="window.location.href = localStorage.getItem('last_viewed_url') || '{{ route('library') }}'" class="flex flex-col items-center p-6 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl shadow-lg border border-white/10 hover:shadow-xl transition-all duration-300 snap-start shrink-0 min-w-[160px]">
+        <a href="#" @click.prevent="window.location.href = localStorage.getItem('last_viewed_url') || '{{ route('library', ['tab' => 'library']) }}'" class="flex flex-col items-center p-6 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl shadow-lg border border-white/10 hover:shadow-xl transition-all duration-300 snap-start shrink-0 min-w-[160px]">
             <div class="bg-white/20 p-3 rounded-xl mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" class="w-8 h-8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />

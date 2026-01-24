@@ -1,3 +1,8 @@
+@php
+    $isLibrary = request()->routeIs('library');
+    $activeTab = request()->query('tab', 'library');
+@endphp
+
 <!-- Mobile Bottom Navigation - Sticky Design -->
 <nav id="mobile-bottom-nav"
     style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 2147483647; width: 100%; height: 72px; display: flex; justify-content: center; align-items: stretch; background-color: white; border-top: 1px solid #e5e7eb; box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1); transform: translateZ(0); -webkit-transform: translateZ(0);">
@@ -50,9 +55,9 @@
         </a>
 
         <!-- Cart -->
-        <a href="{{ route('cart') }}" class="mobile-nav-item group">
+        <a href="{{ route('library', ['tab' => 'cart']) }}" class="mobile-nav-item group" onclick="if(window.setTab) { window.setTab('cart'); return false; }">
             <div class="relative">
-                @if(request()->routeIs('cart'))
+                @if($isLibrary && $activeTab === 'cart')
                     <div class="absolute inset-0 bg-primary/10 rounded-full blur-sm"></div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                         class="mobile-nav-icon text-primary relative">
@@ -74,13 +79,13 @@
                     x-show="count > 0" x-text="count" x-cloak
                     class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center shadow-sm"></span>
             </div>
-            <span class="mobile-nav-text {{ request()->routeIs('cart') ? 'text-primary' : 'text-gray-500 group-hover:text-gray-700' }} transition-colors">Cart</span>
+            <span class="mobile-nav-text {{ ($isLibrary && $activeTab === 'cart') ? 'text-primary' : 'text-gray-500 group-hover:text-gray-700' }} transition-colors">Cart</span>
         </a>
 
         <!-- Library -->
-        <a href="{{ route('library') }}" class="mobile-nav-item group">
+        <a href="{{ route('library', ['tab' => 'library']) }}" class="mobile-nav-item group" onclick="if(window.setTab) { window.setTab('library'); return false; }">
             <div class="relative">
-                @if(request()->routeIs('library'))
+                @if($isLibrary && $activeTab === 'library')
                     <div class="absolute inset-0 bg-primary/10 rounded-full blur-sm"></div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                         class="mobile-nav-icon text-primary relative">
@@ -95,7 +100,7 @@
                     </svg>
                 @endif
             </div>
-            <span class="mobile-nav-text {{ request()->routeIs('library') ? 'text-primary' : 'text-gray-500 group-hover:text-gray-700' }} transition-colors">Library</span>
+            <span class="mobile-nav-text {{ ($isLibrary && $activeTab === 'library') ? 'text-primary' : 'text-gray-500 group-hover:text-gray-700' }} transition-colors">Library</span>
         </a>
     </div>
 </nav>

@@ -13,15 +13,26 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $isInstructor = auth()->user()->hasRole('Instructor');
+        $userId = auth()->id();
+
         $stats = [
-            'users' => User::count(),
-            'products' => Product::count(),
-            'categories' => Category::count(),
-            'views' => AccessLog::where('action_type', 'view')->count(),
-            'downloads' => AccessLog::where('action_type', 'download')->count(),
+            'users' => $isInstructor ? 0 : User::count(),
+            'products' => $isInstructor ? Product::where('user_id', $userId)->count() : Product::count(),
+            'categories' => $isInstructor ? Category::count() : Category::count(),
+            'views' => $isInstructor 
+                ? AccessLog::where('action_type', 'view')->whereHas('product', fn($q) => $q->where('user_id', $userId))->count() 
+                : AccessLog::where('action_type', 'view')->count(),
+            'downloads' => $isInstructor 
+                ? AccessLog::where('action_type', 'download')->whereHas('product', fn($q) => $q->where('user_id', $userId))->count() 
+                : AccessLog::where('action_type', 'download')->count(),
         ];
 
-        $recentLogs = AccessLog::with(['user', 'product'])->latest()->take(10)->get();
+        $logsQuery = AccessLog::with(['user', 'product'])->latest()->take(10);
+        if ($isInstructor) {
+            $logsQuery->whereHas('product', fn($q) => $q->where('user_id', $userId));
+        }
+        $recentLogs = $logsQuery->get();
 
         return view('admin.dashboard', compact('stats', 'recentLogs'));
     }

@@ -19,7 +19,11 @@
     <!-- Scripts -->
     <!-- Scripts -->
     <!-- Tailwind Moved to Footer for Performance -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inconsolata:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" async></script>
@@ -48,14 +52,54 @@
             overflow-x: hidden;
         }
         body {
-            font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Lora', 'Merriweather', serif; /* Body Font */
+            background-color: #F8F1E9;
             min-height: 100vh;
             width: 100%;
-            color: #1D1B20;
-            overflow-x: hidden; /* Prevent horizontal scroll from 3D elements */
+            color: #1A0D00;
+            overflow-x: hidden;
             position: relative;
         }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'EB Garamond', 'Playfair Display', serif; /* Heading Font */
+        }
+        
+        pre, code, .font-mono {
+            font-family: 'Inconsolata', monospace;
+        }
+
+        /* Texture Overlay for that 'Aged' look */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        /* Corner Curls Visual Element */
+        .corner-curl {
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-width: 0 40px 40px 0;
+            border-style: solid;
+            border-color: #FDF6E3 #f4f4f4;
+            box-shadow: -5px 5px 5px rgba(0,0,0,0.05);
+            display: none; /* Add to cards individually if needed */
+        }
+
+        /* Quill Hover Effect */
+        .hover-quill:hover {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%238B4513" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>'), auto;
+        }
+
 
         /* Anti-Gravity Glassmorphism */
         .glass-panel {
@@ -64,6 +108,60 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.5);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        .section-cloud-card {
+            background: rgba(255, 255, 255, 0.85); /* More opaque */
+            backdrop-filter: blur(20px); /* Deeper blur */
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.8); /* Pronounced white border */
+            border-radius: 3rem;
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.1), /* Outer deep shadow */
+                inset 0 0 20px rgba(255, 255, 255, 0.5); /* Inner glow */
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+            margin-bottom: 5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+            animation: cloudFloat 8s ease-in-out infinite;
+        }
+
+        /* Shine Effect */
+        .section-cloud-card::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: cardShine 12s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes cloudFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes cardShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            20%, 100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .section-cloud-card:hover {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px) scale(1.01);
+            animation-play-state: paused;
         }
 
         .glass-card {
@@ -117,48 +215,54 @@
             }
         }
 
-        /* Loading Screen */
+        /* Loading Screen - Intro Style */
         #loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #ffffff;
+            background-color: #F8F1E9; /* Parchment */
+            background-image: 
+                radial-gradient(#D4AF37 0.5px, transparent 0.5px),
+                radial-gradient(#D4AF37 0.5px, #F8F1E9 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
             z-index: 9999;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.5s ease-out, visibility 0.5s;
+            transition: opacity 1s ease-out, visibility 1s;
+            cursor: pointer;
+            overflow: hidden;
         }
 
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+        #loading-screen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+            opacity: 0.5;
+            pointer-events: none;
         }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+        .loader-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInContent 1s ease-out forwards;
         }
 
-        .loading-text {
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            color: #374151;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+        @keyframes fadeInContent {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .text-glow {
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
         }
 
         /* Prevent scroll during loading but keep navbar visible */
@@ -350,6 +454,14 @@
                             }
                         }
 
+                        // Assign Categories if available
+                        if (window.PRODUCT_CATEGORIES) {
+                            stored = stored.map(book => {
+                                book.category = window.PRODUCT_CATEGORIES[book.id] || 'Uncategorized';
+                                return book;
+                            });
+                        }
+
                         this.books = stored.reverse();
                         this.hasBooks = this.books.length > 0;
                     } catch (e) {
@@ -395,10 +507,52 @@
 </head>
 
 <body class="bg-gray-50 font-sans antialiased no-select loading-overflow-hidden" x-data="{ mobileMenuOpen: false }">
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="loader"></div>
-        <div class="loading-text">{{ $siteName }}</div>
+    <!-- Loading Screen / Intro -->
+    <div id="loading-screen" onclick="hideLoader()">
+        <div class="loader-content w-full max-w-4xl mx-auto px-4">
+            @if(request()->routeIs('home'))
+                <!-- Logic: Default to Simple Loader to prevent flash on return visits. Inline JS switches to Intro if needed. -->
+                
+                <!-- Intro Content (Hidden by default) -->
+                <div id="intro-content" class="hidden">
+                    <div class="mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mx-auto text-[#2C1810]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                    </div>
+                    <h1 class="text-3xl md:text-5xl font-bold text-[#2C1810] mb-4 text-glow font-serif">
+                        Upgrade your learning <br/>
+                        <span class="text-[#D4AF37] italic">with {{ $siteName }}</span>
+                    </h1>
+                    <p class="text-[#8B4513] mt-8 text-sm animate-pulse">Click to enter</p>
+                </div>
+
+                <!-- Simple Content (Visible by default) -->
+                <div id="simple-content" class="flex flex-col items-center">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2C1810] mb-4"></div>
+                    <div class="text-[#2C1810] font-bold tracking-widest">{{ $siteName }}</div>
+                </div>
+
+                <script>
+                    // Immediate check to switch content if this is the first visit
+                    if (!sessionStorage.getItem('intro_shown')) {
+                        document.getElementById('intro-content').classList.remove('hidden');
+                        document.getElementById('intro-content').classList.add('block');
+                        document.getElementById('simple-content').classList.add('hidden');
+                        document.getElementById('simple-content').classList.remove('flex'); // remove flex if used
+                        
+                        sessionStorage.setItem('intro_shown', 'true');
+                        window.showIntroDelay = true; // Flag for the load listener
+                    }
+                </script>
+            @else
+                <!-- Standard Loader for other pages -->
+                <div class="flex flex-col items-center">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2C1810] mb-4"></div>
+                    <div class="text-[#2C1810] font-bold tracking-widest">{{ $siteName }}</div>
+                </div>
+            @endif
+        </div>
     </div>
 
     @include('layouts.partials.bottom-nav')
@@ -419,7 +573,7 @@
     </script>
 
     <!-- Navbar -->
-    <nav class="bg-surface/80 backdrop-blur-md border-b border-white/50 sticky top-0 z-50 transition-all duration-300">
+    <nav class="bg-surface/80 backdrop-blur-md border-b border-white/50 fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
@@ -448,14 +602,14 @@
                     <a href="{{ route('products.index') }}"
                         class="text-gray-600 hover:text-primary font-medium">Browse</a>
                     @auth
-                        <a href="{{ route('library') }}" class="text-gray-600 hover:text-primary font-medium">Library</a>
+                        <a href="{{ route('library', ['tab' => 'library']) }}" class="text-gray-600 hover:text-primary font-medium">Library</a>
                         @if(auth()->user()->hasRole('Super Admin'))
                             <a href="{{ route('admin.dashboard') }}"
                                 class="text-gray-600 hover:text-primary font-medium">Admin</a>
                         @endif
 
                         <!-- Desktop Cart -->
-                        <a href="{{ route('cart') }}"
+                        <a href="{{ route('library', ['tab' => 'cart']) }}"
                             class="relative group py-2 text-gray-600 hover:text-primary font-medium transition-colors flex items-center gap-1">
                             <span>Cart</span>
                             <span x-data="{ count: 0 }"
@@ -494,7 +648,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main>
+    <main class="pt-16">
         @yield('content')
     </main>
 
@@ -514,19 +668,19 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '{{ $brandColor }}',
-                        'primary-container': '{{ $brandColor }}22', // Light version
-                        'on-primary-container': '{{ $brandColor }}',
-                        secondary: '#625B71',
-                        'secondary-container': '#E8DEF8',
-                        'on-secondary-container': '#1D192B',
-                        surface: '#FEF7FF',
-                        'surface-variant': '#E7E0EC',
-                        'on-surface': '#1D1B20',
-                        'on-surface-variant': '#49454F',
-                        outline: '#79747E',
-                        'inverse-surface': '#313033',
-                        'inverse-on-surface': '#F4EFF4',
+                        primary: '#2C1810', // Deep Academic Brown
+                        'primary-container': '#D4AF37', // Gold for accents
+                        'on-primary-container': '#1A0D00',
+                        secondary: '#D4AF37', // Gold Accent
+                        'secondary-container': '#FDF6E3', // Parchment
+                        'on-secondary-container': '#1A0D00',
+                        surface: '#F8F1E9', // Aged Paper
+                        'surface-variant': '#ffffff', // White (Cards)
+                        'on-surface': '#1A0D00', // Deep Charcoal
+                        'on-surface-variant': '#8B4513', // Saddle Brown (Highlights)
+                        outline: '#8B4513',
+                        'inverse-surface': '#1A0D00',
+                        'inverse-on-surface': '#F8F1E9',
                     },
                     borderRadius: {
                         '3xl': '1.5rem',
@@ -543,27 +697,48 @@
     </script>
 
     <script>
-        // Optimization: Hide loader on DOMContentLoaded for faster mobile interaction
-        // but keep a fallback for older browsers or extreme cases
+        // Loading Screen Logic
+        let loaderHidden = false;
+
         function hideLoader() {
+            if (loaderHidden) return;
+            loaderHidden = true;
+
             const loader = document.getElementById('loading-screen');
             if (loader) {
                 loader.style.opacity = '0';
                 loader.style.visibility = 'hidden';
             }
             document.body.classList.remove('loading-overflow-hidden');
+            
+            // Re-enable nav if needed (removed old critical css hide)
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', hideLoader);
-        } else {
-            hideLoader();
-        }
+        // Logic for Hide Delay
+        window.addEventListener('load', function() {
+            if (window.showIntroDelay) {
+                // If it was the intro, wait 3 seconds
+                setTimeout(hideLoader, 3000);
+            } else {
+                // Otherwise, hide immediately
+                if (document.readyState === 'loading') {
+                    // This case is rare inside window load, but good for safety
+                    hideLoader();
+                } else {
+                    hideLoader();
+                }
+            }
+        });
 
-        // Fallback: Ensure loader is hidden even if DOMContentLoaded is weirdly delayed
-        window.addEventListener('load', hideLoader);
+        // Backup for immediate hide on DOMContentLoaded for non-intro pages 
+        // (makes navigation snappy for simple loader)
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!window.showIntroDelay && !loaderHidden) {
+                hideLoader();
+            }
+        });
 
-        // Safety timeout: 10 seconds max for loading screen
+        // Safety fallback
         setTimeout(hideLoader, 10000);
     </script>
 </body>

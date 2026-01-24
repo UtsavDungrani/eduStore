@@ -9,7 +9,7 @@ class CartController extends Controller
 {
     public function index()
     {
-        return view('user.cart');
+        return redirect()->route('library', ['tab' => 'cart']);
     }
 
     public function library()

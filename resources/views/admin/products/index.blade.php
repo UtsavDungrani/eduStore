@@ -18,6 +18,9 @@
                 <tr class="bg-gray-50 text-gray-500 text-[10px] uppercase font-bold">
                     <th class="px-6 py-4">Title</th>
                     <th class="px-6 py-4">Category</th>
+                    @role('Super Admin')
+                    <th class="px-6 py-4">Instructor</th>
+                    @endrole
                     <th class="px-6 py-4">Price</th>
                     <th class="px-6 py-4">Status</th>
                     <th class="px-6 py-4 text-right">Actions</th>
@@ -40,6 +43,11 @@
                         <td class="px-6 py-4">
                             <span class="bg-gray-100 text-gray-600 px-2.5 py-1 rounded-lg text-xs font-medium">{{ $product->category->name }}</span>
                         </td>
+                        @role('Super Admin')
+                        <td class="px-6 py-4">
+                            <div class="text-xs font-bold text-primary">{{ $product->instructor->name ?? 'Admin' }}</div>
+                        </td>
+                        @endrole
                         <td class="px-6 py-4 font-bold text-gray-900">₹{{ number_format($product->price, 2) }}</td>
                         <td class="px-6 py-4">
                             @if($product->is_active)
