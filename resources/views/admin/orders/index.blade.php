@@ -34,7 +34,7 @@
                         </td>
                         <td class="px-6 py-4 font-black text-primary">₹{{ number_format($order->amount, 2) }}</td>
                         <td class="px-6 py-4">
-                            <span class="text-xs font-mono text-blue-600 font-bold">{{ $order->razorpay_payment_id ?? 'N/A' }}</span>
+                            <span class="text-xs font-mono text-gray-600 font-bold">{{ $order->razorpay_payment_id ?? 'N/A' }}</span>
                         </td>
                         <td class="px-6 py-4">
                             @if($order->status == 'pending')
@@ -46,7 +46,7 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <a href="{{ route('admin.orders.show', $order->id) }}" class="text-primary hover:text-blue-700 font-bold text-xs">View Details</a>
+                            <a href="{{ route('admin.orders.show', $order->id) }}" class="text-primary hover:text-amber-900 font-bold text-xs">View Details</a>
                         </td>
                     </tr>
                 @empty

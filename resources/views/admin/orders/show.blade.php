@@ -48,7 +48,7 @@
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 class="font-bold text-gray-900 uppercase text-xs tracking-widest mb-6">Customer Information</h2>
             <div class="flex items-center gap-4 mb-6">
-                <img class="h-12 w-12 rounded-full border-2 border-primary" src="https://ui-avatars.com/api/?name={{ urlencode($order->user->name) }}&background=1e40af&color=fff" alt="">
+                <img class="h-12 w-12 rounded-full border-2 border-primary" src="https://ui-avatars.com/api/?name={{ urlencode($order->user->name) }}&background=2C1810&color=fff" alt="">
                 <div>
                     <div class="font-bold text-gray-900 text-sm">{{ $order->user->name }}</div>
                     <div class="text-xs text-gray-400">{{ $order->user->email }}</div>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="flex justify-between text-xs">
                     <span class="text-gray-400">Razorpay Payment</span>
-                    <span class="font-mono text-blue-600 font-bold">{{ $order->razorpay_payment_id }}</span>
+                    <span class="font-mono text-gray-600 font-bold">{{ $order->razorpay_payment_id }}</span>
                 </div>
             </div>
         </div>

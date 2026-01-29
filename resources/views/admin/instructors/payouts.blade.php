@@ -49,9 +49,9 @@
             </div>
             <div class="mb-6">
                 <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Payout Amount (₹)</label>
-                <input type="number" id="modal_amount" step="0.01" class="w-full bg-gray-50 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-blue-500 focus:border-blue-500" placeholder="0.00">
+                <input type="number" id="modal_amount" step="0.01" class="w-full bg-gray-50 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-primary focus:border-primary" placeholder="0.00">
             </div>
-            <button onclick="submitPayout()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-200">
+            <button onclick="submitPayout()" class="w-full bg-primary hover:bg-amber-900 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
                 Mark as Paid
             </button>
         </div>
@@ -82,7 +82,7 @@
                 if (isSuperAdmin) {
                     actionHtml = `
                         <td class="px-6 py-4">
-                            <button onclick="openModal(${instructor.id}, '${instructor.name}', ${instructor.pending_payouts.replace(',','')})" class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all">
+                            <button onclick="openModal(${instructor.id}, '${instructor.name}', ${instructor.pending_payouts.replace(',','')})" class="bg-amber-50 text-primary hover:bg-primary hover:text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all">
                                 Payout Now
                             </button>
                         </td>

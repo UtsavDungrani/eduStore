@@ -19,16 +19,9 @@
             <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">Site Name</label>
-                    <input type="text" name="site_name" value="{{ $settings['site_name'] ?? 'Digital Store' }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
+                    <input type="text" name="site_name" value="{{ $settings['site_name'] ?? 'EduStore' }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Primary Brand Color</label>
-                    <div class="flex items-center gap-4">
-                        <input type="color" name="brand_color" value="{{ $settings['brand_color'] ?? '#1e40af' }}" class="w-12 h-12 rounded-lg cursor-pointer border-none p-0">
-                        <input type="text" value="{{ $settings['brand_color'] ?? '#1e40af' }}" readonly class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono">
-                    </div>
-                </div>
-                <div class="md:col-span-2">
                     <label class="block text-sm font-bold text-gray-700 mb-2">Support Email</label>
                     <input type="email" name="support_email" value="{{ $settings['support_email'] ?? 'support@example.com' }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
                 </div>
@@ -112,7 +105,7 @@
         </div>
 
         <div class="flex justify-end">
-            <button type="submit" class="bg-primary text-white px-10 py-4 rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg">Save All Settings</button>
+            <button type="submit" class="bg-primary text-white px-10 py-4 rounded-2xl font-bold hover:bg-amber-900 transition-all shadow-lg">Save All Settings</button>
         </div>
     </form>
 </div>

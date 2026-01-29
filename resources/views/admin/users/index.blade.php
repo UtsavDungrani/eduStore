@@ -27,7 +27,7 @@
                         <td class="px-6 py-4 text-gray-600">{{ $user->email }}</td>
                         <td class="px-6 py-4">
                             @foreach($user->roles as $role)
-                                <span class="bg-blue-50 text-primary px-2 py-0.5 rounded text-[10px] font-bold uppercase">{{ $role->name }}</span>
+                                <span class="bg-amber-50 text-primary px-2 py-0.5 rounded text-[10px] font-bold uppercase">{{ $role->name }}</span>
                             @endforeach
                         </td>
                         <td class="px-6 py-4 text-gray-400">{{ $user->created_at->format('M d, Y') }}</td>

@@ -11,14 +11,14 @@
     <!-- App-Like Shortcuts -->
     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-10 overflow-x-auto pb-4 -mx-1 px-1 snap-x">
         <!-- My Library -->
-        <a href="{{ route('library', ['tab' => 'library']) }}" class="flex flex-col items-center p-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg border border-white/10 hover:shadow-xl transition-all duration-300 snap-start shrink-0 min-w-[160px]">
-            <div class="bg-white/20 p-3 rounded-xl mb-3">
+        <a href="{{ route('library', ['tab' => 'library']) }}" class="flex flex-col items-center p-6 bg-gradient-to-br from-[#2C1810] to-[#5D4037] rounded-2xl shadow-lg border border-[#D4AF37]/30 hover:shadow-xl transition-all duration-300 snap-start shrink-0 min-w-[160px]">
+            <div class="bg-white/10 p-3 rounded-xl mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" class="w-8 h-8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
                 </svg>
             </div>
             <span class="text-white font-bold text-lg">My Library</span>
-            <span class="text-blue-100 text-xs mt-1">Enrolled Content</span>
+            <span class="text-amber-100/60 text-xs mt-1">Enrolled Content</span>
         </a>
 
         <!-- Continue Reading -->
@@ -53,7 +53,7 @@
             <h2 class="text-2xl font-bold text-gray-900 line-clamp-1">Explore Courses</h2>
             <p class="text-gray-500 text-sm mt-1">Handpicked for your growth</p>
         </div>
-        <a href="{{ route('products.index') }}" class="text-blue-600 font-semibold flex items-center gap-1 hover:gap-2 transition-all">
+        <a href="{{ route('products.index') }}" class="text-amber-900 font-semibold flex items-center gap-1 hover:gap-2 transition-all">
             See all
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />

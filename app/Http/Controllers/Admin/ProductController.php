@@ -46,6 +46,8 @@ class ProductController extends Controller
             'is_downloadable' => 'boolean',
             'is_featured' => 'boolean',
             'is_demo' => 'boolean',
+            'show_sale_tag' => 'boolean',
+            'is_recent' => 'boolean',
         ]);
 
         $filePath = $request->file('product_file')->store('products', 'private');
@@ -73,6 +75,8 @@ class ProductController extends Controller
             'is_downloadable' => $request->has('is_downloadable'),
             'is_featured' => $request->has('is_featured'),
             'is_demo' => $request->has('is_demo'),
+            'show_sale_tag' => $request->has('show_sale_tag'),
+            'is_recent' => $request->has('is_recent'),
         ]);
 
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
@@ -105,6 +109,8 @@ class ProductController extends Controller
             'is_downloadable' => 'boolean',
             'is_featured' => 'boolean',
             'is_demo' => 'boolean',
+            'show_sale_tag' => 'boolean',
+            'is_recent' => 'boolean',
         ]);
 
         if (auth()->user()->hasRole('Instructor') && $product->user_id !== auth()->id()) {
@@ -131,6 +137,8 @@ class ProductController extends Controller
             'is_downloadable' => $request->has('is_downloadable'),
             'is_featured' => $request->has('is_featured'),
             'is_demo' => $request->has('is_demo'),
+            'show_sale_tag' => $request->has('show_sale_tag'),
+            'is_recent' => $request->has('is_recent'),
         ];
 
         if ($request->hasFile('product_file')) {

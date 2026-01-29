@@ -11,11 +11,11 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
         <div>
             <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Date Range</label>
-            <input type="text" id="date_range" class="w-full bg-gray-50 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Select dates">
+            <input type="text" id="date_range" class="w-full bg-gray-50 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-primary focus:border-primary" placeholder="Select dates">
         </div>
         <div>
             <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Product</label>
-            <select id="product_id" class="w-full bg-gray-50 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-blue-500 focus:border-blue-500">
+            <select id="product_id" class="w-full bg-gray-50 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-primary focus:border-primary">
                 <option value="">All Products</option>
                 @foreach($products as $product)
                     <option value="{{ $product->id }}">{{ $product->title }}</option>
@@ -24,7 +24,7 @@
         </div>
         <div>
             <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Category</label>
-            <select id="category_id" class="w-full bg-gray-50 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-blue-500 focus:border-blue-500">
+            <select id="category_id" class="w-full bg-gray-50 border-gray-100 rounded-xl px-4 py-2.5 text-sm focus:ring-primary focus:border-primary">
                 <option value="">All Categories</option>
                 @foreach($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -32,7 +32,7 @@
             </select>
         </div>
         <div>
-            <button onclick="fetchAnalytics()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition-all shadow-lg shadow-blue-200">
+            <button onclick="fetchAnalytics()" class="w-full bg-primary hover:bg-amber-900 text-white font-bold py-2.5 rounded-xl transition-all shadow-lg">
                 Apply Filters
             </button>
         </div>
@@ -42,7 +42,9 @@
 <!-- Key Metrics -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <div class="text-blue-500 mb-2"><i class="fas fa-shopping-cart text-2xl"></i></div>
+        <div class="p-3 bg-amber-50 rounded-xl mb-2">
+            <i class="fas fa-shopping-cart text-primary text-xl"></i>
+        </div>
         <div class="text-gray-500 text-xs font-bold uppercase tracking-wider">Total Sales</div>
         <div id="metric_total_sales" class="text-2xl font-black text-gray-900">0</div>
     </div>

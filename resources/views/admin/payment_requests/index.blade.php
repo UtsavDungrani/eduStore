@@ -36,7 +36,7 @@
                         <td class="px-6 py-4 font-black text-primary">₹{{ number_format($request->amount, 2) }}</td>
                         <td class="px-6 py-4">
                             @if($request->razorpay_payment_id)
-                                <span class="text-xs font-mono text-blue-600 font-bold">{{ $request->razorpay_payment_id }}</span>
+                                <span class="text-xs font-mono text-gray-500 font-bold">{{ $request->razorpay_payment_id }}</span>
                             @else
                                 <span class="text-xs font-mono text-gray-500">{{ $request->transaction_id ?? 'N/A' }}</span>
                             @endif

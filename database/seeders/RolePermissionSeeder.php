@@ -28,37 +28,52 @@ class RolePermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            \Spatie\Permission\Models\Permission::create(['name' => $permission]);
+            \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
         }
 
         // Create Roles
-        $adminRole = \Spatie\Permission\Models\Role::create(['name' => 'Super Admin']);
-        $userRole = \Spatie\Permission\Models\Role::create(['name' => 'User']);
+        $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'Super Admin']);
+        $instructorRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'Instructor']);
+        $userRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'User']);
 
         // Assign Permissions to Roles
         $adminRole->givePermissionTo(\Spatie\Permission\Models\Permission::all());
+        $instructorRole->givePermissionTo(['manage products', 'view content']);
         $userRole->givePermissionTo(['view content']);
 
         // Create Super Admin User
-        $admin = \App\Models\User::create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('password'),
-        ]);
+        $admin = \App\Models\User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            ]
+        );
         $admin->assignRole($adminRole);
 
+        // Create Instructor User
+        $instructor = \App\Models\User::firstOrCreate(
+            ['email' => 'instructor@example.com'],
+            [
+                'name' => 'Instructor',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            ]
+        );
+        $instructor->assignRole($instructorRole);
+
         // Create Regular User
-        $user = \App\Models\User::create([
-            'name' => 'Student',
-            'email' => 'student@example.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('password'),
-        ]);
+        $user = \App\Models\User::firstOrCreate(
+            ['email' => 'student@example.com'],
+            [
+                'name' => 'Student',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            ]
+        );
         $user->assignRole($userRole);
 
         // Seed Default Settings
         $settings = [
             'site_name' => 'EduStore',
-            'brand_color' => '#2563eb', // Nice Blue
             'support_email' => 'support@edustore.com',
             'upi_id' => 'admin@upi',
             'upi_name' => 'EduStore Admin',

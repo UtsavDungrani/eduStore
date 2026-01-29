@@ -9,7 +9,7 @@
 <!-- Stats Grid -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <div class="text-blue-500 mb-2"><i class="fas fa-users text-2xl"></i></div>
+        <div class="text-primary mb-2"><i class="fas fa-users text-2xl"></i></div>
         <div class="text-gray-500 text-xs font-bold uppercase tracking-wider">Total Users</div>
         <div class="text-2xl font-black text-gray-900">{{ $stats['users'] }}</div>
     </div>
@@ -59,7 +59,7 @@
                         <td class="px-6 py-4 text-gray-600">{{ $log->product->title }}</td>
                         <td class="px-6 py-4">
                             @if($log->action_type == 'view')
-                                <span class="bg-blue-100 text-blue-700 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">View</span>
+                                <span class="bg-amber-100 text-amber-900 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">View</span>
                             @else
                                 <span class="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Download</span>
                             @endif

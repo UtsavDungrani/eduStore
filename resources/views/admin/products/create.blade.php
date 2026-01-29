@@ -6,8 +6,8 @@
     <h1 class="text-3xl font-bold text-gray-900">Add New Product</h1>
 </div>
 
-<div class="max-w-4xl">
-    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+<div class="max-w-7xl">
+    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         
         @if ($errors->any())
@@ -29,111 +29,174 @@
                 </div>
             </div>
         @endif
-        
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="md:col-span-2">
-                <label class="block text-sm font-bold text-gray-700 mb-2">Product Title</label>
-                <input type="text" name="title" value="{{ old('title') }}" required class="w-full px-4 py-3 rounded-xl border {{ $errors->has('title') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary" placeholder="e.g. Engineering Drawing Assignment">
-                @error('title')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
-            </div>
 
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Category</label>
-                <select name="category_id" required class="w-full px-4 py-3 rounded-xl border {{ $errors->has('category_id') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary">
-                    <option value="">Select Category</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Main Content Area -->
+            <div class="flex-1 space-y-6">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Product Title</label>
+                        <input type="text" name="title" value="{{ old('title') }}" required class="w-full px-4 py-3 rounded-xl border {{ $errors->has('title') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary" placeholder="e.g. Engineering Drawing Assignment">
+                        @error('title')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
+                    </div>
 
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Offer Price (Selling Price)</label>
-                <input type="number" step="0.01" name="price" value="{{ old('price', 0) }}" required class="w-full px-4 py-3 rounded-xl border {{ $errors->has('price') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary">
-                @error('price')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
-            </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Category</label>
+                        <select name="category_id" required class="w-full px-4 py-3 rounded-xl border {{ $errors->has('category_id') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary">
+                            <option value="">Select Category</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Original Price (MRP) <span class="text-xs font-normal text-gray-400">(Optional)</span></label>
-                <input type="number" step="0.01" name="original_price" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
-            </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Offer Price (Selling Price)</label>
+                        <input type="number" step="0.01" name="price" value="{{ old('price', 0) }}" required class="w-full px-4 py-3 rounded-xl border {{ $errors->has('price') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary">
+                        @error('price')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
+                    </div>
 
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Offer Price (For Reference) <span class="text-xs font-normal text-gray-400">(Same as Price)</span></label>
-                <input type="number" step="0.01" name="offer_price" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="Autofilled usually">
-            </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Original Price (MRP) <span class="text-xs font-normal text-gray-400">(Optional)</span></label>
+                        <input type="number" step="0.01" name="original_price" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
+                    </div>
 
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Sale Badge Tag <span class="text-xs font-normal text-gray-400">(e.g. SALE)</span></label>
-                <input type="text" name="sale_tag" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="HOT, SALE, 50% OFF">
-            </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Offer Price (For Reference) <span class="text-xs font-normal text-gray-400">(Same as Price)</span></label>
+                        <input type="number" step="0.01" name="offer_price" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="Autofilled usually">
+                    </div>
 
-            <div class="md:col-span-2">
-                <label class="block text-sm font-bold text-gray-700 mb-2">Description</label>
-                <textarea name="description" rows="5" class="w-full px-4 py-3 rounded-xl border {{ $errors->has('description') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary" placeholder="Full details about the content...">{{ old('description') }}</textarea>
-                @error('description')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
-            </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Sale Badge Tag <span class="text-xs font-normal text-gray-400">(e.g. SALE)</span></label>
+                        <input type="text" name="sale_tag" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="HOT, SALE, 50% OFF">
+                    </div>
 
-            <div class="md:col-span-2">
-                <label class="block text-sm font-bold text-gray-700 mb-2">Product File (Max 300MB)</label>
-                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-2xl relative group hover:border-primary transition-colors">
-                    <div class="space-y-1 text-center">
-                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 group-hover:text-primary transition-colors"></i>
-                        <div class="flex text-sm text-gray-600">
-                            <label for="product_file" class="relative cursor-pointer rounded-md font-bold text-primary hover:text-blue-500 focus-within:outline-none">
-                                <span>Upload a file</span>
-                                <input id="product_file" name="product_file" type="file" required class="sr-only">
-                            </label>
-                            <p class="pl-1">or drag and drop</p>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Description</label>
+                        <textarea name="description" rows="5" class="w-full px-4 py-3 rounded-xl border {{ $errors->has('description') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary" placeholder="Full details about the content...">{{ old('description') }}</textarea>
+                        @error('description')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Product File (Max 300MB)</label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-2xl relative group hover:border-primary transition-colors">
+                            <div class="space-y-1 text-center">
+                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 group-hover:text-primary transition-colors"></i>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="product_file" class="relative cursor-pointer rounded-md font-bold text-primary hover:text-amber-700 focus-within:outline-none">
+                                        <span>Upload a file</span>
+                                        <input id="product_file" name="product_file" type="file" required class="sr-only">
+                                    </label>
+                                    <p class="pl-1">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">PDF, ZIP, DOC up to 300MB</p>
+                            </div>
                         </div>
-                        <p class="text-xs text-gray-500">PDF, ZIP, DOC up to 300MB</p>
+                        <div id="file-name" class="mt-2 text-sm text-primary font-bold"></div>
+                        @error('product_file')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Cover Image (Optional - Max 2MB)</label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-2xl relative group hover:border-primary transition-colors">
+                            <div class="space-y-1 text-center">
+                                <i class="fas fa-image text-4xl text-gray-300 group-hover:text-primary transition-colors"></i>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="cover_image" class="relative cursor-pointer rounded-md font-bold text-primary hover:text-amber-700 focus-within:outline-none">
+                                        <span>Upload cover image</span>
+                                        <input id="cover_image" name="cover_image" type="file" accept="image/*" class="sr-only">
+                                    </label>
+                                    <p class="pl-1">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">JPG, PNG, SVG up to 2MB</p>
+                            </div>
+                        </div>
+                        <div id="image-name" class="mt-2 text-sm text-primary font-bold"></div>
+                        @error('cover_image')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
                     </div>
                 </div>
-                <div id="file-name" class="mt-2 text-sm text-primary font-bold"></div>
-                @error('product_file')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
             </div>
 
-            <div class="md:col-span-2">
-                <label class="block text-sm font-bold text-gray-700 mb-2">Cover Image (Optional - Max 2MB)</label>
-                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-2xl relative group hover:border-primary transition-colors">
-                    <div class="space-y-1 text-center">
-                        <i class="fas fa-image text-4xl text-gray-300 group-hover:text-primary transition-colors"></i>
-                        <div class="flex text-sm text-gray-600">
-                            <label for="cover_image" class="relative cursor-pointer rounded-md font-bold text-primary hover:text-blue-500 focus-within:outline-none">
-                                <span>Upload cover image</span>
-                                <input id="cover_image" name="cover_image" type="file" accept="image/*" class="sr-only">
+            <!-- Sidebar -->
+            <div class="w-full lg:w-80 space-y-6">
+                <!-- Status & Visibility Card -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 sticky top-24">
+                    <h3 class="text-lg font-bold text-gray-900 mb-5 pb-2 border-b border-gray-50 flex items-center gap-2">
+                        <i class="fas fa-cog text-primary"></i> settings
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group">
+                            <div class="mt-1">
+                                <input type="checkbox" name="is_active" id="is_active" value="1" checked class="w-5 h-5 rounded text-primary focus:ring-primary border-gray-300">
+                            </div>
+                            <label for="is_active" class="cursor-pointer">
+                                <span class="block text-sm font-bold text-gray-700">Live Status</span>
+                                <span class="text-[10px] text-gray-400 group-hover:text-gray-500">Make this product visible to everyone</span>
                             </label>
-                            <p class="pl-1">or drag and drop</p>
                         </div>
-                        <p class="text-xs text-gray-500">JPG, PNG, SVG up to 2MB</p>
+
+                        <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group">
+                            <div class="mt-1">
+                                <input type="checkbox" name="is_downloadable" id="is_downloadable" value="1" class="w-5 h-5 rounded text-primary focus:ring-primary border-gray-300">
+                            </div>
+                            <label for="is_downloadable" class="cursor-pointer">
+                                <span class="block text-sm font-bold text-gray-700">Allow Download</span>
+                                <span class="text-[10px] text-gray-400 group-hover:text-gray-500">Permit users to download the file</span>
+                            </label>
+                        </div>
+
+                        <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group">
+                            <div class="mt-1">
+                                <input type="checkbox" name="is_featured" id="is_featured" value="1" class="w-5 h-5 rounded text-primary focus:ring-primary border-gray-300">
+                            </div>
+                            <label for="is_featured" class="cursor-pointer">
+                                <span class="block text-sm font-bold text-gray-700">Is Featured</span>
+                                <span class="text-[10px] text-gray-400 group-hover:text-gray-500">Show in featured suggestions</span>
+                            </label>
+                        </div>
+
+                        <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group">
+                            <div class="mt-1">
+                                <input type="checkbox" name="is_demo" id="is_demo" value="1" class="w-5 h-5 rounded text-primary focus:ring-primary border-gray-300">
+                            </div>
+                            <label for="is_demo" class="cursor-pointer">
+                                <span class="block text-sm font-bold text-gray-700">Set as Demo/Free</span>
+                                <span class="text-[10px] text-gray-400 group-hover:text-gray-500">Allow full access without payment</span>
+                            </label>
+                        </div>
+
+                        <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group">
+                            <div class="mt-1">
+                                <input type="checkbox" name="show_sale_tag" id="show_sale_tag" value="1" class="w-5 h-5 rounded text-primary focus:ring-primary border-gray-300">
+                            </div>
+                            <label for="show_sale_tag" class="cursor-pointer">
+                                <span class="block text-sm font-bold text-gray-700">Show Sale Badge</span>
+                                <span class="text-[10px] text-gray-400 group-hover:text-gray-500">Display triangular ribbon on card</span>
+                            </label>
+                        </div>
+
+                        <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group">
+                            <div class="mt-1">
+                                <input type="checkbox" name="is_recent" id="is_recent" value="1" class="w-5 h-5 rounded text-primary focus:ring-primary border-gray-300">
+                            </div>
+                            <label for="is_recent" class="cursor-pointer">
+                                <span class="block text-sm font-bold text-gray-700">Recently Added</span>
+                                <span class="text-[10px] text-gray-400 group-hover:text-gray-500">Mark as a fresh new arrival</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-gray-50 space-y-3">
+                        <button type="submit" class="w-full bg-primary text-white py-4 rounded-2xl font-bold hover:bg-amber-900 transition-all shadow-lg flex items-center justify-center gap-2">
+                            <i class="fas fa-save shadow-sm"></i> Save Product
+                        </button>
+                        <a href="{{ route('admin.products.index') }}" class="block w-full text-center py-4 rounded-2xl font-bold bg-gray-50 text-gray-500 hover:bg-gray-100 transition-all border border-gray-100">
+                            Cancel
+                        </a>
                     </div>
                 </div>
-                <div id="image-name" class="mt-2 text-sm text-primary font-bold"></div>
-                @error('cover_image')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
             </div>
-
-            <div class="flex items-center gap-6">
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" name="is_active" value="1" checked class="rounded text-primary focus:ring-primary">
-                    <span class="text-sm font-bold text-gray-700">Live Status</span>
-                </label>
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" name="is_downloadable" value="1" class="rounded text-primary focus:ring-primary">
-                    <span class="text-sm font-bold text-gray-700">Allow Download</span>
-                </label>
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" name="is_featured" value="1" class="rounded text-primary focus:ring-primary">
-                    <span class="text-sm font-bold text-gray-700">Is Featured</span>
-                </label>
-                <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" name="is_demo" value="1" class="rounded text-primary focus:ring-primary">
-                    <span class="text-sm font-bold text-gray-700">Set as Demo/Free</span>
-                </label>
-            </div>
-        </div>
-
-        <div class="flex justify-end">
-            <button type="submit" class="bg-primary text-white px-10 py-4 rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg">Save Product</button>
         </div>
     </form>
 </div>

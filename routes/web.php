@@ -18,9 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 // User Routes
 Route::get('/', [UserProduct::class, 'home'])->name('home');
-Route::get('/intro', function () {
-    return view('user.intro');
-})->name('intro');
 Route::get('/products', [UserProduct::class, 'index'])->name('products.index');
 Route::get('/products/{product:slug}', [UserProduct::class, 'show'])->name('products.show');
 

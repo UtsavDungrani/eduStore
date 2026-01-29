@@ -503,22 +503,22 @@
 @endpush
 
 <!-- Features Info -->
-<section class="bg-slate-900 py-8 md:py-16">
+<section class="bg-primary py-8 md:py-16">
     <div class="max-w-7xl mx-auto px-4 grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-12 text-center text-white">
         <div>
-            <div class="text-primary text-2xl md:text-4xl mb-2 md:mb-4"><i class="fas fa-shield-alt"></i></div>
+            <div class="text-secondary text-2xl md:text-4xl mb-2 md:mb-4"><i class="fas fa-shield-alt"></i></div>
             <h4 class="text-xs md:text-xl font-bold mb-1 md:mb-2">Secure Viewing</h4>
-            <p class="hidden md:block text-slate-400">Advanced protection prevents unauthorized copying or downloading of content.</p>
+            <p class="hidden md:block text-slate-100/60">Advanced protection prevents unauthorized copying or downloading of content.</p>
         </div>
         <div>
-            <div class="text-primary text-2xl md:text-4xl mb-2 md:mb-4"><i class="fas fa-bolt"></i></div>
+            <div class="text-secondary text-2xl md:text-4xl mb-2 md:mb-4"><i class="fas fa-bolt"></i></div>
             <h4 class="text-xs md:text-xl font-bold mb-1 md:mb-2">Instant Access</h4>
-            <p class="hidden md:block text-slate-400">Get access to your digital products immediately after payment approval.</p>
+            <p class="hidden md:block text-slate-100/60">Get access to your digital products immediately after payment approval.</p>
         </div>
         <div>
-            <div class="text-primary text-2xl md:text-4xl mb-2 md:mb-4"><i class="fas fa-mobile-alt"></i></div>
+            <div class="text-secondary text-2xl md:text-4xl mb-2 md:mb-4"><i class="fas fa-mobile-alt"></i></div>
             <h4 class="text-xs md:text-xl font-bold mb-1 md:mb-2">Mobile Ready</h4>
-            <p class="hidden md:block text-slate-400">Study on the go with our fully responsive and touch-friendly interface.</p>
+            <p class="hidden md:block text-slate-100/60">Study on the go with our fully responsive and touch-friendly interface.</p>
         </div>
     </div>
 </section>

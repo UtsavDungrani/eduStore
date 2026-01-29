@@ -84,7 +84,7 @@
             -moz-appearance: textfield;
             background: transparent;
             border: none;
-            color: #60a5fa;
+            color: #D4AF37;
             font-weight: 700;
             width: 32px;
             text-align: center;
@@ -139,12 +139,12 @@
 
         <div class="hidden sm:block">
             @if($product->is_downloadable)
-                <a href="{{ route('content.download', $product->id) }}" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg shadow-blue-600/20 transition-all active:scale-95">
+                <a href="{{ route('content.download', $product->id) }}" class="bg-amber-800 hover:bg-amber-700 text-white px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg transition-all active:scale-95">
                     <i class="fas fa-download"></i> <span class="hidden md:inline">Download</span>
                 </a>
             @else
                 <div class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg text-zinc-400 flex items-center gap-2">
-                    <i class="fas fa-shield-halved text-blue-400"></i> <span class="hidden md:inline text-[10px] uppercase tracking-widest font-bold">Secure View</span>
+                    <i class="fas fa-shield-halved text-amber-500"></i> <span class="hidden md:inline text-[10px] uppercase tracking-widest font-bold">Secure View</span>
                 </div>
             @endif
         </div>
@@ -330,7 +330,7 @@
                     <i class="fas fa-exclamation-circle text-red-500 text-4xl mb-4"></i>
                     <h2 class="text-white font-bold text-xl mb-2">Failed to load document</h2>
                     <p class="text-zinc-400 mb-6">This could be due to a connection issue or document expiration.</p>
-                    <button onclick="window.location.reload()" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-lg font-bold transition-colors">
+                    <button onclick="window.location.reload()" class="bg-amber-800 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-bold transition-colors">
                         Try Again
                     </button>
                 </div>

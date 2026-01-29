@@ -6,7 +6,7 @@
         <h1 class="text-3xl font-bold text-gray-900">Products</h1>
         <p class="text-gray-500">Manage your digital content catalog.</p>
     </div>
-    <a href="{{ route('admin.products.create') }}" class="bg-primary text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all flex items-center gap-2">
+    <a href="{{ route('admin.products.create') }}" class="bg-primary text-white px-6 py-3 rounded-xl font-bold hover:bg-amber-900 transition-all flex items-center gap-2">
         <i class="fas fa-plus"></i> Add Product
     </a>
 </div>
@@ -31,7 +31,7 @@
                     <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-blue-100 text-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                                <div class="w-10 h-10 bg-amber-50 text-primary rounded-lg flex items-center justify-center flex-shrink-0">
                                     <i class="fas fa-file-pdf"></i>
                                 </div>
                                 <div>

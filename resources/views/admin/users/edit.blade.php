@@ -33,7 +33,7 @@
         </div>
 
         <div class="flex justify-end">
-            <button type="submit" class="bg-primary text-white px-10 py-4 rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg">Update User</button>
+            <button type="submit" class="bg-primary text-white px-10 py-4 rounded-2xl font-bold hover:bg-amber-900 transition-all shadow-lg">Update User</button>
         </div>
     </form>
 </div>

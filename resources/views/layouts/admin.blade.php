@@ -155,60 +155,60 @@
 
                 <!-- Nav -->
                 <nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto no-scrollbar">
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-chart-line w-6"></i>
                         <span class="ml-3">Dashboard</span>
                     </a>
-                    <a href="{{ route('admin.analytics') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.analytics') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.analytics') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.analytics') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-chart-pie w-6"></i>
                         <span class="ml-3">Analytics</span>
                     </a>
-                    <a href="{{ route('admin.instructors.payouts') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.instructors.payouts') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.instructors.payouts') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.instructors.payouts') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-hand-holding-usd w-6"></i>
                         <span class="ml-3">Payouts</span>
                     </a>
-                    <a href="{{ route('admin.products.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.products.*') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.products.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.products.*') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-box w-6"></i>
                         <span class="ml-3">Products</span>
                     </a>
                     @role('Super Admin')
-                    <a href="{{ route('admin.featured.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.featured.*') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.featured.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.featured.*') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-star w-6"></i>
                         <span class="ml-3">Featured Content</span>
                     </a>
-                    <a href="{{ route('admin.recent.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.recent.*') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.recent.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.recent.*') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-plus-circle w-6"></i>
                         <span class="ml-3">Recently Added</span>
                     </a>
-                    <a href="{{ route('admin.categories.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.categories.*') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.categories.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.categories.*') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-tags w-6"></i>
                         <span class="ml-3">Categories</span>
                     </a>
-                    <a href="{{ route('admin.users.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.users.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-users w-6"></i>
                         <span class="ml-3">Users</span>
                     </a>
-                    <a href="{{ route('admin.banners.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.banners.*') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.banners.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.banners.*') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-image w-6"></i>
                         <span class="ml-3">Banners</span>
                     </a>
                     @endrole
 
-                    <a href="{{ route('admin.orders.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.orders.*') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.orders.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.orders.*') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-shopping-basket w-6"></i>
                         <span class="ml-3">Cart Orders</span>
                     </a>
-                    <a href="{{ route('admin.payment-requests.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.payment-requests.*') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.payment-requests.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.payment-requests.*') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-receipt w-6"></i>
                         <span class="ml-3">Single Orders</span>
                     </a>
 
                     @role('Super Admin')
-                    <a href="{{ route('admin.logs') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.logs') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.logs') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.logs') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-history w-6"></i>
                         <span class="ml-3">Access Logs</span>
                     </a>
-                    <a href="{{ route('admin.settings.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.settings.*') ? 'bg-blue-50 text-primary' : '' }}">
+                    <a href="{{ route('admin.settings.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.settings.*') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-cog w-6"></i>
                         <span class="ml-3">Settings</span>
                     </a>
@@ -246,7 +246,7 @@
                     <div class="relative">
                         <button @click="userDropdownOpen = !userDropdownOpen" @click.away="userDropdownOpen = false" class="flex items-center focus:outline-none">
                             <span class="text-gray-700 font-medium mr-4 hidden md:block">{{ Auth::user()->name }}</span>
-                            <img class="h-10 w-10 rounded-full object-cover border-2 border-primary" src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=1e40af&color=fff" alt="Profile">
+                            <img class="h-10 w-10 rounded-full object-cover border-2 border-primary" src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=2C1810&color=fff" alt="Profile">
                         </button>
 
 
@@ -280,7 +280,7 @@
                             
                             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div class="sm:flex sm:items-start">
-                                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-amber-100 sm:mx-0 sm:h-10 sm:w-10">
                                         <i class="fas fa-headset text-primary text-xl"></i>
                                     </div>
                                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
@@ -293,7 +293,7 @@
                                             </p>
                                             
                                             <div class="mt-6 flex flex-col space-y-3">
-                                                <a href="mailto:support@edustore.com" class="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors">
+                                                <a href="mailto:support@edustore.com" class="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md text-white bg-amber-800 hover:bg-amber-900 shadow-sm transition-colors">
                                                     <i class="fas fa-envelope mr-2"></i> Email Support
                                                 </a>
                                                 <a href="https://wa.me/919999999999" target="_blank" class="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-500 hover:bg-green-600 shadow-sm transition-colors">

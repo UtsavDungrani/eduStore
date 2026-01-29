@@ -9,7 +9,7 @@
                 @if($product->image_path)
                     <img src="{{ $product->image_url }}" class="w-full aspect-[4/3] object-cover">
                 @else
-                    <img src="https://placehold.co/800x600/1e40af/ffffff?text={{ urlencode($product->title) }}" class="w-full aspect-[4/3] object-cover">
+                    <img src="https://placehold.co/800x600/2C1810/ffffff?text={{ urlencode($product->title) }}" class="w-full aspect-[4/3] object-cover">
                 @endif
             </div>
             
@@ -78,7 +78,7 @@
                         @endif
                     </div>
 
-                    @if($saleTag)
+                    @if(($product->show_sale_tag ?? true) && $saleTag)
                         <div class="flex flex-col items-center gap-1 bg-red-50 border border-red-100 px-6 py-3 rounded-2xl shadow-sm animate-bounce">
                             <span class="text-2xl font-black text-red-600 leading-none">{{ $saleTag }}</span>
                             <span class="text-[10px] uppercase font-bold text-red-700 tracking-tighter opacity-70 italic whitespace-nowrap">Offer Applied</span>
@@ -98,7 +98,7 @@
                 </div>
             </div>
 
-            <div class="prose prose-blue max-w-none text-gray-600 mb-10">
+            <div class="prose prose-stone max-w-none text-gray-600 mb-10">
                 {!! nl2br(e($product->description)) !!}
             </div>
 

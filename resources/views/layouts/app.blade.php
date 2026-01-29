@@ -107,7 +107,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            box-shadow: 0 8px 32px 0 rgba(44, 24, 16, 0.07);
         }
 
         .section-cloud-card {
@@ -263,6 +263,11 @@
 
         .text-glow {
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Prevent scroll during loading but keep navbar visible */
@@ -509,22 +514,46 @@
 <body class="bg-gray-50 font-sans antialiased no-select loading-overflow-hidden" x-data="{ mobileMenuOpen: false }">
     <!-- Loading Screen / Intro -->
     <div id="loading-screen" onclick="hideLoader()">
+        <!-- Close Button -->
+        <button onclick="event.stopPropagation(); hideLoader()" class="absolute top-6 right-6 z-[10000] p-2 text-[#2C1810]/50 hover:text-[#2C1810] transition-colors duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
         <div class="loader-content w-full max-w-4xl mx-auto px-4">
             @if(request()->routeIs('home'))
                 <!-- Logic: Default to Simple Loader to prevent flash on return visits. Inline JS switches to Intro if needed. -->
                 
                 <!-- Intro Content (Hidden by default) -->
-                <div id="intro-content" class="hidden">
-                    <div class="mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mx-auto text-[#2C1810]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
+                <div id="intro-content" class="hidden relative z-10 transition-opacity duration-1000">
+                    <!-- Logo/Icon (Open Book) -->
+                    <div class="mb-8 opacity-0 animate-[fadeIn_1.2s_ease-out_forwards]">
+                        <div class="relative inline-block">
+                            <div class="absolute inset-0 bg-[#D4AF37] blur-3xl opacity-20 animate-pulse"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-28 w-28 md:h-36 md:w-36 mx-auto text-[#2C1810] relative z-10 drop-shadow-2xl" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
                     </div>
-                    <h1 class="text-3xl md:text-5xl font-bold text-[#2C1810] mb-4 text-glow font-serif">
-                        Upgrade your learning <br/>
-                        <span class="text-[#D4AF37] italic">with {{ $siteName }}</span>
-                    </h1>
-                    <p class="text-[#8B4513] mt-8 text-sm animate-pulse">Click to enter</p>
+
+                    <div class="space-y-6 opacity-0 animate-[fadeIn_1.2s_ease-out_0.6s_forwards]">
+                        <h1 class="text-4xl md:text-7xl font-bold text-[#2C1810] tracking-tight leading-[1.1] text-glow font-serif">
+                            Upgrade your learning <br/>
+                            <span class="text-[#D4AF37] italic block mt-2 md:mt-4">with {{ $siteName }}</span>
+                        </h1>
+                        
+                        <div class="h-1 w-24 md:w-32 bg-[#D4AF37] mx-auto rounded-full opacity-60"></div>
+                        
+                        <p class="text-[#2C1810]/70 text-lg md:text-xl font-medium tracking-wide max-w-2xl mx-auto">
+                            Premium assignments, E-books, and study notes at your fingertips.
+                        </p>
+                    </div>
+                    
+                    <div class="mt-16 opacity-0 animate-[fadeIn_1.2s_ease-out_1.2s_forwards]">
+                        <p class="text-[#8B4513] text-sm md:text-base font-bold uppercase tracking-[0.3em] animate-pulse">
+                            Click anywhere to enter
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Simple Content (Visible by default) -->
@@ -638,7 +667,7 @@
                     @else
                         <a href="{{ route('login') }}" class="text-gray-600 hover:text-primary font-medium">Login</a>
                         <a href="{{ route('register') }}"
-                            class="bg-primary text-white px-5 py-2 rounded-full font-medium hover:bg-blue-700 transition-all">Sign
+                            class="bg-primary text-white px-5 py-2 rounded-full font-medium hover:bg-amber-900 transition-all">Sign
                             Up</a>
                     @endauth
                 </div>
@@ -653,7 +682,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t mt-12 py-8">
+    <footer class="bg-surface border-t border-white/50 mt-12 py-8">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-gray-500">&copy; {{ date('Y') }} {{ $siteName }}. All rights reserved.</p>
         </div>

@@ -23,6 +23,7 @@ class Product extends Model
         'is_featured',
         'is_recent',
         'is_demo',
+        'show_sale_tag',
     ];
 
     public function instructor()
@@ -41,6 +42,7 @@ class Product extends Model
         'is_featured' => 'boolean',
         'is_recent' => 'boolean',
         'is_demo' => 'boolean',
+        'show_sale_tag' => 'boolean',
     ];
 
     public function category()

@@ -3,14 +3,17 @@
         @if($product->image_path)
             <img src="{{ $product->image_url }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="{{ $product->title }}">
         @else
-            <img src="https://placehold.co/600x400/1e40af/ffffff?text={{ urlencode($product->title) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="{{ $product->title }}">
+            <img src="https://placehold.co/600x400/2C1810/ffffff?text={{ urlencode($product->title) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="{{ $product->title }}">
         @endif
         <div class="absolute top-4 right-4 bg-[#FDF6E3]/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-[#2C1810] shadow-sm border border-[#D4AF37] z-10">
             {{ $product->category->name }}
         </div>
-        @if($product->sale_tag)
-            <div class="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md z-10 animate-pulse">
-                {{ $product->sale_tag }}
+        <!-- Sale Ribbon (Triangular) -->
+        @if(($product->show_sale_tag ?? true) && $product->sale_tag)
+            <div class="absolute top-0 left-0 w-20 h-20 overflow-hidden z-20 pointer-events-none">
+                <div class="absolute top-4 -left-8 w-28 bg-red-600 text-white text-[10px] font-black py-1 text-center transform -rotate-45 shadow-md border-b border-white/20 uppercase tracking-tighter">
+                    {{ $product->sale_tag }}
+                </div>
             </div>
         @endif
     </div>
@@ -69,7 +72,7 @@
                                 id: {{ $product->id }},
                                 title: '{{ addslashes($product->title) }}',
                                 price: {{ $product->selling_price }},
-                                thumbnail: '{{ $product->image_path ? $product->image_url : "https://placehold.co/100x100/1e40af/ffffff?text=" . urlencode(substr($product->title, 0, 2)) }}',
+                                thumbnail: '{{ $product->image_path ? $product->image_url : "https://placehold.co/100x100/2C1810/ffffff?text=" . urlencode(substr($product->title, 0, 2)) }}',
                                 qty: 1
                             });
                             localStorage.setItem(window.CART_KEY, JSON.stringify(cart));

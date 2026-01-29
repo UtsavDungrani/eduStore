@@ -30,7 +30,7 @@ class ProductController extends Controller
             })->toArray();
         }
 
-        $recentlyAddedProducts = Product::where('is_active', true)->where('is_recent', true)->latest()->take(8)->get();
+        $recentlyAddedProducts = Product::where('is_active', true)->where('is_recent', true)->with('category')->latest()->take(8)->get();
 
         return view('user.landing', compact('banners', 'categories', 'featuredProducts', 'purchasedProducts', 'allProductIds', 'productCategories', 'recentlyAddedProducts'));
     }
@@ -51,8 +51,9 @@ class ProductController extends Controller
 
         $products = $query->latest()->paginate(12);
         $categories = Category::all();
+        $featuredProducts = Product::where('is_active', true)->where('is_featured', true)->with('category')->latest()->take(10)->get();
 
-        return view('user.products.index', compact('products', 'categories'));
+        return view('user.products.index', compact('products', 'categories', 'featuredProducts'));
     }
 
     public function show(Product $product)

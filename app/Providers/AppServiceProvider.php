@@ -26,8 +26,9 @@ class AppServiceProvider extends ServiceProvider
             });
 
             $view->with('siteSettings', $settings);
-            $view->with('brandColor', $settings['brand_color'] ?? '#1e40af');
-            $view->with('siteName', $settings['site_name'] ?? 'Digital Store');
+            $view->with('brandColor', '#2C1810'); // Hardcoded for theme consistency
+            $view->with('secondaryColor', '#D4AF37'); // Gold Accent
+            $view->with('siteName', 'EduStore');
         });
     }
 }

@@ -16,10 +16,12 @@
                 <p class="text-[10px] md:text-xs text-gray-200 mt-1 font-sans font-medium">{{ $product->category->name }}</p>
             </div>
             
-            <!-- Sale Tag -->
-            @if($product->sale_tag)
-                <div class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 shadow-md z-20">
-                    {{ (str_contains($product->sale_tag, '%') && !str_contains(strtoupper($product->sale_tag), 'OFF')) ? $product->sale_tag . ' OFF' : $product->sale_tag }}
+            <!-- Sale Ribbon (Triangular) -->
+            @if(($product->show_sale_tag ?? true) && $product->sale_tag)
+                <div class="absolute top-0 right-0 w-16 h-16 overflow-hidden z-20 pointer-events-none">
+                    <div class="absolute top-2 -right-6 w-24 bg-red-600 text-white text-[10px] font-black py-1 text-center transform rotate-45 shadow-sm border-b border-white/20 uppercase tracking-tighter">
+                        {{ $product->sale_tag }}
+                    </div>
                 </div>
             @endif
         </div>
@@ -45,7 +47,7 @@
         <div class="flex justify-center gap-2">
             <a href="{{ route('products.show', $product->slug) }}" 
                class="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-2 rounded-full text-xs font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all flex items-center gap-2 uppercase tracking-wider">
-                <i class="fas fa-eye"></i> View
+                <i class="fas fa-shopping-cart"></i> Buy
             </a>
         </div>
     </div>
