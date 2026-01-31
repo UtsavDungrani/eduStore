@@ -54,8 +54,8 @@
     
             <div x-show="hasBooks">
                 <!-- Mobile Carousel View -->
-                <div class="md:hidden mb-12">
-                    <div class="relative shelf-container">
+                <div class="md:hidden">
+                    <div class="relative">
                         <!-- Custom Navigation Buttons -->
                         <button x-show="books.length > 1" class="recent-next absolute top-1/2 -translate-y-1/2 -right-4 z-50 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95">
                             <i class="fas fa-chevron-right text-sm"></i>
@@ -64,20 +64,16 @@
                             <i class="fas fa-chevron-left text-sm"></i>
                         </button>
 
-                        <div class="swiper recentSwiper w-full !overflow-visible">
+                        <div class="swiper recentSwiper w-full">
                             <div class="swiper-wrapper relative z-10">
                                 <template x-for="book in books" :key="book.id">
-                                    <div class="swiper-slide flex justify-center items-end pb-4 cont-read-item" :data-title="book.title.toLowerCase()" :data-category="book.category">
-                                        <div class="origin-bottom">
-                                            @include('user.partials.book-card-history-alpine')
+                                    <div class="swiper-slide flex justify-center items-stretch cont-read-item" :data-title="book.title.toLowerCase()" :data-category="book.category">
+                                        <div class="h-full w-full max-w-[280px]">
+                                            @include('user.partials.product-card-history-alpine')
                                         </div>
                                     </div>
                                 </template>
                             </div>
-                        </div>
-                        <!-- Shelf Board -->
-                        <div class="absolute bottom-0 left-0 right-0 h-8 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                            <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
                         </div>
                     </div>
                 </div>
@@ -85,20 +81,14 @@
                 <!-- Desktop Static Shelf View -->
                 <div class="hidden md:block">
                     <template x-for="(chunk, index) in chunkedBooks" :key="index">
-                        <div class="relative shelf-container mb-20 last:mb-12">
-                            <div class="flex justify-evenly gap-16 md:gap-24 items-end relative z-10 w-full px-4 md:px-8 pl-12 md:pl-16">
+                        <div class="relative mb-20 last:mb-12">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch relative z-10 w-full">
                                 <template x-for="book in chunk" :key="book.id">
-                                    <div class="cont-read-item origin-bottom" :data-title="book.title.toLowerCase()" :data-category="book.category">
-                                        @include('user.partials.book-card-history-alpine', ['marginClass' => 'mb-6'])
+                                    <div class="cont-read-item flex" :data-title="book.title.toLowerCase()" :data-category="book.category">
+                                        @include('user.partials.product-card-history-alpine')
                                     </div>
                                 </template>
                             </div>
-                            <!-- Shelf Board -->
-                            <div class="absolute bottom-0 left-0 right-0 h-12 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                                <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
-                            </div>
-                            <!-- Shelf Shadow/Depth -->
-                            <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
                         </div>
                     </template>
                 </div>
@@ -124,8 +114,8 @@
     
         @if($recentlyAddedProducts->count() > 0)
             <!-- Mobile Carousel View -->
-            <div class="md:hidden mb-12">
-                <div class="relative shelf-container">
+            <div class="md:hidden">
+                <div class="relative">
                     @if($recentlyAddedProducts->count() > 1)
                     <!-- Custom Navigation Buttons -->
                     <button class="added-next absolute top-1/2 -translate-y-1/2 -right-4 z-50 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95">
@@ -136,43 +126,33 @@
                     </button>
                     @endif
 
-                    <div class="swiper recentlyAddedSwiper w-full !overflow-visible">
+                    <div class="swiper recentlyAddedSwiper w-full">
                         <div class="swiper-wrapper relative z-10">
                             @foreach($recentlyAddedProducts as $product)
-                                <div class="swiper-slide flex justify-center items-end pb-4" 
+                                <div class="swiper-slide h-auto" 
                                      data-category="{{ $product->category->name ?? 'Uncategorized' }}" 
                                      data-title="{{ strtolower($product->title) }}">
-                                    <div class="origin-bottom">
-                                        @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-1'])
-                                    </div>
+                                    @include('user.partials.product-card', ['product' => $product])
                                 </div>
                             @endforeach
                         </div>
-                    </div>
-                    <!-- Shelf Board -->
-                    <div class="absolute bottom-0 left-0 right-0 h-8 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                        <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
+
                     </div>
                 </div>
             </div>
 
+
             <!-- Desktop Static Shelf View -->
             <div class="hidden md:block">
                 @foreach($recentlyAddedProducts->chunk(4) as $chunk)
-                    <div class="relative shelf-container mb-20 last:mb-12">
-                        <div class="flex justify-evenly gap-16 md:gap-24 items-end relative z-10 w-full px-4 md:px-8 pl-12 md:pl-16">
+                    <div class="relative mb-20 last:mb-12">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch relative z-10 w-full">
                             @foreach($chunk as $product)
-                                <div data-category="{{ $product->category->name ?? 'Uncategorized' }}" data-title="{{ strtolower($product->title) }}">
-                                    @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-6'])
+                                <div class="flex" data-category="{{ $product->category->name ?? 'Uncategorized' }}" data-title="{{ strtolower($product->title) }}">
+                                    @include('user.partials.product-card', ['product' => $product])
                                 </div>
                             @endforeach
                         </div>
-                        <!-- Shelf Board -->
-                        <div class="absolute bottom-0 left-0 right-0 h-12 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                            <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
-                        </div>
-                        <!-- Shelf Shadow/Depth -->
-                        <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
                     </div>
                 @endforeach
             </div>
@@ -187,7 +167,7 @@
 
 
 <!-- Featured Content Slider -->
-<section class="max-w-7xl mx-auto px-4 mt-8 mb-20" id="featured-content">
+<section class="max-w-7xl mx-auto px-4 mt-8 mb-12" id="featured-content">
     <div class="section-cloud-card">
         <!-- Featured Content Header -->
         <div class="flex items-center justify-between bg-[#2C1810] p-4 rounded-xl border border-[#D4AF37] shadow-lg mb-8 relative overflow-hidden group">
@@ -204,8 +184,8 @@
     
         @if($featuredProducts->count() > 0)
             <!-- Mobile Carousel View -->
-            <div class="md:hidden mb-12">
-                <div class="relative shelf-container">
+            <div class="md:hidden">
+                <div class="relative">
                     @if($featuredProducts->count() > 1)
                     <!-- Custom Navigation Buttons -->
                     <button class="featured-next absolute top-1/2 -translate-y-1/2 -right-4 z-50 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95">
@@ -216,43 +196,33 @@
                     </button>
                     @endif
 
-                    <div class="swiper featuredSwiper w-full !overflow-visible">
+                    <div class="swiper featuredSwiper w-full">
                         <div class="swiper-wrapper relative z-10">
                             @foreach($featuredProducts as $product)
-                                <div class="swiper-slide flex justify-center items-end pb-4" 
+                                <div class="swiper-slide h-auto" 
                                      data-category="{{ $product->category->name ?? 'Uncategorized' }}" 
                                      data-title="{{ strtolower($product->title) }}">
-                                    <div class="origin-bottom">
-                                        @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-1'])
-                                    </div>
+                                    @include('user.partials.product-card', ['product' => $product])
                                 </div>
                             @endforeach
                         </div>
-                    </div>
-                    <!-- Shelf Board -->
-                    <div class="absolute bottom-0 left-0 right-0 h-8 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                        <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
+
                     </div>
                 </div>
             </div>
 
+
             <!-- Desktop Static Shelf View -->
             <div class="hidden md:block">
                 @foreach($featuredProducts->chunk(4) as $chunk)
-                    <div class="relative shelf-container mb-20 last:mb-12">
-                        <div class="flex justify-evenly gap-16 md:gap-24 items-end relative z-10 w-full px-4 md:px-8 pl-12 md:pl-16">
+                    <div class="relative mb-20 last:mb-12">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch relative z-10 w-full">
                             @foreach($chunk as $product)
-                                <div data-category="{{ $product->category->name ?? 'Uncategorized' }}" data-title="{{ strtolower($product->title) }}">
-                                    @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-6'])
+                                <div class="flex" data-category="{{ $product->category->name ?? 'Uncategorized' }}" data-title="{{ strtolower($product->title) }}">
+                                    @include('user.partials.product-card', ['product' => $product])
                                 </div>
                             @endforeach
                         </div>
-                        <!-- Shelf Board -->
-                        <div class="absolute bottom-0 left-0 right-0 h-12 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                            <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
-                        </div>
-                        <!-- Shelf Shadow/Depth -->
-                        <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
                     </div>
                 @endforeach
             </div>
@@ -262,7 +232,7 @@
             </div>
         @endif
         
-        <div class="mt-20 text-center">
+        <div class="mt-12 text-center">
             <a href="{{ route('products.index') }}" class="inline-block bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl">
                 Browse Full Library
             </a>
@@ -272,63 +242,9 @@
 
 @push('scripts')
 <style>
-    /* 3D Book Effects */
-    .perspective-1000 { perspective: 1000px; }
-    .transform-style-3d { transform-style: preserve-3d; }
-    
-    /* Book Hover Animation Classes */
-    .book-container:hover .book {
-        transform: rotateY(-20deg) rotateX(5deg) scale(1.05);
-    }
-    
-    .writing-vertical-rl {
-        writing-mode: vertical-rl;
-    }
-    
-    /* Ensure book cards reside at the start by default */
-    .book-container {
-        margin-left: 0;
-        margin-right: 0;
-    }
-
-    /* Centering Override for Sliders - Refined for Precise Visual Center */
-    .featuredSwiper .book-container,
-    .recentSwiper .book-container,
-    .recentlyAddedSwiper .book-container {
-        margin-left: auto !important;
-        margin-right: auto !important;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-        transform: translateX(16px) !important; /* Visual center compensation for mobile */
-    }
-    
-    @media (min-width: 1024px) {
-        /* Desktop alignment fix - compensation for larger spine */
-        .featuredSwiper .book-container,
-        .recentSwiper .book-container,
-        .recentlyAddedSwiper .book-container {
-            transform: translateX(24px) !important;
-        }
-    }
-
-    /* Shelf Wooden Texture */
-    .shelf-container::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 12px;
-        background: repeating-linear-gradient(
-            90deg,
-            #5d4037,
-            #5d4037 10px,
-            #4e342e 10px,
-            #4e342e 20px
-        );
-        opacity: 0.3;
-        pointer-events: none;
-        z-index: 5;
+    /* Swiper custom styles */
+    .featuredSwiper, .recentSwiper, .recentlyAddedSwiper {
+        padding-bottom: 0.5rem !important;
     }
     
     /* Custom Button Hover Effect (Cloudy Glow) */

@@ -90,7 +90,7 @@
     </div>
 
     <!-- Recently Opened / Continue Reading -->
-    <section class="max-w-7xl mx-auto mt-8 mb-20" x-data="myLibrary()" x-init="init()" x-cloak id="continue-reading-section">
+    <section class="max-w-7xl mx-auto mt-8 mb-12" x-data="myLibrary()" x-init="init()" x-cloak id="continue-reading-section">
         <div class="section-cloud-card">
              <div class="flex items-center justify-between bg-[#2C1810] p-4 rounded-xl border border-[#D4AF37] shadow-lg mb-8 relative overflow-hidden group">
                 <!-- Shine Effect -->
@@ -111,7 +111,7 @@
             <div x-show="hasBooks">
                 <!-- Mobile Slider (Recently Opened) -->
                 <div class="md:hidden">
-                    <div class="relative shelf-container mb-12">
+                    <div class="relative mb-6">
                         <!-- Custom Navigation Buttons -->
                         <button x-show="books.length > 1" class="recent-next absolute top-1/2 -translate-y-1/2 -right-4 z-50 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95">
                             <i class="fas fa-chevron-right text-sm"></i>
@@ -120,20 +120,14 @@
                             <i class="fas fa-chevron-left text-sm"></i>
                         </button>
 
-                        <div class="swiper recentSwiper w-full !overflow-visible">
+                        <div class="swiper recentSwiper w-full">
                             <div class="swiper-wrapper relative z-10">
                                 <template x-for="book in books" :key="book.id">
-                                    <div class="swiper-slide flex justify-center items-end pb-4 cont-read-item" :data-title="book.title.toLowerCase()" :data-category="book.category">
-                                        <div class="origin-bottom">
-                                            @include('user.partials.book-card-history-alpine')
-                                        </div>
+                                    <div class="swiper-slide h-auto cont-read-item" :data-title="book.title.toLowerCase()" :data-category="book.category">
+                                        @include('user.partials.product-card-history-alpine')
                                     </div>
                                 </template>
                             </div>
-                        </div>
-                        <!-- Shelf Board -->
-                        <div class="absolute bottom-0 left-0 right-0 h-8 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                            <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
                         </div>
                     </div>
                 </div>
@@ -141,20 +135,14 @@
                 <!-- Desktop Shelf (Recently Opened) -->
                 <div class="hidden md:block">
                     <template x-for="(chunk, index) in chunkedBooks" :key="index">
-                        <div class="relative shelf-container mb-20 last:mb-12">
-                            <div class="flex justify-evenly gap-16 md:gap-24 items-end relative z-10 w-full px-4 md:px-8 pl-12 md:pl-16">
+                        <div class="relative mb-20 last:mb-12">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch relative z-10 w-full">
                                 <template x-for="book in chunk" :key="book.id">
-                                    <div class="cont-read-item origin-bottom" :data-title="book.title.toLowerCase()" :data-category="book.category">
-                                        @include('user.partials.book-card-history-alpine', ['marginClass' => 'mb-6'])
+                                    <div class="cont-read-item flex" :data-title="book.title.toLowerCase()" :data-category="book.category">
+                                        @include('user.partials.product-card-history-alpine')
                                     </div>
                                 </template>
                             </div>
-                            <!-- Shelf Board -->
-                            <div class="absolute bottom-0 left-0 right-0 h-12 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                                <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
-                            </div>
-                            <!-- Shelf Shadow/Depth -->
-                            <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
                         </div>
                     </template>
                 </div>
@@ -163,7 +151,7 @@
     </section>
 
     <!-- Purchased Content Section -->
-    <section class="mb-20" id="purchased-content-section">
+    <section class="mb-12" id="purchased-content-section">
         <div class="section-cloud-card">
             <div class="flex items-center justify-between bg-[#2C1810] p-4 rounded-xl border border-[#D4AF37] shadow-lg mb-8 relative overflow-hidden group">
                 <!-- Shine Effect -->
@@ -177,7 +165,7 @@
             @if($products->count() > 0)
                 <!-- Mobile Slider (Purchased Content) -->
                 <div class="md:hidden">
-                    <div class="relative shelf-container mb-12">
+                    <div class="relative mb-6">
                         @if($products->count() > 1)
                         <!-- Custom Navigation Buttons -->
                         <button class="purchased-next absolute top-1/2 -translate-y-1/2 -right-4 z-50 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95">
@@ -188,22 +176,16 @@
                         </button>
                         @endif
 
-                        <div class="swiper purchasedSwiper w-full !overflow-visible">
+                        <div class="swiper purchasedSwiper w-full">
                             <div class="swiper-wrapper relative z-10">
-                                @foreach($products as $product)
-                                    <div class="swiper-slide flex justify-center items-end pb-4" 
-                                         data-category="{{ $product->category->name ?? 'Uncategorized' }}" 
-                                         data-title="{{ strtolower($product->title) }}">
-                                        <div class="origin-bottom">
-                                            @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-1', 'isPurchased' => true])
-                                        </div>
-                                    </div>
-                                @endforeach
+                            @foreach($products as $product)
+                                <div class="swiper-slide h-auto" 
+                                     data-category="{{ $product->category->name ?? 'Uncategorized' }}" 
+                                     data-title="{{ strtolower($product->title) }}">
+                                    @include('user.partials.product-card', ['product' => $product, 'isPurchased' => true])
+                                </div>
+                            @endforeach
                             </div>
-                        </div>
-                        <!-- Shelf Board -->
-                        <div class="absolute bottom-0 left-0 right-0 h-8 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                            <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
                         </div>
                     </div>
                 </div>
@@ -211,22 +193,16 @@
                 <!-- Desktop Shelf (Purchased Content) -->
                 <div class="hidden md:block" id="purchased-content-desktop">
                     @foreach($products->chunk(4) as $chunk)
-                        <div class="relative shelf-container mb-20 last:mb-12">
-                            <div class="flex justify-evenly gap-16 md:gap-24 items-end relative z-10 w-full px-4 md:px-8 pl-12 md:pl-16">
+                        <div class="relative mb-20 last:mb-12">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch relative z-10 w-full">
                                 @foreach($chunk as $product)
-                                    <div class="purchased-item origin-bottom" 
+                                    <div class="purchased-item flex" 
                                          data-category="{{ $product->category->name ?? 'Uncategorized' }}" 
                                          data-title="{{ strtolower($product->title) }}">
-                                        @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-6', 'isPurchased' => true])
+                                        @include('user.partials.product-card', ['product' => $product, 'isPurchased' => true])
                                     </div>
                                 @endforeach
                             </div>
-                            <!-- Shelf Board -->
-                            <div class="absolute bottom-0 left-0 right-0 h-12 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                                <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
-                            </div>
-                            <!-- Shelf Shadow/Depth -->
-                            <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
                         </div>
                     @endforeach
                 </div>
@@ -311,61 +287,17 @@
 @push('scripts')
 <style>
     .no-scrollbar::-webkit-scrollbar { display: none; }
-    /* Ensure Swiper arrows are visible and properly styled like home page */
-    .recent-next, .recent-prev, .purchased-next, .purchased-prev {
-        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    }
-    .recent-next:hover, .recent-prev:hover, .purchased-next:hover, .purchased-prev:hover {
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.4);
+    
+    .recentSwiper, .purchasedSwiper {
+        padding-bottom: 0.5rem !important;
     }
 
-    /* Centering Override for Slider - Refined for Precise Visual Center */
-    .recentSwiper .book-container, 
-    .purchasedSwiper .book-container {
-        margin-left: auto !important;
-        margin-right: auto !important;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-        transform: translateX(16px) !important; /* Visual center compensation for mobile */
-    }
-
-    @media (min-width: 1024px) {
-        .recentSwiper .book-container, 
-        .purchasedSwiper .book-container {
-            transform: translateX(24px) !important;
-        }
-    }
-    
-    /* 3D Book Effects */
-    .perspective-1000 { perspective: 1000px; }
-    .transform-style-3d { transform-style: preserve-3d; }
-    
-    .book-container:hover .book {
-        transform: rotateY(-20deg) rotateX(5deg) scale(1.05);
-    }
-    
-    /* Shelf Wooden Texture (Simple CSS Pattern) */
-    .shelf-container::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 12px;
-        background: repeating-linear-gradient(
-            90deg,
-            #5d4037,
-            #5d4037 10px,
-            #4e342e 10px,
-            #4e342e 20px
-        );
-        opacity: 0.3;
-        pointer-events: none;
-        z-index: 5;
-    }
-
-    .writing-vertical-rl {
-        writing-mode: vertical-rl;
+    /* Custom Button Hover Effect (Cloudy Glow) */
+    [class*="-next"]:hover, [class*="-prev"]:hover {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(255, 255, 255, 0.4) !important;
+        transform: translateY(-50%) scale(1.1) !important;
+        background-color: white !important;
+        color: black !important;
     }
 </style>
 <script>
@@ -472,11 +404,11 @@
                 purchasedSwiper.slideToLoop(0);
             }
 
-            // Hide empty shelves on Desktop
-            const shelves = document.querySelectorAll('#purchased-content-desktop .shelf-container');
-            shelves.forEach(shelf => {
-                const visibleItems = Array.from(shelf.querySelectorAll('.purchased-item')).filter(i => i.style.display !== 'none');
-                shelf.style.display = visibleItems.length === 0 ? 'none' : 'block';
+            // Hide empty sections on Desktop
+            const sections = document.querySelectorAll('#purchased-content-desktop > div');
+            sections.forEach(section => {
+                const visibleItems = Array.from(section.querySelectorAll('.purchased-item')).filter(i => i.style.display !== 'none');
+                section.style.display = visibleItems.length === 0 ? 'none' : 'block';
             });
 
             // Filter Continue Reading (Alpine/Local Storage based items)

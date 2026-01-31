@@ -687,6 +687,9 @@
     <footer class="bg-surface border-t border-white/50 mt-12 py-8">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-gray-500">&copy; {{ date('Y') }} {{ $siteName }}. All rights reserved.</p>
+            <p class="text-gray-500 text-sm mt-2">
+                Developed by <a href="https://mbixflow.com/" target="_blank" class="hover:text-primary transition-colors">Mbixflow</a>
+            </p>
         </div>
     </footer>
 

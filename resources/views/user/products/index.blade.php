@@ -25,8 +25,8 @@
 
             <!-- Mobile Slider (Featured Promotions) -->
             <div class="md:hidden">
-                <div class="relative shelf-container mb-12">
-                    <div class="swiper promoSwiper w-full !overflow-visible">
+                <div class="relative mb-6">
+                    <div class="swiper promoSwiper w-full">
                         @if($featuredProducts->count() > 1)
                         <!-- Custom Navigation Buttons -->
                         <button class="promo-next absolute top-1/2 -translate-y-1/2 -right-4 z-50 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95">
@@ -39,38 +39,26 @@
 
                         <div class="swiper-wrapper relative z-10">
                                 @foreach($featuredProducts as $product)
-                                    <div class="swiper-slide flex justify-center items-end pb-4">
-                                        <div class="origin-bottom">
-                                            @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-1'])
-                                        </div>
+                                    <div class="swiper-slide h-auto">
+                                        @include('user.partials.product-card', ['product' => $product])
                                     </div>
                                 @endforeach
                             </div>
                         </div>
                     
-                    <!-- Wooden Shelf -->
-                    <div class="absolute bottom-0 left-0 right-0 h-8 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                        <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
                     </div>
-                    <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
                 </div>
-            </div>
+
 
             <!-- Desktop Shelf (Featured Promotions) -->
-            <div class="hidden md:block relative shelf-container">
-                <div class="flex flex-wrap justify-evenly gap-16 md:gap-24 relative z-10 items-end px-4 md:px-8 pl-12 md:pl-16 min-h-[200px]">
+            <div class="hidden md:block">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch relative z-10 w-full">
                     @foreach($featuredProducts->take(4) as $product)
-                        <div class="promo-desktop-item">
-                            @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-6'])
+                        <div class="flex">
+                            @include('user.partials.product-card', ['product' => $product])
                         </div>
                     @endforeach
                 </div>
-                
-                <!-- Wooden Shelf -->
-                <div class="absolute bottom-0 left-0 right-0 h-8 md:h-12 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
-                    <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
-                </div>
-                <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
             </div>
         </div>
     </section>
@@ -79,50 +67,9 @@
 
 @push('scripts')
 <style>
-    /* 3D Book Effects & Shelf Styling from Home Page */
-    .perspective-1000 { perspective: 1000px; }
-    .transform-style-3d { transform-style: preserve-3d; }
-    
-    .book-container:hover .book {
-        transform: rotateY(-20deg) rotateX(5deg) scale(1.05);
-    }
-    
-    .writing-vertical-rl {
-        writing-mode: vertical-rl;
-    }
-
-    /* Centering Override for Promotional Slider - Refined for Precise Visual Center */
-    .promoSwiper .book-container {
-        margin-left: auto !important;
-        margin-right: auto !important;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-        transform: translateX(16px) !important; /* Visual center compensation for mobile */
-    }
-    
-    @media (min-width: 1024px) {
-        .promoSwiper .book-container {
-            transform: translateX(24px) !important;
-        }
-    }
-
-    .shelf-container::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 12px;
-        background: repeating-linear-gradient(
-            90deg,
-            #5d4037,
-            #5d4037 10px,
-            #4e342e 10px,
-            #4e342e 20px
-        );
-        opacity: 0.3;
-        pointer-events: none;
-        z-index: 5;
+    /* Swiper custom styles */
+    .promoSwiper {
+        padding-bottom: 2rem !important;
     }
 
     /* Ensure Swiper arrows are visible and properly styled like home page */
@@ -244,7 +191,7 @@
                 <div class="md:hidden relative mb-12">
 
 
-                    <div class="swiper myProductSwiper !pb-12 !overflow-visible">
+                    <div class="swiper myProductSwiper !pb-12">
                         <div class="swiper-wrapper">
                             @foreach($products as $product)
                                 <div class="swiper-slide h-auto">

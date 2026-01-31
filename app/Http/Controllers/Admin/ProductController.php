@@ -49,6 +49,7 @@ class ProductController extends Controller
             'is_recent' => 'boolean',
             'sale_percentage' => 'nullable|integer|min:0|max:100',
             'sale_display_mode' => 'nullable|string|in:tag,percentage',
+            'highlight_badge' => 'nullable|string|in:' . implode(',', \App\Models\Product::HIGHLIGHT_BADGE_OPTIONS),
         ]);
 
         $filePath = $request->file('product_file')->store('products', 'private');
@@ -78,7 +79,7 @@ class ProductController extends Controller
             'is_demo' => $request->has('is_demo'),
             'is_recent' => $request->has('is_recent'),
             'sale_percentage' => $request->sale_percentage,
-            'sale_display_mode' => $request->sale_display_mode ?? 'tag',
+            'sale_display_mode' => 'percentage',
             'highlight_badge' => $request->highlight_badge,
             'highlight_badge_shape' => $request->highlight_badge_shape ?? 'pill',
         ]);
@@ -116,6 +117,7 @@ class ProductController extends Controller
             'is_recent' => 'boolean',
             'sale_percentage' => 'nullable|integer|min:0|max:100',
             'sale_display_mode' => 'nullable|string|in:tag,percentage',
+            'highlight_badge' => 'nullable|string|in:' . implode(',', \App\Models\Product::HIGHLIGHT_BADGE_OPTIONS),
         ]);
 
         if (auth()->user()->hasRole('Instructor') && $product->user_id !== auth()->id()) {
@@ -144,7 +146,7 @@ class ProductController extends Controller
             'is_demo' => $request->has('is_demo'),
             'is_recent' => $request->has('is_recent'),
             'sale_percentage' => $request->sale_percentage,
-            'sale_display_mode' => $request->sale_display_mode ?? 'tag',
+            'sale_display_mode' => 'percentage',
             'highlight_badge' => $request->highlight_badge,
             'highlight_badge_shape' => $request->highlight_badge_shape ?? 'pill',
         ];

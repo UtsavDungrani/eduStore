@@ -1,55 +1,79 @@
-<div onclick="window.location.href='{{ route('products.show', $product->slug) }}'" class="bg-white rounded-2xl overflow-hidden shadow-md border border-[#D4AF37] flex flex-col hover:shadow-2xl transition-all group cursor-pointer relative hover:-translate-y-1">
+<div onclick="window.location.href='{{ route('products.show', $product->slug) }}'" class="bg-white rounded-2xl overflow-hidden shadow-md border border-[#D4AF37] flex flex-col hover:shadow-2xl transition-all group cursor-pointer relative hover:-translate-y-1 {{ $marginClass ?? '' }}">
     <div class="relative aspect-[4/3] bg-gray-100 overflow-hidden">
         @if($product->image_path)
             <img src="{{ $product->image_url }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="{{ $product->title }}">
         @else
             <img src="https://placehold.co/600x400/2C1810/ffffff?text={{ urlencode($product->title) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="{{ $product->title }}">
         @endif
-        <!-- Category Badge -->
-        <div class="absolute top-4 left-4 bg-[#FDF6E3]/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-[#2C1810] shadow-sm border border-[#D4AF37] z-30">
-            {{ $product->category->name }}
-        </div>
-
+        <!-- Category Badge Moved to Title -->
+        
         <!-- Sale Ribbon (Triangular) -->
         @php
-            $displayTag = null;
-            if ($product->sale_display_mode === 'percentage' && $product->sale_percentage) {
-                $displayTag = $product->sale_percentage . '% OFF';
-            } else {
-                $displayTag = $product->sale_tag;
-            }
+            $displayTag = $product->sale_percentage ? $product->sale_percentage . '% OFF' : null;
         @endphp
         @if($displayTag)
             <div class="absolute top-0 right-0 w-20 h-20 overflow-hidden z-30 pointer-events-none">
-                <div class="absolute top-4 -right-8 w-28 bg-red-600 text-white text-[10px] font-black py-1 text-center transform rotate-45 shadow-md border-b border-white/20 uppercase tracking-tighter">
+                <div class="absolute top-4 -right-8 w-28 bg-red-600 text-white text-xs font-black py-1 text-center transform rotate-45 shadow-md border-b border-white/20 uppercase tracking-tight">
                     {{ $displayTag }}
                 </div>
             </div>
         @endif
 
-        <!-- Highlight Badge (Selectable Shape) -->
+        <!-- Highlight Badge (Advanced Customizable) -->
         @if($product->highlight_badge)
-            <div class="absolute {{ ($product->highlight_badge_shape ?? 'pill') === 'tag' ? 'top-12 left-0' : 'top-12 left-3' }} z-30 pointer-events-none w-fit max-w-[calc(100%-1.5rem)]">
-                @php
-                    $shapeClass = 'rounded-full'; // Default Pill
-                    $containerClass = 'px-3 py-1';
-                    if (($product->highlight_badge_shape ?? 'pill') === 'soft_rectangle') {
-                        $shapeClass = 'rounded-lg';
-                    } elseif (($product->highlight_badge_shape ?? 'pill') === 'tag') {
-                        $shapeClass = 'rounded-r-full rounded-l-none';
-                        $containerClass = 'pl-5 pr-4 py-1.5 -ml-1.5';
-                    }
-                @endphp
-                <!-- Premium Golden Badge -->
-                <div class="bg-amber-400 bg-gradient-to-br from-[#FDE68A] via-[#F59E0B] to-[#B45309] text-black text-[11px] font-black {{ $containerClass }} {{ $shapeClass }} shadow-[0_4px_12px_rgba(0,0,0,0.4)] border-t border-white/40 border-l border-white/20 uppercase tracking-widest flex items-center gap-1.5 transition-all duration-300 hover:scale-110">
-                    <i class="fas fa-star text-[10px] drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)] text-amber-950 shrink-0"></i>
-                    <span class="drop-shadow-[0_1px_1px_rgba(255,255,255,0.3)] whitespace-nowrap">{{ $product->highlight_badge }}</span>
+            @php
+                $shape = $product->highlight_badge_shape ?? 'pill';
+                $color = $product->highlight_badge_color ?? 'golden';
+
+                
+                // Color Mapping
+                $colors = [
+                    'golden' => 'bg-amber-400 bg-gradient-to-br from-[#FDE68A] via-[#F59E0B] to-[#B45309] text-black border-t border-white/40 border-l border-white/20',
+                    'red' => 'bg-red-500 bg-gradient-to-br from-red-400 via-red-600 to-red-800 text-white border-t border-white/30 border-l border-white/10',
+                    'blue' => 'bg-blue-500 bg-gradient-to-br from-blue-400 via-blue-600 to-blue-800 text-white border-t border-white/30 border-l border-white/10',
+                    'green' => 'bg-emerald-500 bg-gradient-to-br from-emerald-400 via-emerald-600 to-emerald-800 text-white border-t border-white/30 border-l border-white/10',
+                    'black' => 'bg-gray-900 bg-gradient-to-br from-gray-700 via-gray-900 to-black text-white border-t border-white/20 border-l border-white/10',
+                    'pink' => 'bg-pink-500 bg-gradient-to-br from-pink-400 via-pink-600 to-pink-800 text-white border-t border-white/30 border-l border-white/10',
+                    'orange' => 'bg-orange-500 bg-gradient-to-br from-orange-400 via-orange-600 to-orange-800 text-white border-t border-white/30 border-l border-white/10',
+                ];
+
+                // Shape Mapping (Clip paths or Border Radius)
+                $shapeClasses = 'rounded-full px-3 py-1'; // Default pill
+                $clipPath = '';
+
+                switch($shape) {
+                    case 'soft_rectangle': $shapeClasses = 'rounded-lg px-3 py-1'; break;
+                    case 'tag': $shapeClasses = 'rounded-r-full rounded-l-none pl-5 pr-4 py-1.5 -ml-1.5'; break;
+                    case 'circle': $shapeClasses = 'rounded-full h-16 w-16 flex items-center justify-center p-1 text-center leading-tight shrink-0'; break;
+                    case 'square': $shapeClasses = 'rounded-none h-16 w-16 flex items-center justify-center p-1 text-center leading-tight shrink-0'; break;
+
+                    case 'banner': $shapeClasses = 'w-14 pt-5 pb-6 px-1.5 min-h-[7rem] flex items-center justify-center text-center leading-none text-[11px]'; $clipPath = 'polygon(100% 0, 100% 100%, 50% 85%, 0 100%, 0 0)'; break; // Vertical Banner
+                    case 'flag': $shapeClasses = 'w-32 pl-4 pr-5 py-1.5'; $clipPath = 'polygon(0 0, 100% 0, 95% 50%, 100% 100%, 0 100%)'; break; // Horizontal Flag
+                    case 'arrow': $shapeClasses = 'pl-5 pr-6 py-1.5'; $clipPath = 'polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0 100%)'; break;
+                }
+
+                // Position Mapping
+                $posClasses = 'top-3 left-3';
+                if($shape === 'banner') $posClasses = 'top-0 left-3';
+                if($shape === 'tag') $posClasses = 'top-3 left-0';
+
+            @endphp
+            <div class="absolute {{ $posClasses }} z-30 pointer-events-none w-fit max-w-[calc(100%-1.5rem)]">
+                <div class="{{ $colors[$color] ?? $colors['golden'] }} text-[10px] md:text-[11px] font-black {{ $shapeClasses }} shadow-[0_4px_12px_rgba(0,0,0,0.4)] uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all duration-300 hover:scale-110"
+                     style="{{ $clipPath ? 'clip-path: ' . $clipPath . ';' : '' }}">
+                    @if(!in_array($shape, ['circle', 'square', 'banner']))
+                        <i class="fas fa-bolt text-[9px] {{ $color === 'golden' ? 'text-amber-950' : 'text-white/80' }} shrink-0"></i>
+                    @endif
+                    <span class="{{ in_array($shape, ['circle', 'square', 'banner']) ? 'whitespace-normal leading-none break-words' : 'whitespace-nowrap' }}">{!! $shape === 'banner' ? str_replace(' ', '<br>', $product->highlight_badge) : $product->highlight_badge !!}</span>
                 </div>
             </div>
         @endif
     </div>
     <div class="p-6 flex-1 flex flex-col">
-        <h3 class="font-bold text-lg text-[#2C1810] mb-2 line-clamp-2 font-serif group-hover:text-[#8B4513] transition-colors">{{ $product->title }}</h3>
+        <div class="flex justify-between items-start gap-2 mb-2">
+            <h3 class="font-bold text-lg text-[#2C1810] line-clamp-2 font-serif group-hover:text-[#8B4513] transition-colors leading-tight">{{ $product->title }}</h3>
+            <span class="shrink-0 bg-[#FDF6E3] border border-[#D4AF37] rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#8B4513] whitespace-nowrap mt-1">{{ $product->category->name }}</span>
+        </div>
         <p class="text-[#8B4513] text-sm mb-4 line-clamp-3 font-serif italic leading-relaxed">@php echo Str::limit(strip_tags($product->description), 100) @endphp</p>
         <div class="mt-auto flex items-center justify-between">
             @if($product->on_sale)

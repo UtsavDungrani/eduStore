@@ -6,6 +6,39 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    public const HIGHLIGHT_BADGE_OPTIONS = [
+        'Most Bought',
+        'New Arrivals',
+        'Trending',
+        'Best Seller',
+        'SALE',
+        'OFFER',
+    ];
+
+    public const HIGHLIGHT_BADGE_SHAPES = [
+        'pill' => 'Pill (Rounded)',
+        'soft_rectangle' => 'Soft Rectangle',
+        'tag' => 'Tag Style (Left)',
+        'circle' => 'Circle',
+        'square' => 'Square',
+
+        'banner' => 'Banner Style',
+        'flag' => 'Flag Style',
+        'arrow' => 'Arrow Style',
+    ];
+
+
+
+    public const HIGHLIGHT_BADGE_COLORS = [
+        'golden' => 'Golden (Premium)',
+        'red' => 'Red / Hot',
+        'blue' => 'Blue / Info',
+        'green' => 'Green / Success',
+        'black' => 'Black / Dark',
+        'pink' => 'Pink / Special',
+        'orange' => 'Orange / Warning',
+    ];
+
     protected $fillable = [
         'category_id',
         'user_id',
@@ -28,6 +61,8 @@ class Product extends Model
         'sale_display_mode',
         'highlight_badge',
         'highlight_badge_shape',
+
+        'highlight_badge_color',
     ];
 
     public function instructor()

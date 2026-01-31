@@ -68,28 +68,10 @@
                     </div>
 
                     <div class="md:col-span-2 bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
-                        <label class="block text-sm font-bold text-gray-700 mb-4 flex items-center gap-2">
-                            <i class="fas fa-tag text-primary"></i> Sale Display Preference
-                        </label>
-                        
-                        <div class="flex flex-wrap gap-6 mb-6">
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="radio" name="sale_display_mode" value="tag" {{ old('sale_display_mode', $product->sale_display_mode ?? 'tag') === 'tag' ? 'checked' : '' }} class="w-5 h-5 text-primary focus:ring-primary border-gray-300">
-                                <span class="text-sm font-bold text-gray-700 group-hover:text-primary transition-colors">Use Custom Tag</span>
-                            </label>
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="radio" name="sale_display_mode" value="percentage" {{ old('sale_display_mode', $product->sale_display_mode) === 'percentage' ? 'checked' : '' }} class="w-5 h-5 text-primary focus:ring-primary border-gray-300">
-                                <span class="text-sm font-bold text-gray-700 group-hover:text-primary transition-colors">Use Percentage (%)</span>
-                            </label>
-                        </div>
-
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div id="sale_tag_container">
-                                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Sale Badge Tag</label>
-                                <input type="text" name="sale_tag" value="{{ old('sale_tag', $product->sale_tag) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="HOT, SALE">
-                            </div>
-                            <div id="sale_percentage_container" class="hidden">
-                                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Sale Percentage (%)</label>
+                            <input type="hidden" name="sale_display_mode" value="percentage">
+                            <div id="sale_percentage_container">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Sale Percentage (%)</label>
                                 <input type="number" name="sale_percentage" value="{{ old('sale_percentage', $product->sale_percentage) }}" min="0" max="100" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="e.g. 20">
                             </div>
                         </div>
@@ -97,18 +79,34 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-gray-100">
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                    <i class="fas fa-star text-amber-500"></i> Highlight Badge <span class="text-xs font-normal text-gray-400">(Optional)</span>
+                                    <i class="fas fa-star text-amber-500"></i> Offer/Sale Strip <span class="text-xs font-normal text-gray-400">(Custom Text)</span>
                                 </label>
-                                <input type="text" name="highlight_badge" value="{{ old('highlight_badge', $product->highlight_badge) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="e.g. Most Bought">
+                                <select name="highlight_badge" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
+                                    <option value="">None (No Badge)</option>
+                                    @foreach(\App\Models\Product::HIGHLIGHT_BADGE_OPTIONS as $option)
+                                        <option value="{{ $option }}" {{ old('highlight_badge', $product->highlight_badge) == $option ? 'selected' : '' }}>{{ $option }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
                                     <i class="fas fa-shapes text-primary"></i> Badge Shape
                                 </label>
                                 <select name="highlight_badge_shape" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
-                                    <option value="pill" {{ old('highlight_badge_shape', $product->highlight_badge_shape) == 'pill' ? 'selected' : '' }}>Pill (Rounded)</option>
-                                    <option value="soft_rectangle" {{ old('highlight_badge_shape', $product->highlight_badge_shape) == 'soft_rectangle' ? 'selected' : '' }}>Soft Rectangle</option>
-                                    <option value="tag" {{ old('highlight_badge_shape', $product->highlight_badge_shape) == 'tag' ? 'selected' : '' }}>Tag Style (Left-aligned)</option>
+                                    @foreach(\App\Models\Product::HIGHLIGHT_BADGE_SHAPES as $value => $label)
+                                        <option value="{{ $value }}" {{ old('highlight_badge_shape', $product->highlight_badge_shape) == $value ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                                    <i class="fas fa-palette text-primary"></i> Badge Color
+                                </label>
+                                <select name="highlight_badge_color" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
+                                    @foreach(\App\Models\Product::HIGHLIGHT_BADGE_COLORS as $value => $label)
+                                        <option value="{{ $value }}" {{ old('highlight_badge_color', $product->highlight_badge_color) == $value ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -275,24 +273,6 @@
     // Initialize
     togglePrice();
 
-    // Sale Display Mode Logic
-    const displayModeRadios = document.querySelectorAll('input[name="sale_display_mode"]');
-    const tagContainer = document.getElementById('sale_tag_container');
-    const percentageContainer = document.getElementById('sale_percentage_container');
-
-    function updateSaleFields() {
-        const selectedMode = document.querySelector('input[name="sale_display_mode"]:checked').value;
-        if (selectedMode === 'tag') {
-            tagContainer.classList.remove('hidden');
-            percentageContainer.classList.add('hidden');
-        } else {
-            tagContainer.classList.add('hidden');
-            percentageContainer.classList.remove('hidden');
-        }
-    }
-
-    displayModeRadios.forEach(radio => radio.addEventListener('change', updateSaleFields));
-    // Initialize
-    updateSaleFields();
+    // No extra JS needed for Sale Display Mode anymore
 </script>
 @endsection
