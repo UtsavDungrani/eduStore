@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController as AdminUser;
 use App\Http\Controllers\Admin\ProductController as AdminProduct;
 use App\Http\Controllers\Admin\CategoryController as AdminCategory;
 use App\Http\Controllers\Admin\BannerController as AdminBanner;
+use App\Http\Controllers\Admin\BadgeController as AdminBadge;
 
 use App\Http\Controllers\Admin\OrderController as AdminOrder;
 use App\Http\Controllers\Admin\SettingController as AdminSetting;
@@ -21,6 +22,8 @@ Route::get('/', [UserProduct::class, 'home'])->name('home');
 Route::get('/products', [UserProduct::class, 'index'])->name('products.index');
 Route::get('/products/{product:slug}', [UserProduct::class, 'show'])->name('products.show');
 Route::get('/buy/{product}', [UserProduct::class, 'buy'])->name('products.buy')->middleware('auth');
+Route::get('/demo-view/{product}', [UserContent::class, 'demoView'])->name('content.demo.view')->middleware('auth');
+Route::get('/demo-stream/{product}', [UserContent::class, 'demoStream'])->name('content.demo.stream')->middleware('auth');
 
 // Authenticated User Routes
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -66,6 +69,12 @@ Route::middleware(['auth', 'role:Super Admin|Instructor'])->prefix('admin')->nam
     Route::get('/instructors/payouts', [\App\Http\Controllers\Admin\PayoutController::class, 'index'])->name('instructors.payouts');
     
     Route::resource('products', AdminProduct::class);
+    
+    // Badge Management
+    Route::get('/badges', [AdminBadge::class, 'index'])->name('badges.index');
+    Route::get('/badges/{product}/edit', [AdminBadge::class, 'edit'])->name('badges.edit');
+    Route::patch('/badges/{product}', [AdminBadge::class, 'update'])->name('badges.update');
+    
     Route::resource('orders', AdminOrder::class)->only(['index', 'show']);
     Route::resource('payment-requests', \App\Http\Controllers\Admin\PaymentRequestController::class)->only(['index', 'show', 'update']);
 

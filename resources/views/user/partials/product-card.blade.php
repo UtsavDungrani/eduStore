@@ -26,15 +26,15 @@
                 $color = $product->highlight_badge_color ?? 'golden';
 
                 
-                // Color Mapping
-                $colors = [
-                    'golden' => 'bg-amber-400 bg-gradient-to-br from-[#FDE68A] via-[#F59E0B] to-[#B45309] text-black border-t border-white/40 border-l border-white/20',
-                    'red' => 'bg-red-500 bg-gradient-to-br from-red-400 via-red-600 to-red-800 text-white border-t border-white/30 border-l border-white/10',
-                    'blue' => 'bg-blue-500 bg-gradient-to-br from-blue-400 via-blue-600 to-blue-800 text-white border-t border-white/30 border-l border-white/10',
-                    'green' => 'bg-emerald-500 bg-gradient-to-br from-emerald-400 via-emerald-600 to-emerald-800 text-white border-t border-white/30 border-l border-white/10',
-                    'black' => 'bg-gray-900 bg-gradient-to-br from-gray-700 via-gray-900 to-black text-white border-t border-white/20 border-l border-white/10',
-                    'pink' => 'bg-pink-500 bg-gradient-to-br from-pink-400 via-pink-600 to-pink-800 text-white border-t border-white/30 border-l border-white/10',
-                    'orange' => 'bg-orange-500 bg-gradient-to-br from-orange-400 via-orange-600 to-orange-800 text-white border-t border-white/30 border-l border-white/10',
+                // Color Mapping with inline styles
+                $colorStyles = [
+                    'golden' => 'background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #B45309 100%); color: black; border-top: 1px solid rgba(255,255,255,0.4); border-left: 1px solid rgba(255,255,255,0.2);',
+                    'red' => 'background: linear-gradient(135deg, #f87171 0%, #dc2626 50%, #991b1b 100%); color: white; border-top: 1px solid rgba(255,255,255,0.3); border-left: 1px solid rgba(255,255,255,0.1);',
+                    'blue' => 'background: linear-gradient(135deg, #60a5fa 0%, #2563eb 50%, #1e40af 100%); color: white; border-top: 1px solid rgba(255,255,255,0.3); border-left: 1px solid rgba(255,255,255,0.1);',
+                    'green' => 'background: linear-gradient(135deg, #34d399 0%, #059669 50%, #065f46 100%); color: white; border-top: 1px solid rgba(255,255,255,0.3); border-left: 1px solid rgba(255,255,255,0.1);',
+                    'black' => 'background: linear-gradient(135deg, #4b5563 0%, #111827 50%, #000000 100%); color: white; border-top: 1px solid rgba(255,255,255,0.2); border-left: 1px solid rgba(255,255,255,0.1);',
+                    'pink' => 'background: linear-gradient(135deg, #f472b6 0%, #db2777 50%, #9f1239 100%); color: white; border-top: 1px solid rgba(255,255,255,0.3); border-left: 1px solid rgba(255,255,255,0.1);',
+                    'orange' => 'background: linear-gradient(135deg, #fb923c 0%, #ea580c 50%, #9a3412 100%); color: white; border-top: 1px solid rgba(255,255,255,0.3); border-left: 1px solid rgba(255,255,255,0.1);',
                 ];
 
                 // Shape Mapping (Clip paths or Border Radius)
@@ -59,11 +59,8 @@
 
             @endphp
             <div class="absolute {{ $posClasses }} z-30 pointer-events-none w-fit max-w-[calc(100%-1.5rem)]">
-                <div class="{{ $colors[$color] ?? $colors['golden'] }} text-[10px] md:text-[11px] font-black {{ $shapeClasses }} shadow-[0_4px_12px_rgba(0,0,0,0.4)] uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all duration-300 hover:scale-110"
-                     style="{{ $clipPath ? 'clip-path: ' . $clipPath . ';' : '' }}">
-                    @if(!in_array($shape, ['circle', 'square', 'banner']))
-                        <i class="fas fa-bolt text-[9px] {{ $color === 'golden' ? 'text-amber-950' : 'text-white/80' }} shrink-0"></i>
-                    @endif
+                <div class="text-[10px] md:text-[11px] font-black {{ $shapeClasses }} shadow-[0_4px_12px_rgba(0,0,0,0.4)] uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all duration-300 hover:scale-110"
+                     style="{{ ($colorStyles[$color] ?? $colorStyles['golden']) . ($clipPath ? ' clip-path: ' . $clipPath . ';' : '') }}">
                     <span class="{{ in_array($shape, ['circle', 'square', 'banner']) ? 'whitespace-normal leading-none break-words' : 'whitespace-nowrap' }}">{!! $shape === 'banner' ? str_replace(' ', '<br>', $product->highlight_badge) : $product->highlight_badge !!}</span>
                 </div>
             </div>

@@ -171,6 +171,10 @@
                         <i class="fas fa-box w-6"></i>
                         <span class="ml-3">Products</span>
                     </a>
+                    <a href="{{ route('admin.badges.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.badges.*') ? 'bg-amber-50 text-primary' : '' }}">
+                        <i class="fas fa-award w-6"></i>
+                        <span class="ml-3">Product Badges</span>
+                    </a>
                     @role('Super Admin')
                     <a href="{{ route('admin.featured.index') }}" class="flex items-center px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors {{ request()->routeIs('admin.featured.*') ? 'bg-amber-50 text-primary' : '' }}">
                         <i class="fas fa-star w-6"></i>

@@ -35,7 +35,7 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'nullable|exists:users,id',
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
             'price' => 'nullable|numeric|min:0',
             'original_price' => 'nullable|numeric|min:0',
             'offer_price' => 'nullable|numeric|min:0',
@@ -103,7 +103,7 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'nullable|exists:users,id',
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
             'price' => 'nullable|numeric|min:0',
             'original_price' => 'nullable|numeric|min:0',
             'offer_price' => 'nullable|numeric|min:0',
@@ -147,8 +147,6 @@ class ProductController extends Controller
             'is_recent' => $request->has('is_recent'),
             'sale_percentage' => $request->sale_percentage,
             'sale_display_mode' => 'percentage',
-            'highlight_badge' => $request->highlight_badge,
-            'highlight_badge_shape' => $request->highlight_badge_shape ?? 'pill',
         ];
 
         if ($request->hasFile('product_file')) {

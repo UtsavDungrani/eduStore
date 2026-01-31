@@ -75,45 +75,12 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-gray-100">
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                    <i class="fas fa-star text-amber-500"></i> Offer/Sale Strip <span class="text-xs font-normal text-gray-400">(Custom Text)</span>
-                                </label>
-                                <select name="highlight_badge" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
-                                    <option value="">None (No Badge)</option>
-                                    @foreach(\App\Models\Product::HIGHLIGHT_BADGE_OPTIONS as $option)
-                                        <option value="{{ $option }}" {{ old('highlight_badge') == $option ? 'selected' : '' }}>{{ $option }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                    <i class="fas fa-shapes text-primary"></i> Badge Shape
-                                </label>
-                                <select name="highlight_badge_shape" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
-                                    @foreach(\App\Models\Product::HIGHLIGHT_BADGE_SHAPES as $value => $label)
-                                        <option value="{{ $value }}" {{ old('highlight_badge_shape', 'pill') == $value ? 'selected' : '' }}>{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
 
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                                    <i class="fas fa-palette text-primary"></i> Badge Color
-                                </label>
-                                <select name="highlight_badge_color" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
-                                    @foreach(\App\Models\Product::HIGHLIGHT_BADGE_COLORS as $value => $label)
-                                        <option value="{{ $value }}" {{ old('highlight_badge_color', 'golden') == $value ? 'selected' : '' }}>{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="md:col-span-2">
                         <label class="block text-sm font-bold text-gray-700 mb-2">Description</label>
-                        <textarea name="description" rows="5" class="w-full px-4 py-3 rounded-xl border {{ $errors->has('description') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary" placeholder="Full details about the content...">{{ old('description') }}</textarea>
+                        <textarea name="description" required rows="5" class="w-full px-4 py-3 rounded-xl border {{ $errors->has('description') ? 'border-red-500' : 'border-gray-200' }} focus:ring-primary focus:border-primary" placeholder="Full details about the content...">{{ old('description') }}</textarea>
                         @error('description')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
                     </div>
 
@@ -127,7 +94,7 @@
                                         <span>Upload a file</span>
                                         <input id="product_file" name="product_file" type="file" required accept=".pdf" class="sr-only">
                                     </label>
-                                    <p class="pl-1">or drag and drop</p>
+                                    <p class="pl-1">or drag and drop</p>y
                                 </div>
                                 <p class="text-xs text-gray-500">PDF ONLY up to 300MB</p>
                             </div>

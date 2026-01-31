@@ -11,7 +11,50 @@
         $saleTag .= ' OFF';
     }
 @endphp
-<div class="max-w-7xl mx-auto px-4 py-12">
+<div class="max-w-7xl mx-auto px-4 py-12" x-data="previewModal()" @open-preview.window="openPreview()">
+    <!-- Preview Modal -->
+    <div x-show="showPreviewModal" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center px-4" x-cloak>
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" @click="showPreviewModal = false"></div>
+        <div class="bg-zinc-900 w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden relative shadow-2xl flex flex-col">
+            <!-- Header -->
+            <div class="p-6 border-b border-white/10 flex items-center justify-between bg-zinc-900/50 backdrop-blur">
+                <div>
+                    <h3 class="text-xl font-bold text-white">Free Preview</h3>
+                    <p class="text-xs text-zinc-400">Viewing sample pages for {{ Str::limit($product->title, 40) }}</p>
+                </div>
+                <button @click="showPreviewModal = false" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition-all">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Content Area (Scrollable) -->
+            <div class="flex-1 overflow-y-auto p-6 bg-zinc-950/50 text-center" id="preview-container">
+                <div x-show="loading" class="py-20">
+                    <i class="fas fa-circle-notch fa-spin text-4xl text-primary"></i>
+                    <p class="text-zinc-500 mt-4 text-sm font-medium animate-pulse">Loading preview pages...</p>
+                </div>
+                
+                <div x-show="!loading" class="space-y-8">
+                     <!-- PDF Pages Container -->
+                     <div id="pdf-preview-pages" class="space-y-6 flex flex-col items-center"></div>
+                </div>
+            </div>
+
+            <!-- Footer (Buy Action) -->
+            <div class="p-6 border-t border-white/10 bg-zinc-900 flex items-center justify-between gap-4">
+                <div class="text-left hidden sm:block">
+                    <p class="text-zinc-400 text-xs">Like what you see?</p>
+                    <p class="text-white font-bold">Get lifetime access now.</p>
+                </div>
+                <button @click="triggerBuy()" class="flex-1 sm:flex-none bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-primary/20 transition-all transform hover:scale-105 flex items-center justify-center gap-3">
+                    <span>Unlock Full Book</span>
+                    <span class="bg-black/20 px-2 py-0.5 rounded text-sm">₹{{ number_format($product->selling_price, 2) }}</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="flex flex-col lg:flex-row gap-12">
         <!-- Product Image/Preview -->
         <div class="w-full lg:w-1/2">
@@ -31,15 +74,15 @@
                         $color = $product->highlight_badge_color ?? 'golden';
 
                         
-                        // Color Mapping
-                        $colors = [
-                            'golden' => 'bg-amber-400 bg-gradient-to-br from-[#FDE68A] via-[#F59E0B] to-[#B45309] text-black border-t border-white/40 border-l border-white/20',
-                            'red' => 'bg-red-500 bg-gradient-to-br from-red-400 via-red-600 to-red-800 text-white border-t border-white/30 border-l border-white/10',
-                            'blue' => 'bg-blue-500 bg-gradient-to-br from-blue-400 via-blue-600 to-blue-800 text-white border-t border-white/30 border-l border-white/10',
-                            'green' => 'bg-emerald-500 bg-gradient-to-br from-emerald-400 via-emerald-600 to-emerald-800 text-white border-t border-white/30 border-l border-white/10',
-                            'black' => 'bg-gray-900 bg-gradient-to-br from-gray-700 via-gray-900 to-black text-white border-t border-white/20 border-l border-white/10',
-                            'pink' => 'bg-pink-500 bg-gradient-to-br from-pink-400 via-pink-600 to-pink-800 text-white border-t border-white/30 border-l border-white/10',
-                            'orange' => 'bg-orange-500 bg-gradient-to-br from-orange-400 via-orange-600 to-orange-800 text-white border-t border-white/30 border-l border-white/10',
+                        // Color Mapping with inline styles
+                        $colorStyles = [
+                            'golden' => 'background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #B45309 100%); color: black; border-top: 1px solid rgba(255,255,255,0.4); border-left: 1px solid rgba(255,255,255,0.2);',
+                            'red' => 'background: linear-gradient(135deg, #f87171 0%, #dc2626 50%, #991b1b 100%); color: white; border-top: 1px solid rgba(255,255,255,0.3); border-left: 1px solid rgba(255,255,255,0.1);',
+                            'blue' => 'background: linear-gradient(135deg, #60a5fa 0%, #2563eb 50%, #1e40af 100%); color: white; border-top: 1px solid rgba(255,255,255,0.3); border-left: 1px solid rgba(255,255,255,0.1);',
+                            'green' => 'background: linear-gradient(135deg, #34d399 0%, #059669 50%, #065f46 100%); color: white; border-top: 1px solid rgba(255,255,255,0.3); border-left: 1px solid rgba(255,255,255,0.1);',
+                            'black' => 'background: linear-gradient(135deg, #4b5563 0%, #111827 50%, #000000 100%); color: white; border-top: 1px solid rgba(255,255,255,0.2); border-left: 1px solid rgba(255,255,255,0.1);',
+                            'pink' => 'background: linear-gradient(135deg, #f472b6 0%, #db2777 50%, #9f1239 100%); color: white; border-top: 1px solid rgba(255,255,255,0.3); border-left: 1px solid rgba(255,255,255,0.1);',
+                            'orange' => 'background: linear-gradient(135deg, #fb923c 0%, #ea580c 50%, #9a3412 100%); color: white; border-top: 1px solid rgba(255,255,255,0.3); border-left: 1px solid rgba(255,255,255,0.1);',
                         ];
 
                         // Shape Mapping
@@ -64,11 +107,8 @@
 
                     @endphp
                     <div class="absolute {{ $posClasses }} z-20 pointer-events-none w-fit max-w-[calc(100%-3rem)]">
-                        <div class="{{ $colors[$color] ?? $colors['golden'] }} text-xs md:text-sm font-black {{ $shapeClasses }} shadow-[0_15px_35px_rgba(0,0,0,0.4)] uppercase tracking-widest flex items-center justify-center gap-3 transition-all duration-300"
-                             style="{{ $clipPath ? 'clip-path: ' . $clipPath . ';' : '' }}">
-                            @if(!in_array($shape, ['circle', 'square', 'banner']))
-                                <i class="fas fa-bolt text-sm {{ $color === 'golden' ? 'text-amber-950' : 'text-white/80' }} shrink-0"></i>
-                            @endif
+                        <div class="text-xs md:text-sm font-black {{ $shapeClasses }} shadow-[0_15px_35px_rgba(0,0,0,0.4)] uppercase tracking-widest flex items-center justify-center gap-3 transition-all duration-300"
+                             style="{{ ($colorStyles[$color] ?? $colorStyles['golden']) . ($clipPath ? ' clip-path: ' . $clipPath . ';' : '') }}">
                             <span class="{{ in_array($shape, ['circle', 'square', 'banner']) ? 'whitespace-normal leading-none break-words' : 'whitespace-nowrap' }}">{{ $product->highlight_badge }}</span>
                         </div>
                     </div>
@@ -150,13 +190,26 @@
                 <!-- Buy Now Button -->
                 <div class="mt-8 relative z-10">
                     @auth
-                        @if(!($product->price == 0 || $product->is_demo || auth()->user()->hasRole('Super Admin') || auth()->user()->hasPurchased($product->id)))
+                        @if($product->price == 0 || $product->is_demo || auth()->user()->hasRole('Super Admin') || auth()->user()->hasPurchased($product->id))
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <a href="{{ route('content.view', $product->id) }}" class="flex-1 bg-primary text-white text-center py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-all shadow-lg flex items-center justify-center">
+                                    <i class="fas fa-book-open mr-3"></i> Open Secure Viewer
+                                </a>
+                                @if($product->is_downloadable)
+                                    <a href="{{ route('content.download', $product->id) }}" class="sm:w-auto px-8 bg-gray-100 text-gray-800 text-center py-4 rounded-2xl font-bold hover:bg-gray-200 transition-all flex items-center justify-center">
+                                        <i class="fas fa-download mr-3"></i>
+                                    </a>
+                                @endif
+                            </div>
+                        @else
                             @if($activeMethod == 'razorpay' || $activeMethod == 'both')
-                                <button id="rzp-button" class="w-full bg-primary text-white py-4 rounded-2xl font-bold hover:opacity-90 transition-all shadow-lg flex items-center justify-center gap-3 relative overflow-hidden group">
+                                <a href="{{ route('content.demo.view', $product->id) }}" class="w-full bg-primary text-white py-4 rounded-2xl font-bold hover:opacity-90 transition-all shadow-lg flex items-center justify-center gap-3 relative overflow-hidden group">
                                     <span class="absolute inset-0 bg-white/20 group-hover:translate-x-full transition-transform duration-500 ease-out -skew-x-12"></span>
                                     <span class="relative">Buy Now - ₹{{ number_format($product->selling_price, 2) }}</span>
                                     <i class="fas fa-arrow-right relative"></i>
-                                </button>
+                                </a>
+                                <!-- Hidden Real Trigger for Purchase from Viewer return -->
+                                <button id="rzp-button" style="display:none;"></button>
                             @endif
                         @endif
                     @else
@@ -179,18 +232,7 @@
             </div>
 
             @auth
-                @if($product->price == 0 || $product->is_demo || auth()->user()->hasRole('Super Admin') || auth()->user()->hasPurchased($product->id))
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="{{ route('content.view', $product->id) }}" class="flex-1 bg-primary text-white text-center py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-all shadow-lg flex items-center justify-center">
-                            <i class="fas fa-book-open mr-3"></i> Open Secure Viewer
-                        </a>
-                        @if($product->is_downloadable)
-                            <a href="{{ route('content.download', $product->id) }}" class="sm:w-auto px-8 bg-gray-100 text-gray-800 text-center py-4 rounded-2xl font-bold hover:bg-gray-200 transition-all flex items-center justify-center">
-                                <i class="fas fa-download mr-3"></i>
-                            </a>
-                        @endif
-                    </div>
-                @else
+                @if(!($product->price == 0 || $product->is_demo || auth()->user()->hasRole('Super Admin') || auth()->user()->hasPurchased($product->id)))
                     <!-- Payment Options -->
                     <div class="space-y-6" x-data="{ showManualForm: false }">
                         @if($activeMethod == 'manual' || $activeMethod == 'both')
@@ -239,6 +281,129 @@
                         @endif
                     </div>
 
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+                    <script>
+                        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+                        document.addEventListener('alpine:init', () => {
+                            Alpine.data('previewModal', () => {
+                                // Store pdfDoc outside the reactive object to avoid Proxy issues with private fields
+                                let pdfDoc = null;
+
+                                return {
+                                    showPreviewModal: false,
+                                    loading: false,
+                                    loaded: false,
+
+                                    openPreview() {
+                                        this.showPreviewModal = true;
+                                        if (!this.loaded) {
+                                            this.loadPreview();
+                                        }
+                                    },
+
+                                    triggerBuy() {
+                                        this.showPreviewModal = false;
+                                        // Trigger the Razorpay logic
+                                        document.getElementById('rzp-button').click();
+                                    },
+
+                                    async loadPreview() {
+                                        this.loading = true;
+                                        try {
+                                            const url = '{{ route("content.demo.stream", $product->id) }}';
+                                            pdfDoc = await pdfjsLib.getDocument(url).promise;
+                                            
+                                            const totalPages = pdfDoc.numPages;
+                                            const container = document.getElementById('pdf-preview-pages');
+                                            container.innerHTML = ''; // Clear
+
+                                            // Strategy: Show first 5 pages and last 2 pages
+                                            // For small PDFs (<=5 pages), only show first 2 pages
+                                            let updatePages = [];
+                                            let firstPagesLimit = totalPages <= 5 ? 2 : 5;
+                                            
+                                            // First pages
+                                            for (let i = 1; i <= firstPagesLimit && i <= totalPages; i++) {
+                                                updatePages.push(i);
+                                            }
+
+                                            // Last 2 pages (avoid duplicates and only for larger PDFs)
+                                            if (totalPages > 5) {
+                                                for (let i = Math.max(1, totalPages - 1); i <= totalPages; i++) {
+                                                    if (!updatePages.includes(i)) {
+                                                        if (updatePages.length > 0 && i === Math.max(1, totalPages - 1)) {
+                                                             // Add separator if gap exists
+                                                             if (updatePages[updatePages.length - 1] < i - 1) {
+                                                                const sep = document.createElement('div');
+                                                                sep.className = 'text-zinc-500 text-xs uppercase tracking-widest my-4';
+                                                                sep.innerText = '... Skipping ' + (i - 1 - updatePages[updatePages.length - 1]) + ' pages ...';
+                                                                container.appendChild(sep);
+                                                             }
+                                                        }
+                                                        updatePages.push(i);
+                                                    }
+                                                }
+                                            }
+
+                                            // Render pages
+                                            for (const pageNum of updatePages) {
+                                                await this.renderPage(pageNum, container);
+                                            }
+
+                                            this.loaded = true;
+                                        } catch (err) {
+                                            console.error('PDF Preview Error:', err);
+                                            // Fallback? Just show error or redirect to buy on error?
+                                        } finally {
+                                            this.loading = false;
+                                        }
+                                    },
+
+                                    async renderPage(num, container) {
+                                        try {
+                                            const page = await pdfDoc.getPage(num);
+                                            
+                                            // Responsive scale
+                                            // We want it to fit somewhat nicely
+                                            const viewport = page.getViewport({scale: 1});
+                                            // Max width 800px approx
+                                            const desiredWidth = Math.min(container.clientWidth || 800, 800);
+                                            const scale = desiredWidth / viewport.width;
+                                            
+                                            const scaledViewport = page.getViewport({scale: scale}); // High quality scale
+                                            
+                                            // Wrapper for style
+                                            const wrapper = document.createElement('div');
+                                            wrapper.className = 'relative shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-transform hover:scale-[1.02] duration-300 bg-white';
+                                            
+                                            const canvas = document.createElement('canvas');
+                                            const context = canvas.getContext('2d');
+                                            canvas.height = scaledViewport.height;
+                                            canvas.width = scaledViewport.width;
+                                            
+                                            // Label
+                                            const label = document.createElement('div');
+                                            label.className = 'absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded font-mono';
+                                            label.innerText = 'Page ' + num;
+
+                                            wrapper.appendChild(canvas);
+                                            wrapper.appendChild(label);
+                                            container.appendChild(wrapper);
+
+                                            const renderContext = {
+                                                canvasContext: context,
+                                                viewport: scaledViewport
+                                            };
+                                            await page.render(renderContext).promise;
+                                        } catch(e) {
+                                            console.error(e);
+                                        }
+                                    }
+                                };
+                            });
+                        });
+                    </script>
                     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
                     <script>
                         document.getElementById('rzp-button').onclick = function(e) {
@@ -303,14 +468,14 @@
                         }
                     </script>
 
-                    @if(session('trigger_purchase'))
+                    @if(session('trigger_purchase') || request('trigger_purchase'))
                         <script>
                             window.addEventListener('load', function() {
                                 setTimeout(function() {
-                                    const buyBtn = document.getElementById('rzp-button');
-                                    if (buyBtn) {
-                                        buyBtn.click();
-                                    }
+                                    // Trigger the purchase flow directly
+                                    // Ensure Razorpay script is loaded and button is ready
+                                    const btn = document.getElementById('rzp-button');
+                                    if(btn) btn.click();
                                 }, 800);
                             });
                         </script>

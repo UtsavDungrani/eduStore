@@ -130,21 +130,25 @@
                 <button id="next-page" class="w-8 h-8 flex items-center justify-center rounded hover:bg-white/10 transition-colors"><i class="fas fa-chevron-right text-xs"></i></button>
             </div>
             
-            <div class="flex items-center gap-1 md:gap-4 md:border-l border-white/10 md:pl-6">
+            <div class="hidden sm:flex items-center gap-1 md:gap-4 md:border-l border-white/10 md:pl-6">
                 <button id="zoom-out" class="w-8 h-8 flex items-center justify-center rounded hover:bg-white/10 text-zinc-400 transition-colors"><i class="fas fa-minus text-xs"></i></button>
                 <span id="zoom-percent" class="text-[10px] md:text-xs font-mono text-zinc-500 min-w-[35px] text-center">100%</span>
                 <button id="zoom-in" class="w-8 h-8 flex items-center justify-center rounded hover:bg-white/10 text-zinc-400 transition-colors"><i class="fas fa-plus text-xs"></i></button>
             </div>
         </div>
 
-        <div class="hidden sm:block">
-            @if($product->is_downloadable)
-                <a href="{{ route('content.download', $product->id) }}" class="bg-amber-800 hover:bg-amber-700 text-white px-4 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg transition-all active:scale-95">
+        <div class="flex items-center gap-2">
+            @if(isset($isDemo) && $isDemo)
+                <a href="{{ route('products.show', $product->slug) }}?trigger_purchase=1" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 md:px-6 md:py-2 rounded-xl font-bold flex items-center gap-2 shadow-lg transition-all animate-pulse text-xs md:text-base">
+                     <span class="md:hidden">Unlock</span><span class="hidden md:inline">Unlock Full Access</span> <i class="fas fa-lock-open"></i>
+                </a>
+            @elseif($product->is_downloadable)
+                <a href="{{ route('content.download', $product->id) }}" class="bg-amber-800 hover:bg-amber-700 text-white px-3 py-1.5 md:px-4 md:py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg transition-all active:scale-95">
                     <i class="fas fa-download"></i> <span class="hidden md:inline">Download</span>
                 </a>
             @else
-                <div class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg text-zinc-400 flex items-center gap-2">
-                    <i class="fas fa-shield-halved text-amber-500"></i> <span class="hidden md:inline text-[10px] uppercase tracking-widest font-bold">Secure View</span>
+                <div class="hidden md:flex bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg text-zinc-400 items-center gap-2">
+                    <i class="fas fa-shield-halved text-amber-500"></i> <span class="text-[10px] uppercase tracking-widest font-bold">Secure View</span>
                 </div>
             @endif
         </div>
@@ -159,6 +163,8 @@
 
     <script>
         const url = '{!! $signedUrl !!}';
+        const isDemo = @json(isset($isDemo) && $isDemo);
+        let demoLimit = @json(isset($demoLimit) ? $demoLimit : 99999);
         let pdfDoc = null,
             pageNum = 1,
             pageRendering = false,
@@ -284,6 +290,28 @@
             debouncedRender();
         }
 
+        function showDemoBlocker() {
+            const container = document.getElementById('viewer-container');
+            // Check if we already appended the prompt
+            if (!document.getElementById('demo-blocker')) {
+                const blocker = document.createElement('div');
+                blocker.id = 'demo-blocker';
+                blocker.className = 'my-8 flex flex-col items-center justify-center p-8 bg-white border border-gray-200 rounded-2xl max-w-md mx-auto text-center shadow-2xl';
+                blocker.innerHTML = `
+                    <i class="fas fa-lock text-4xl text-green-600 mb-4"></i>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">End of Preview</h3>
+                    <p class="text-gray-500 mb-6 text-sm">You have viewed all the free pages. Unlock the full book to continue reading.</p>
+                    <a href="{{ route('products.show', $product->slug) }}?trigger_purchase=1" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg transition-all transform hover:scale-105">
+                        <span>Get Full Access - ₹{{ number_format($product->selling_price, 2) }}</span> <i class="fas fa-arrow-right"></i>
+                    </a>
+                `;
+                container.appendChild(blocker);
+                
+                // Scroll to it
+                blocker.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
         function onPrevPage() {
             if (pageNum <= 1 || pageRendering) return;
             pageNum--;
@@ -291,7 +319,16 @@
         }
 
         function onNextPage() {
-            if (!pdfDoc || pageNum >= pdfDoc.numPages || pageRendering) return;
+            if (!pdfDoc || pageRendering) return;
+            
+            // Demo Check
+            if (isDemo && pageNum >= demoLimit) {
+                showDemoBlocker();
+                return;
+            }
+
+            if (pageNum >= pdfDoc.numPages) return;
+
             pageNum++;
             renderPage(pageNum);
         }
@@ -299,7 +336,15 @@
         // Initialize PDF
         pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
             pdfDoc = pdfDoc_;
-            document.getElementById('page-count').textContent = pdfDoc.numPages;
+            
+            const totalPages = pdfDoc.numPages;
+            
+            // Restrict page count display
+            if (isDemo && totalPages <= 5) {
+                demoLimit = 2;
+            }
+            const effectivePages = isDemo ? Math.min(totalPages, demoLimit) : totalPages;
+            document.getElementById('page-count').textContent = effectivePages;
             
             // Auto-fit to width on small screens
             if (window.innerWidth < 768) {
@@ -310,7 +355,7 @@
                     
                     // Resume from saved page
                     const savedPage = getSavedPage();
-                    if (savedPage && savedPage > 1 && savedPage <= pdfDoc.numPages) {
+                    if (savedPage && savedPage > 1 && (isDemo ? savedPage <= demoLimit : savedPage <= pdfDoc.numPages)) {
                         pageNum = parseInt(savedPage);
                     }
                     renderPage(pageNum);
@@ -318,7 +363,7 @@
             } else {
                 // Resume from saved page
                 const savedPage = getSavedPage();
-                if (savedPage && savedPage > 1 && savedPage <= pdfDoc.numPages) {
+                if (savedPage && savedPage > 1 && (isDemo ? savedPage <= demoLimit : savedPage <= pdfDoc.numPages)) {
                     pageNum = parseInt(savedPage);
                 }
                 renderPage(pageNum);
@@ -352,6 +397,8 @@
         }
 
         function saveProgress(num) {
+            if (isDemo) return;
+
             try {
                 let library = JSON.parse(localStorage.getItem('my_library_books') || '[]');
                 // Remove existing to push to top
@@ -384,12 +431,20 @@
         
         function navigateToPage() {
             if (!pdfDoc) return;
-            const val = parseInt(pageInput.value);
+            let val = parseInt(pageInput.value);
+
+             // Demo Check
+            if (isDemo && val > demoLimit) {
+                val = demoLimit;
+                // Also trigger blocker
+                showDemoBlocker();
+            }
+
             if (val >= 1 && val <= pdfDoc.numPages && val !== pageNum) {
                 pageNum = val;
                 renderPage(pageNum);
             } else {
-                // Reset input to current page if invalid or unchanged
+                // Reset input to current page if invalid or unchanged or restricted
                 pageInput.value = pageNum;
             }
         }

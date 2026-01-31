@@ -43,6 +43,27 @@ class ContentController extends Controller
         return view('user.products.viewer', compact('product', 'signedUrl'));
     }
 
+    public function demoView(Product $product)
+    {
+        // Allow access to demo view for everyone
+        // We still sign the URL for the stream to valid for a short time
+        $signedUrl = URL::temporarySignedRoute(
+            'content.demo.stream', 
+            now()->addMinutes(30), 
+            [
+                'product' => $product->id,
+                // No user ID binding for public demo stream to keep it simple, 
+                // or bind to session/IP if needed. For now, we trust the demo stream endpoint.
+            ]
+        );
+
+        $isDemo = true;
+        // Demo limit: 5 pages
+        $demoLimit = 5;
+
+        return view('user.products.viewer', compact('product', 'signedUrl', 'isDemo', 'demoLimit'));
+    }
+
     public function stream(Request $request, Product $product)
     {
         if (! $request->hasValidSignature()) {
@@ -135,5 +156,24 @@ class ContentController extends Controller
             'Content-Type' => $mimeType,
             'Cache-Control' => 'public, max-age=31536000', // Cache for 1 year
         ]);
+    }
+
+    /**
+     * Serve product file for demo purposes (Buy Preview)
+     * CAUTION: This serves the full file. Frontend should only restrict display.
+     */
+    public function demoStream(Request $request, Product $product)
+    {
+        // Only for priced products. Free products have their own flow.
+        if ($product->price <= 0) {
+            abort(404);
+        }
+
+        if (!Storage::disk('private')->exists($product->file_path)) {
+            abort(404);
+        }
+
+        // Return the file for PDF.js to consume
+        return Storage::disk('private')->response($product->file_path);
     }
 }

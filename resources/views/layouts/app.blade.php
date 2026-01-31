@@ -370,6 +370,7 @@
 
             footer {
                 margin-bottom: 0 !important;
+                padding-bottom: 100px !important;
             }
 
             body {
