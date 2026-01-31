@@ -25,6 +25,7 @@
                     @foreach($products as $product)
                         <tr class="hover:bg-gray-50/50 transition-colors">
                             <td class="px-6 py-4 text-center">
+                                <input type="hidden" name="all_ids[]" value="{{ $product->id }}">
                                 <label class="inline-flex items-center cursor-pointer">
                                     <input type="checkbox" name="recent_ids[]" value="{{ $product->id }}" {{ $product->is_recent ? 'checked' : '' }} class="rounded text-primary focus:ring-primary w-5 h-5 transition-all">
                                 </label>
@@ -70,7 +71,10 @@
             </table>
         </div>
 
-        <div class="p-6 bg-gray-50 border-t border-gray-100 flex justify-end sticky bottom-0 z-10">
+        <div class="p-6 bg-gray-50 border-t border-gray-100 flex justify-between items-center sticky bottom-0 z-10">
+            <div class="flex-1">
+                {{ $products->links() }}
+            </div>
             <button type="submit" class="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-lg flex items-center gap-2">
                 <i class="fas fa-save"></i> Save Recent Selection
             </button>

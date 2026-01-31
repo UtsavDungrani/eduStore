@@ -64,4 +64,9 @@ class ProductController extends Controller
 
         return view('user.products.show', compact('product'));
     }
+
+    public function buy(Product $product)
+    {
+        return redirect()->route('products.show', $product->slug)->with('trigger_purchase', true);
+    }
 }

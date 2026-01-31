@@ -112,146 +112,51 @@
                 <!-- Mobile Slider (Recently Opened) -->
                 <div class="md:hidden">
                     <div class="relative shelf-container mb-12">
+                        <!-- Custom Navigation Buttons -->
+                        <button x-show="books.length > 1" class="recent-next absolute top-1/2 -translate-y-1/2 -right-4 z-50 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95">
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+                        <button x-show="books.length > 1" class="recent-prev absolute top-1/2 -translate-y-1/2 -left-4 z-50 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95">
+                            <i class="fas fa-chevron-left text-sm"></i>
+                        </button>
+
                         <div class="swiper recentSwiper w-full !overflow-visible">
                             <div class="swiper-wrapper relative z-10">
                                 <template x-for="book in books" :key="book.id">
                                     <div class="swiper-slide flex justify-center items-end pb-4 cont-read-item" :data-title="book.title.toLowerCase()" :data-category="book.category">
-                                         <div class="book-container group relative w-40 h-60 perspective-1000 z-20 cursor-pointer origin-bottom" 
-                                             @click="window.location.href = book.url"
-                                             :data-title="book.title.toLowerCase()">
-                                            <div class="book relative w-full h-full transform-style-3d transition-transform duration-500 group-hover:rotate-y-[-20deg] shadow-xl">
-                                                
-                                                <!-- Front Cover -->
-                                                <div class="absolute inset-0 bg-cover bg-center rounded-r-md shadow-inner origin-left z-10" 
-                                                     :style="`background-image: url('${book.image}'); background-size: cover;`">
-                                                    
-                                                    <div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent opacity-50 rounded-r-md"></div>
-                                        
-                                                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent text-white rounded-br-md">
-                                                        <h3 class="font-serif font-bold text-sm leading-tight line-clamp-2 shadow-sm" x-text="book.title"></h3>
-                                                        <p class="text-[10px] text-gray-300 mt-1 font-sans">Continue Reading</p>
-                                                    </div>
-                                                    
-                                                    <!-- Progress Bar Overlay -->
-                                                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-700/50 backdrop-blur-sm z-20">
-                                                         <div class="h-full bg-emerald-500 transition-all duration-300" :style="`width: ${(book.page / 20) * 100 > 100 ? 100 : ((book.page / 20) * 100)}%`"></div> 
-                                                    </div>
-                                                </div>
-                                        
-                                                <div class="absolute top-0 bottom-0 left-0 w-8 bg-gray-800 transform -translate-x-full origin-right rotate-y-[-90deg] flex flex-col justify-center items-center shadow-inner" style="background-color: #1a202c;">
-                                                     <span class="text-white text-[10px] font-bold tracking-widest writing-vertical-rl rotate-180 line-clamp-1 py-4 opacity-80" x-text="book.title"></span>
-                                                </div>
-                                        
-                                                <!-- Pages -->
-                                                <div class="absolute top-1 bottom-1 right-0 w-8 bg-white transform translate-z-[-2px] translate-x-[2px] shadow-sm rounded-r-sm bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+CjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjEiIGZpbGw9IiNjY2MiLz4KPC9zdmc+')]"></div>
-                                        
-                                                <!-- Back Cover -->
-                                                <div class="absolute inset-0 bg-gray-900 transform translate-z-[-25px] rounded-l-md shadow-xl"></div>
-                                            </div>
-                                            
-                                            <!-- Shelf Shadow -->
-                                            <div class="absolute -bottom-4 left-2 right-2 h-4 bg-black/20 blur-md rounded-full transform scale-x-90 group-hover:scale-x-100 transition-transform duration-500"></div>
-                                        
-                                            <!-- Description & Actions Panel -->
-                                            <div class="absolute -bottom-8 left-[-10px] right-[-10px] bg-white/95 backdrop-blur-sm p-4 pt-6 rounded-xl shadow-xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-[-10px] transition-all duration-500 z-50 pointer-events-none group-hover:pointer-events-auto border border-gray-100">
-                                                <div class="mb-4 text-center">
-                                                    <p class="text-[10px] text-gray-500 italic font-serif leading-relaxed">
-                                                        Resume from Page <span x-text="book.page || 1" class="font-bold text-primary"></span>
-                                                    </p>
-                                                </div>
-                                        
-                                                <div class="flex justify-center gap-2">
-                                                    <button @click.stop="window.location.href = book.url" 
-                                                       class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1.5 rounded-full text-[10px] font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all flex items-center gap-2 uppercase tracking-wider">
-                                                        <i class="fas fa-book-open"></i> Resume
-                                                    </button>
-                                                </div>
-                                            </div>
+                                        <div class="origin-bottom">
+                                            @include('user.partials.book-card-history-alpine')
                                         </div>
                                     </div>
                                 </template>
                             </div>
-    
-                            <!-- Navigation Buttons -->
-                            <div x-show="books.length > 1" class="swiper-button-prev !text-primary !w-8 !h-8 bg-white/80 backdrop-blur shadow-md rounded-full after:!text-sm hover:bg-white transition-all transform -translate-x-2"><i class="fas fa-chevron-left"></i></div>
-                            <div x-show="books.length > 1" class="swiper-button-next !text-primary !w-8 !h-8 bg-white/80 backdrop-blur shadow-md rounded-full after:!text-sm hover:bg-white transition-all transform translate-x-2"><i class="fas fa-chevron-right"></i></div>
                         </div>
                         <!-- Shelf Board -->
                         <div class="absolute bottom-0 left-0 right-0 h-8 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
                             <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
                         </div>
-                        <!-- Shelf Shadow/Depth -->
-                        <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
                     </div>
                 </div>
     
                 <!-- Desktop Shelf (Recently Opened) -->
-                <div class="hidden md:block relative shelf-container">
-                    <!-- Books Row -->
-                    <div class="flex flex-wrap justify-evenly gap-16 md:gap-24 relative z-10 items-end px-4 md:px-8 pl-12 md:pl-16 min-h-[200px]">
-                    <template x-for="(book, index) in books" :key="book.id">
-                        <div class="book-container mb-6 group relative w-40 h-60 md:w-48 md:h-72 perspective-1000 z-20 cursor-pointer cont-read-item" 
-                             @click="window.location.href = book.url"
-                             :data-title="book.title.toLowerCase()"
-                             :data-category="book.category">
-                            <div class="book relative w-full h-full transform-style-3d transition-transform duration-500 group-hover:rotate-y-[-20deg] shadow-xl">
-                                
-                                <!-- Front Cover -->
-                                <div class="absolute inset-0 bg-cover bg-center rounded-r-md shadow-inner origin-left z-10" 
-                                     :style="`background-image: url('${book.image}'); background-size: cover;`">
-                                    
-                                    <div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent opacity-50 rounded-r-md"></div>
-                        
-                                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent text-white rounded-br-md">
-                                        <h3 class="font-serif font-bold text-lg leading-tight line-clamp-2 shadow-sm" x-text="book.title"></h3>
-                                        <p class="text-xs text-gray-300 mt-1 font-sans">Continue Reading</p>
+                <div class="hidden md:block">
+                    <template x-for="(chunk, index) in chunkedBooks" :key="index">
+                        <div class="relative shelf-container mb-20 last:mb-12">
+                            <div class="flex justify-evenly gap-16 md:gap-24 items-end relative z-10 w-full px-4 md:px-8 pl-12 md:pl-16">
+                                <template x-for="book in chunk" :key="book.id">
+                                    <div class="cont-read-item origin-bottom" :data-title="book.title.toLowerCase()" :data-category="book.category">
+                                        @include('user.partials.book-card-history-alpine', ['marginClass' => 'mb-6'])
                                     </div>
-                                    
-                                    <!-- Progress Bar Overlay -->
-                                    <div class="absolute bottom-0 left-0 right-0 h-1.5 bg-gray-700/50 backdrop-blur-sm z-20">
-                                         <div class="h-full bg-emerald-500 transition-all duration-300" :style="`width: ${(book.page / 20) * 100 > 100 ? 100 : ((book.page / 20) * 100)}%`"></div> 
-                                    </div>
-                                </div>
-                        
-                                <div class="absolute top-0 bottom-0 left-0 w-8 md:w-12 bg-gray-800 transform -translate-x-full origin-right rotate-y-[-90deg] flex flex-col justify-center items-center shadow-inner" style="background-color: #1a202c;">
-                                     <span class="text-white text-[10px] md:text-xs font-bold tracking-widest writing-vertical-rl rotate-180 line-clamp-1 py-4 opacity-80" x-text="book.title"></span>
-                                </div>
-                        
-                                <!-- Pages -->
-                                <div class="absolute top-1 bottom-1 right-0 w-8 md:w-10 bg-white transform translate-z-[-2px] translate-x-[2px] shadow-sm rounded-r-sm bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+CjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjEiIGZpbGw9IiNjY2MiLz4KPC9zdmc+')]"></div>
-                        
-                                <!-- Back Cover -->
-                                <div class="absolute inset-0 bg-gray-900 transform translate-z-[-25px] rounded-l-md shadow-xl"></div>
+                                </template>
                             </div>
-                            
-                            <!-- Shelf Shadow -->
-                            <div class="absolute -bottom-4 left-2 right-2 h-4 bg-black/20 blur-md rounded-full transform scale-x-90 group-hover:scale-x-100 transition-transform duration-500"></div>
-                        
-                            <!-- Description & Actions Panel -->
-                            <div class="absolute -bottom-8 left-[-10px] right-[-10px] bg-white/95 backdrop-blur-sm p-4 pt-6 rounded-xl shadow-xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-[-10px] transition-all duration-500 z-50 pointer-events-none group-hover:pointer-events-auto border border-gray-100">
-                                <div class="mb-4 text-center">
-                                    <p class="text-xs text-gray-500 italic font-serif leading-relaxed">
-                                        Resume from Page <span x-text="book.page || 1" class="font-bold text-primary"></span>
-                                    </p>
-                                </div>
-                        
-                                <div class="flex justify-center gap-2">
-                                    <button @click.stop="window.location.href = book.url" 
-                                       class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-full text-xs font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all flex items-center gap-2 uppercase tracking-wider">
-                                        <i class="fas fa-book-open"></i> Resume
-                                    </button>
-                                </div>
+                            <!-- Shelf Board -->
+                            <div class="absolute bottom-0 left-0 right-0 h-12 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
+                                <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
                             </div>
+                            <!-- Shelf Shadow/Depth -->
+                            <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
                         </div>
                     </template>
-                    </div>
-                    
-                    <!-- Shelf Board -->
-                    <div class="absolute bottom-0 left-0 right-0 h-8 md:h-12 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden">
-                        <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
-                    </div>
-                    <!-- Shelf Shadow/Depth -->
-                    <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
                 </div>
             </div>
         </div>
@@ -273,6 +178,16 @@
                 <!-- Mobile Slider (Purchased Content) -->
                 <div class="md:hidden">
                     <div class="relative shelf-container mb-12">
+                        @if($products->count() > 1)
+                        <!-- Custom Navigation Buttons -->
+                        <button class="purchased-next absolute top-1/2 -translate-y-1/2 -right-4 z-50 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95">
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+                        <button class="purchased-prev absolute top-1/2 -translate-y-1/2 -left-4 z-50 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95">
+                            <i class="fas fa-chevron-left text-sm"></i>
+                        </button>
+                        @endif
+
                         <div class="swiper purchasedSwiper w-full !overflow-visible">
                             <div class="swiper-wrapper relative z-10">
                                 @foreach($products as $product)
@@ -280,43 +195,34 @@
                                          data-category="{{ $product->category->name ?? 'Uncategorized' }}" 
                                          data-title="{{ strtolower($product->title) }}">
                                         <div class="origin-bottom">
-                                            @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-1'])
+                                            @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-1', 'isPurchased' => true])
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
-                            <!-- Navigation Buttons -->
-                            @if($products->count() > 1)
-                                <div class="swiper-button-prev !text-primary !w-8 !h-8 bg-white/80 backdrop-blur shadow-md rounded-full after:!text-sm hover:bg-white transition-all transform -translate-x-2"><i class="fas fa-chevron-left"></i></div>
-                                <div class="swiper-button-next !text-primary !w-8 !h-8 bg-white/80 backdrop-blur shadow-md rounded-full after:!text-sm hover:bg-white transition-all transform translate-x-2"><i class="fas fa-chevron-right"></i></div>
-                            @endif
                         </div>
                         <!-- Shelf Board -->
                         <div class="absolute bottom-0 left-0 right-0 h-8 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
                             <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
                         </div>
-                        <!-- Shelf Shadow/Depth -->
-                        <div class="absolute bottom-[-20px] left-2 right-2 h-4 bg-black/20 blur-xl rounded-full"></div>
                     </div>
                 </div>
     
                 <!-- Desktop Shelf (Purchased Content) -->
-                <div class="hidden md:block space-y-20 mt-12" id="purchased-content-desktop">
+                <div class="hidden md:block" id="purchased-content-desktop">
                     @foreach($products->chunk(4) as $chunk)
-                        <div class="relative shelf-container">
-                            <!-- Books Row -->
-                            <div class="flex flex-wrap justify-evenly gap-16 md:gap-24 relative z-10 items-end px-4 md:px-8 pl-12 md:pl-16 min-h-[200px]">
+                        <div class="relative shelf-container mb-20 last:mb-12">
+                            <div class="flex justify-evenly gap-16 md:gap-24 items-end relative z-10 w-full px-4 md:px-8 pl-12 md:pl-16">
                                 @foreach($chunk as $product)
-                                    <div class="purchased-item" 
+                                    <div class="purchased-item origin-bottom" 
                                          data-category="{{ $product->category->name ?? 'Uncategorized' }}" 
                                          data-title="{{ strtolower($product->title) }}">
-                                        @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-6'])
+                                        @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-6', 'isPurchased' => true])
                                     </div>
                                 @endforeach
                             </div>
-                            
                             <!-- Shelf Board -->
-                            <div class="absolute bottom-0 left-0 right-0 h-8 md:h-12 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden">
+                            <div class="absolute bottom-0 left-0 right-0 h-12 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
                                 <div class="absolute top-0 w-full h-2 bg-[#8d6e63] opacity-50"></div>
                             </div>
                             <!-- Shelf Shadow/Depth -->
@@ -405,15 +311,29 @@
 @push('scripts')
 <style>
     .no-scrollbar::-webkit-scrollbar { display: none; }
-    
-    /* Centering Override for Slider */
+    /* Ensure Swiper arrows are visible and properly styled like home page */
+    .recent-next, .recent-prev, .purchased-next, .purchased-prev {
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+    .recent-next:hover, .recent-prev:hover, .purchased-next:hover, .purchased-prev:hover {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.4);
+    }
+
+    /* Centering Override for Slider - Refined for Precise Visual Center */
     .recentSwiper .book-container, 
     .purchasedSwiper .book-container {
         margin-left: auto !important;
         margin-right: auto !important;
         margin-top: 0 !important;
         margin-bottom: 0 !important;
-        transform: translateX(20px); /* Compensation for spine */
+        transform: translateX(16px) !important; /* Visual center compensation for mobile */
+    }
+
+    @media (min-width: 1024px) {
+        .recentSwiper .book-container, 
+        .purchasedSwiper .book-container {
+            transform: translateX(24px) !important;
+        }
     }
     
     /* 3D Book Effects */
@@ -423,7 +343,7 @@
     .book-container:hover .book {
         transform: rotateY(-20deg) rotateX(5deg) scale(1.05);
     }
-
+    
     /* Shelf Wooden Texture (Simple CSS Pattern) */
     .shelf-container::before {
         content: '';
@@ -443,7 +363,7 @@
         pointer-events: none;
         z-index: 5;
     }
-    
+
     .writing-vertical-rl {
         writing-mode: vertical-rl;
     }
@@ -463,21 +383,23 @@
     @endif
 
     document.addEventListener('DOMContentLoaded', function() {
-        const swiperOptions = {
+        const commonConfig = {
             slidesPerView: 1,
             centeredSlides: true,
-            loop: true,
             @if(($siteSettings['products_auto_scroll'] ?? '1') == '1')
             autoplay: {
                 delay: 2500,
                 disableOnInteraction: false,
             },
             @endif
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
         };
+
+        // Helper function to check if loop should be enabled
+        function shouldEnableLoop(swiperElement) {
+            if (!swiperElement) return false;
+            const slides = swiperElement.querySelectorAll('.swiper-slide');
+            return slides.length > 1; // Only enable loop if more than 1 slide
+        }
 
         // Initialize Recent Swiper with Alpine integration
         let recentSwiper = null;
@@ -489,10 +411,30 @@
 
         // Small delay to let Alpine render templates
         setTimeout(() => {
-            recentSwiper = new Swiper(".recentSwiper", swiperOptions);
+            const recentEl = document.querySelector(".recentSwiper");
+            if (recentEl) {
+                recentSwiper = new Swiper(".recentSwiper", {
+                    ...commonConfig,
+                    loop: shouldEnableLoop(recentEl),
+                    navigation: {
+                        nextEl: '.recent-next',
+                        prevEl: '.recent-prev',
+                    },
+                });
+            }
             
             // Purchased Swiper
-            purchasedSwiper = new Swiper(".purchasedSwiper", swiperOptions);
+            const purchasedEl = document.querySelector(".purchasedSwiper");
+            if (purchasedEl) {
+                purchasedSwiper = new Swiper(".purchasedSwiper", {
+                    ...commonConfig,
+                    loop: shouldEnableLoop(purchasedEl),
+                    navigation: {
+                        nextEl: '.purchased-next',
+                        prevEl: '.purchased-prev',
+                    },
+                });
+            }
         }, 100);
 
         // Search and Filtering Logic

@@ -5,14 +5,45 @@
         @else
             <img src="https://placehold.co/600x400/2C1810/ffffff?text={{ urlencode($product->title) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="{{ $product->title }}">
         @endif
-        <div class="absolute top-4 right-4 bg-[#FDF6E3]/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-[#2C1810] shadow-sm border border-[#D4AF37] z-10">
+        <!-- Category Badge -->
+        <div class="absolute top-4 left-4 bg-[#FDF6E3]/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-[#2C1810] shadow-sm border border-[#D4AF37] z-30">
             {{ $product->category->name }}
         </div>
+
         <!-- Sale Ribbon (Triangular) -->
-        @if(($product->show_sale_tag ?? true) && $product->sale_tag)
-            <div class="absolute top-0 left-0 w-20 h-20 overflow-hidden z-20 pointer-events-none">
-                <div class="absolute top-4 -left-8 w-28 bg-red-600 text-white text-[10px] font-black py-1 text-center transform -rotate-45 shadow-md border-b border-white/20 uppercase tracking-tighter">
-                    {{ $product->sale_tag }}
+        @php
+            $displayTag = null;
+            if ($product->sale_display_mode === 'percentage' && $product->sale_percentage) {
+                $displayTag = $product->sale_percentage . '% OFF';
+            } else {
+                $displayTag = $product->sale_tag;
+            }
+        @endphp
+        @if($displayTag)
+            <div class="absolute top-0 right-0 w-20 h-20 overflow-hidden z-30 pointer-events-none">
+                <div class="absolute top-4 -right-8 w-28 bg-red-600 text-white text-[10px] font-black py-1 text-center transform rotate-45 shadow-md border-b border-white/20 uppercase tracking-tighter">
+                    {{ $displayTag }}
+                </div>
+            </div>
+        @endif
+
+        <!-- Highlight Badge (Selectable Shape) -->
+        @if($product->highlight_badge)
+            <div class="absolute {{ ($product->highlight_badge_shape ?? 'pill') === 'tag' ? 'top-12 left-0' : 'top-12 left-3' }} z-30 pointer-events-none w-fit max-w-[calc(100%-1.5rem)]">
+                @php
+                    $shapeClass = 'rounded-full'; // Default Pill
+                    $containerClass = 'px-3 py-1';
+                    if (($product->highlight_badge_shape ?? 'pill') === 'soft_rectangle') {
+                        $shapeClass = 'rounded-lg';
+                    } elseif (($product->highlight_badge_shape ?? 'pill') === 'tag') {
+                        $shapeClass = 'rounded-r-full rounded-l-none';
+                        $containerClass = 'pl-5 pr-4 py-1.5 -ml-1.5';
+                    }
+                @endphp
+                <!-- Premium Golden Badge -->
+                <div class="bg-amber-400 bg-gradient-to-br from-[#FDE68A] via-[#F59E0B] to-[#B45309] text-black text-[11px] font-black {{ $containerClass }} {{ $shapeClass }} shadow-[0_4px_12px_rgba(0,0,0,0.4)] border-t border-white/40 border-l border-white/20 uppercase tracking-widest flex items-center gap-1.5 transition-all duration-300 hover:scale-110">
+                    <i class="fas fa-star text-[10px] drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)] text-amber-950 shrink-0"></i>
+                    <span class="drop-shadow-[0_1px_1px_rgba(255,255,255,0.3)] whitespace-nowrap">{{ $product->highlight_badge }}</span>
                 </div>
             </div>
         @endif

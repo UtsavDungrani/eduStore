@@ -27,19 +27,26 @@
             <div class="md:hidden">
                 <div class="relative shelf-container mb-12">
                     <div class="swiper promoSwiper w-full !overflow-visible">
+                        @if($featuredProducts->count() > 1)
+                        <!-- Custom Navigation Buttons -->
+                        <button class="promo-next absolute top-1/2 -translate-y-1/2 -right-4 z-50 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95">
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+                        <button class="promo-prev absolute top-1/2 -translate-y-1/2 -left-4 z-50 bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-white transition-all shadow-lg active:scale-95">
+                            <i class="fas fa-chevron-left text-sm"></i>
+                        </button>
+                        @endif
+
                         <div class="swiper-wrapper relative z-10">
-                            @foreach($featuredProducts as $product)
-                                <div class="swiper-slide flex justify-center items-end pb-4">
-                                    <div class="origin-bottom">
-                                        @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-1'])
+                                @foreach($featuredProducts as $product)
+                                    <div class="swiper-slide flex justify-center items-end pb-4">
+                                        <div class="origin-bottom">
+                                            @include('user.partials.book-card', ['product' => $product, 'marginClass' => 'mb-1'])
+                                        </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         </div>
-                        <!-- Navigation Buttons (Mobile Only) -->
-                        <div class="promo-prev !text-primary !w-10 !h-10 bg-white/90 backdrop-blur shadow-lg rounded-full after:!text-lg hover:bg-white transition-all transform -translate-x-4 border border-gray-100 flex items-center justify-center z-30 absolute top-1/2 left-4 -translate-y-1/2"></div>
-                        <div class="promo-next !text-primary !w-10 !h-10 bg-white/90 backdrop-blur shadow-lg rounded-full after:!text-lg hover:bg-white transition-all transform translate-x-4 border border-gray-100 flex items-center justify-center z-30 absolute top-1/2 right-4 -translate-y-1/2"></div>
-                    </div>
                     
                     <!-- Wooden Shelf -->
                     <div class="absolute bottom-0 left-0 right-0 h-8 bg-[#5d4037] shadow-lg rounded-sm transform translate-y-1/2 flex items-center justify-center overflow-hidden z-0">
@@ -84,18 +91,18 @@
         writing-mode: vertical-rl;
     }
 
-    /* Centering Override for Promotional Slider - MATCHING HOME PAGE */
+    /* Centering Override for Promotional Slider - Refined for Precise Visual Center */
     .promoSwiper .book-container {
         margin-left: auto !important;
         margin-right: auto !important;
         margin-top: 0 !important;
         margin-bottom: 0 !important;
-        transform: translateX(20px); /* Compensation for spine */
+        transform: translateX(16px) !important; /* Visual center compensation for mobile */
     }
     
-    @media (max-width: 768px) {
+    @media (min-width: 1024px) {
         .promoSwiper .book-container {
-            transform: translateX(20px);
+            transform: translateX(24px) !important;
         }
     }
 
@@ -119,16 +126,12 @@
     }
 
     /* Ensure Swiper arrows are visible and properly styled like home page */
-    .promo-next::after, .promo-prev::after {
-        font-family: "Font Awesome 6 Free" !important;
-        font-weight: 900 !important;
-        font-size: 1.25rem !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+    .promo-next, .promo-prev {
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     }
-    .promo-next::after { content: "\f054" !important; }
-    .promo-prev::after { content: "\f053" !important; }
+    .promo-next:hover, .promo-prev:hover {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.4);
+    }
 </style>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -138,7 +141,6 @@
                 slidesPerView: 1,
                 spaceBetween: 30,
                 centeredSlides: true,
-                loop: true,
                 navigation: {
                     nextEl: '.promo-next',
                     prevEl: '.promo-prev',
@@ -150,23 +152,52 @@
                 }
             };
 
-            new Swiper(".promoSwiper", {
-                ...commonConfig,
-                autoplay: {
-                    delay: 3500,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                },
-                navigation: {
-                    nextEl: '.promo-next',
-                    prevEl: '.promo-prev',
-                },
-                // Responsive overrides for promo context
-                breakpoints: {
-                    640: { slidesPerView: 2, centeredSlides: false },
-                    // On larger screens, the container is hidden, but Swiper still initializes
-                }
-            });
+            // Helper function to check if loop should be enabled
+            function shouldEnableLoop(swiperElement) {
+                const slides = swiperElement.querySelectorAll('.swiper-slide');
+                return slides.length > 1; // Only enable loop if more than 1 slide
+            }
+
+            const promoEl = document.querySelector(".promoSwiper");
+            if (promoEl && shouldEnableLoop(promoEl)) {
+                new Swiper(".promoSwiper", {
+                    ...commonConfig,
+                    loop: true,
+                    autoplay: {
+                        delay: 3500,
+                        disableOnInteraction: false,
+                        pauseOnMouseEnter: true,
+                    },
+                    navigation: {
+                        nextEl: '.promo-next',
+                        prevEl: '.promo-prev',
+                    },
+                    // Responsive overrides for promo context
+                    breakpoints: {
+                        640: { slidesPerView: 2, centeredSlides: false },
+                        // On larger screens, the container is hidden, but Swiper still initializes
+                    }
+                });
+            } else if (promoEl) {
+                new Swiper(".promoSwiper", {
+                    ...commonConfig,
+                    loop: false,
+                    autoplay: {
+                        delay: 3500,
+                        disableOnInteraction: false,
+                        pauseOnMouseEnter: true,
+                    },
+                    navigation: {
+                        nextEl: '.promo-next',
+                        prevEl: '.promo-prev',
+                    },
+                    // Responsive overrides for promo context
+                    breakpoints: {
+                        640: { slidesPerView: 2, centeredSlides: false },
+                        // On larger screens, the container is hidden, but Swiper still initializes
+                    }
+                });
+            }
         }, 50); // Same 50ms delay as landing.blade.php
     });
 </script>
@@ -210,13 +241,17 @@
         <div class="flex-1">
             @if($products->count() > 0)
                 <!-- Mobile Slider -->
-                <div class="md:hidden swiper myProductSwiper !pb-12">
-                    <div class="swiper-wrapper">
-                        @foreach($products as $product)
-                            <div class="swiper-slide h-auto">
-                                @include('user.partials.product-card', ['product' => $product])
-                            </div>
-                        @endforeach
+                <div class="md:hidden relative mb-12">
+
+
+                    <div class="swiper myProductSwiper !pb-12 !overflow-visible">
+                        <div class="swiper-wrapper">
+                            @foreach($products as $product)
+                                <div class="swiper-slide h-auto">
+                                    @include('user.partials.product-card', ['product' => $product])
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
 
@@ -251,6 +286,7 @@
                 disableOnInteraction: false,
                 pauseOnMouseEnter: true,
             },
+
             breakpoints: {
                 640: {
                     slidesPerView: 2,

@@ -8,13 +8,11 @@
     <title>{{ $siteName }} - Secure Digital Content</title>
 
     <!-- Resource Hints for Performance -->
-    <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
-    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="//unpkg.com">
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Scripts -->
     <!-- Scripts -->
@@ -24,18 +22,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inconsolata:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" async></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         :root {
-            --primary:
-                {{ $brandColor }}
-            ;
-            --primary-light:
-                {{ $brandColor }}
-                22;
+            --primary: {{ $brandColor }};
+            --primary-light: {{ $brandColor }}22;
         }
 
         [x-cloak] {
@@ -337,23 +327,6 @@
             display: block;
         }
 
-        /* Critical Utilities (Tailwind Polyfills for Initial Render) */
-        .relative { position: relative; }
-        .absolute { position: absolute; }
-        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
-        .flex { display: flex; }
-        .flex-col { flex-direction: column; }
-        .items-center { align-items: center; }
-        .justify-center { justify-content: center; }
-        .gap-1 { gap: 0.25rem; }
-        .hidden { display: none; }
-        .blur-sm { filter: blur(4px); }
-        .rounded-full { border-radius: 9999px; }
-        .bg-primary\/10 { background-color: rgba(var(--primary-rgb, 59, 130, 246), 0.1); }
-        .bg-red-500 { background-color: #ef4444 !important; }
-        .text-white { color: #ffffff !important; }
-        .font-bold { font-weight: 700 !important; }
-        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
 
         /* Critical Colors & Utilities */
         .text-primary {
@@ -433,7 +406,7 @@
     <script src="{{ asset('js/security.js') }}"></script>
     <script>
         // Global Cart Key
-        window.CART_KEY = 'cart_' + ({{ auth()->id() ?? "'guest'" }});
+        window.CART_KEY = @json('cart_' . (auth()->id() ?? 'guest'));
 
         // Global My Library Logic
         document.addEventListener('alpine:init', () => {
@@ -475,6 +448,13 @@
                         this.hasBooks = false;
                     }
                 },
+                get chunkedBooks() {
+                    let chunks = [];
+                    for (let i = 0; i < this.books.length; i += 4) {
+                        chunks.push(this.books.slice(i, i + 4));
+                    }
+                    return chunks;
+                },
                 clearHistory() {
                     if (confirm('Clear your reading history?')) {
                         localStorage.removeItem('my_library_books');
@@ -507,6 +487,26 @@
             } catch (e) {
                 console.error('Error saving book:', e);
             }
+        }
+    </script>
+    <script>
+        // Loading Screen Logic - Defined early to prevent race conditions
+        let loaderHidden = false;
+
+        function hideLoader() {
+            if (loaderHidden) return;
+            
+            const loader = document.getElementById('loading-screen');
+            if (loader) {
+                loader.style.opacity = '0';
+                loader.style.transition = 'opacity 0.5s ease-out';
+                setTimeout(() => {
+                    loader.style.visibility = 'hidden';
+                    loader.style.display = 'none';
+                    document.body.classList.remove('loading-overflow-hidden');
+                }, 500);
+            }
+            loaderHidden = true;
         }
     </script>
 </head>
@@ -610,6 +610,7 @@
                 </div>
 
                 <!-- Mobile Login/Profile Button -->
+                @unless(request()->routeIs('products.show'))
                 <div class="flex items-center md:hidden">
                     @auth
                         <a href="{{ route('profile.edit') }}" class="text-primary p-2">
@@ -624,6 +625,7 @@
                             class="text-primary font-bold px-4 py-1 border border-primary rounded-full text-sm">Login</a>
                     @endauth
                 </div>
+                @endunless
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
@@ -691,76 +693,20 @@
     @stack('scripts')
 
     <!-- Deferred Scripts for Performance -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#2C1810', // Deep Academic Brown
-                        'primary-container': '#D4AF37', // Gold for accents
-                        'on-primary-container': '#1A0D00',
-                        secondary: '#D4AF37', // Gold Accent
-                        'secondary-container': '#FDF6E3', // Parchment
-                        'on-secondary-container': '#1A0D00',
-                        surface: '#F8F1E9', // Aged Paper
-                        'surface-variant': '#ffffff', // White (Cards)
-                        'on-surface': '#1A0D00', // Deep Charcoal
-                        'on-surface-variant': '#8B4513', // Saddle Brown (Highlights)
-                        outline: '#8B4513',
-                        'inverse-surface': '#1A0D00',
-                        'inverse-on-surface': '#F8F1E9',
-                    },
-                    borderRadius: {
-                        '3xl': '1.5rem',
-                        '4xl': '2rem',
-                    },
-                    boxShadow: {
-                        'elevation-1': '0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15)',
-                        'elevation-2': '0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)',
-                        'elevation-3': '0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3)',
-                    }
-                }
-            }
-        }
-    </script>
+
 
     <script>
-        // Loading Screen Logic
-        let loaderHidden = false;
-
-        function hideLoader() {
-            if (loaderHidden) return;
-            loaderHidden = true;
-
-            const loader = document.getElementById('loading-screen');
-            if (loader) {
-                loader.style.opacity = '0';
-                loader.style.visibility = 'hidden';
-            }
-            document.body.classList.remove('loading-overflow-hidden');
-            
-            // Re-enable nav if needed (removed old critical css hide)
-        }
-
         // Logic for Hide Delay
         window.addEventListener('load', function() {
             if (window.showIntroDelay) {
                 // If it was the intro, wait 3 seconds
                 setTimeout(hideLoader, 3000);
             } else {
-                // Otherwise, hide immediately
-                if (document.readyState === 'loading') {
-                    // This case is rare inside window load, but good for safety
-                    hideLoader();
-                } else {
-                    hideLoader();
-                }
+                hideLoader();
             }
         });
 
         // Backup for immediate hide on DOMContentLoaded for non-intro pages 
-        // (makes navigation snappy for simple loader)
         document.addEventListener('DOMContentLoaded', function() {
             if (!window.showIntroDelay && !loaderHidden) {
                 hideLoader();

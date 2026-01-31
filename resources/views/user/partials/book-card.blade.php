@@ -12,18 +12,47 @@
 
             <!-- Title Overlay (Refined) -->
             <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent text-white rounded-br-md">
+                <!-- Highlight Badge (Selectable Shape) -->
+                @if($product->highlight_badge)
+                    <div class="mb-2 w-fit max-w-[calc(100%-1rem)]">
+                        @php
+                            $shapeClass = 'rounded-full'; // Default Pill
+                            $containerClass = 'px-2 py-0.5';
+                            if (($product->highlight_badge_shape ?? 'pill') === 'soft_rectangle') {
+                                $shapeClass = 'rounded-lg';
+                            } elseif (($product->highlight_badge_shape ?? 'pill') === 'tag') {
+                                $shapeClass = 'rounded-r-full rounded-l-none';
+                                $containerClass = 'pl-4 pr-3 py-1 -ml-4';
+                            }
+                        @endphp
+                        <!-- Premium Golden Badge -->
+                        <div class="bg-amber-400 bg-gradient-to-br from-[#FDE68A] via-[#F59E0B] to-[#B45309] text-black text-[10px] md:text-[11px] font-black {{ $containerClass }} {{ $shapeClass }} shadow-lg border-t border-white/40 border-l border-white/20 uppercase tracking-widest flex items-center gap-1 transition-all duration-300">
+                            <i class="fas fa-star text-[9px] text-amber-950 shrink-0"></i>
+                            <span class="whitespace-nowrap">{{ $product->highlight_badge }}</span>
+                        </div>
+                    </div>
+                @endif
                 <h3 class="font-serif font-bold text-sm md:text-lg leading-tight line-clamp-2 shadow-sm">{{ $product->title }}</h3>
                 <p class="text-[10px] md:text-xs text-gray-200 mt-1 font-sans font-medium">{{ $product->category->name }}</p>
             </div>
             
             <!-- Sale Ribbon (Triangular) -->
-            @if(($product->show_sale_tag ?? true) && $product->sale_tag)
+            @php
+                $displayTag = null;
+                if ($product->sale_display_mode === 'percentage' && $product->sale_percentage) {
+                    $displayTag = $product->sale_percentage . '% OFF';
+                } else {
+                    $displayTag = $product->sale_tag;
+                }
+            @endphp
+            @if($displayTag)
                 <div class="absolute top-0 right-0 w-16 h-16 overflow-hidden z-20 pointer-events-none">
                     <div class="absolute top-2 -right-6 w-24 bg-red-600 text-white text-[10px] font-black py-1 text-center transform rotate-45 shadow-sm border-b border-white/20 uppercase tracking-tighter">
-                        {{ $product->sale_tag }}
+                        {{ $displayTag }}
                     </div>
                 </div>
             @endif
+
         </div>
 
         <!-- Spine -->
@@ -44,10 +73,13 @@
     <!-- Actions Panel -->
     <div class="absolute -bottom-8 left-[-10px] right-[-10px] bg-white/95 backdrop-blur-sm p-4 pt-6 rounded-xl shadow-xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-[-10px] transition-all duration-500 z-50 pointer-events-none group-hover:pointer-events-auto border border-gray-100">
         <!-- Actions -->
+        @php
+            $isPurchased = $isPurchased ?? (auth()->check() && auth()->user()->hasPurchased($product->id));
+        @endphp
         <div class="flex justify-center gap-2">
             <a href="{{ route('products.show', $product->slug) }}" 
-               class="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-2 rounded-full text-xs font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all flex items-center gap-2 uppercase tracking-wider">
-                <i class="fas fa-shopping-cart"></i> Buy
+               class="{{ $isPurchased ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-[#2C1810] hover:bg-[#1A0D00] border border-[#D4AF37]' }} text-white px-8 py-2 rounded-full text-xs font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all flex items-center gap-2 uppercase tracking-wider">
+                <i class="fas {{ $isPurchased ? 'fa-eye' : 'fa-shopping-cart' }}"></i> {{ $isPurchased ? 'View' : 'Buy' }}
             </a>
         </div>
     </div>

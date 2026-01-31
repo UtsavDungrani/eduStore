@@ -43,6 +43,8 @@ class ProductSaleTest extends TestCase
             'product_file' => UploadedFile::fake()->create('document.pdf', 100),
             'is_active' => 1,
             'is_downloadable' => 1,
+            'sale_percentage' => 20,
+            'sale_display_mode' => 'percentage',
         ]);
 
         if ($response->status() !== 302) {
@@ -58,6 +60,8 @@ class ProductSaleTest extends TestCase
             'original_price' => 150,
             'offer_price' => 90,
             'sale_tag' => 'BEST SELLER',
+            'sale_percentage' => 20,
+            'sale_display_mode' => 'percentage',
         ]);
     }
 
@@ -79,6 +83,8 @@ class ProductSaleTest extends TestCase
             'original_price' => 80,
             'offer_price' => 45,
             'sale_tag' => 'CLEARANCE',
+            'sale_percentage' => 15,
+            'sale_display_mode' => 'percentage',
         ]);
 
         if ($response->status() !== 302) {
@@ -93,6 +99,8 @@ class ProductSaleTest extends TestCase
             'original_price' => 80,
             'offer_price' => 45,
             'sale_tag' => 'CLEARANCE',
+            'sale_percentage' => 15,
+            'sale_display_mode' => 'percentage',
         ]);
     }
 }

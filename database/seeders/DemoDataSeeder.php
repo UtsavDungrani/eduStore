@@ -21,7 +21,7 @@ class DemoDataSeeder extends Seeder
         ];
 
         foreach ($categories as $cat) {
-            \App\Models\Category::create($cat);
+            \App\Models\Category::updateOrCreate(['slug' => $cat['slug']], $cat);
         }
 
         // Banners
@@ -34,26 +34,30 @@ class DemoDataSeeder extends Seeder
 
         // Products
         $assignCat = \App\Models\Category::where('slug', 'assignments')->first();
-        \App\Models\Product::create([
-            'category_id' => $assignCat->id,
-            'title' => 'Engineering Drawing Assignment',
-            'slug' => 'engineering-drawing-assignment',
-            'description' => 'Complete assignment for first-year engineering drawing.',
-            'price' => 299.00,
-            'file_path' => 'products/drawing_assignment.pdf',
-            'is_active' => true,
-            'is_downloadable' => false,
-        ]);
+        \App\Models\Product::updateOrCreate(
+            ['slug' => 'engineering-drawing-assignment'],
+            [
+                'category_id' => $assignCat->id,
+                'title' => 'Engineering Drawing Assignment',
+                'description' => 'Complete assignment for first-year engineering drawing.',
+                'price' => 299.00,
+                'file_path' => 'products/drawing_assignment.pdf',
+                'is_active' => true,
+                'is_downloadable' => false,
+            ]
+        );
         
-        \App\Models\Product::create([
-            'category_id' => $assignCat->id,
-            'title' => 'Java Programming Lab Manual',
-            'slug' => 'java-lab-manual',
-            'description' => 'Detailed lab manual for Java programming.',
-            'price' => 150.00,
-            'file_path' => 'products/java_lab.pdf',
-            'is_active' => true,
-            'is_downloadable' => true,
-        ]);
+        \App\Models\Product::updateOrCreate(
+            ['slug' => 'java-lab-manual'],
+            [
+                'category_id' => $assignCat->id,
+                'title' => 'Java Programming Lab Manual',
+                'description' => 'Detailed lab manual for Java programming.',
+                'price' => 150.00,
+                'file_path' => 'products/java_lab.pdf',
+                'is_active' => true,
+                'is_downloadable' => true,
+            ]
+        );
     }
 }

@@ -10,16 +10,19 @@ class FeaturedContentController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->latest()->get();
+        $products = Product::with('category')->latest()->paginate(10);
         return view('admin.featured.index', compact('products'));
     }
 
     public function update(Request $request)
     {
+        $allIds = $request->input('all_ids', []);
         $featuredIds = $request->input('featured_ids', []);
 
-        // Reset all featured status
-        Product::query()->update(['is_featured' => false]);
+        // Reset featured status ONLY for products on this page
+        if (!empty($allIds)) {
+            Product::whereIn('id', $allIds)->update(['is_featured' => false]);
+        }
 
         // Set selected as featured
         if (!empty($featuredIds)) {

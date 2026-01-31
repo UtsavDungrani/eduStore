@@ -40,14 +40,15 @@ class ProductController extends Controller
             'original_price' => 'nullable|numeric|min:0',
             'offer_price' => 'nullable|numeric|min:0',
             'sale_tag' => 'nullable|string|max:50',
-            'product_file' => 'required|file|mimes:pdf,zip,jpg,png,doc,docx|max:307200', // 300MB
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB
+            'product_file' => 'required|file|mimes:pdf|max:307200', // 300MB
+            'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB
             'is_active' => 'boolean',
             'is_downloadable' => 'boolean',
             'is_featured' => 'boolean',
             'is_demo' => 'boolean',
-            'show_sale_tag' => 'boolean',
             'is_recent' => 'boolean',
+            'sale_percentage' => 'nullable|integer|min:0|max:100',
+            'sale_display_mode' => 'nullable|string|in:tag,percentage',
         ]);
 
         $filePath = $request->file('product_file')->store('products', 'private');
@@ -75,8 +76,11 @@ class ProductController extends Controller
             'is_downloadable' => $request->has('is_downloadable'),
             'is_featured' => $request->has('is_featured'),
             'is_demo' => $request->has('is_demo'),
-            'show_sale_tag' => $request->has('show_sale_tag'),
             'is_recent' => $request->has('is_recent'),
+            'sale_percentage' => $request->sale_percentage,
+            'sale_display_mode' => $request->sale_display_mode ?? 'tag',
+            'highlight_badge' => $request->highlight_badge,
+            'highlight_badge_shape' => $request->highlight_badge_shape ?? 'pill',
         ]);
 
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
@@ -103,14 +107,15 @@ class ProductController extends Controller
             'original_price' => 'nullable|numeric|min:0',
             'offer_price' => 'nullable|numeric|min:0',
             'sale_tag' => 'nullable|string|max:50',
-            'product_file' => 'nullable|file|mimes:pdf,zip,jpg,png,doc,docx|max:307200',
+            'product_file' => 'nullable|file|mimes:pdf|max:307200',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'is_active' => 'boolean',
             'is_downloadable' => 'boolean',
             'is_featured' => 'boolean',
             'is_demo' => 'boolean',
-            'show_sale_tag' => 'boolean',
             'is_recent' => 'boolean',
+            'sale_percentage' => 'nullable|integer|min:0|max:100',
+            'sale_display_mode' => 'nullable|string|in:tag,percentage',
         ]);
 
         if (auth()->user()->hasRole('Instructor') && $product->user_id !== auth()->id()) {
@@ -137,8 +142,11 @@ class ProductController extends Controller
             'is_downloadable' => $request->has('is_downloadable'),
             'is_featured' => $request->has('is_featured'),
             'is_demo' => $request->has('is_demo'),
-            'show_sale_tag' => $request->has('show_sale_tag'),
             'is_recent' => $request->has('is_recent'),
+            'sale_percentage' => $request->sale_percentage,
+            'sale_display_mode' => $request->sale_display_mode ?? 'tag',
+            'highlight_badge' => $request->highlight_badge,
+            'highlight_badge_shape' => $request->highlight_badge_shape ?? 'pill',
         ];
 
         if ($request->hasFile('product_file')) {

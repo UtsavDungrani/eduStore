@@ -67,9 +67,51 @@
                         <input type="number" step="0.01" name="offer_price" value="{{ old('offer_price', $product->offer_price) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
                     </div>
 
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Sale Badge Tag</label>
-                        <input type="text" name="sale_tag" value="{{ old('sale_tag', $product->sale_tag) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="HOT, SALE, 50% OFF">
+                    <div class="md:col-span-2 bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                        <label class="block text-sm font-bold text-gray-700 mb-4 flex items-center gap-2">
+                            <i class="fas fa-tag text-primary"></i> Sale Display Preference
+                        </label>
+                        
+                        <div class="flex flex-wrap gap-6 mb-6">
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="radio" name="sale_display_mode" value="tag" {{ old('sale_display_mode', $product->sale_display_mode ?? 'tag') === 'tag' ? 'checked' : '' }} class="w-5 h-5 text-primary focus:ring-primary border-gray-300">
+                                <span class="text-sm font-bold text-gray-700 group-hover:text-primary transition-colors">Use Custom Tag</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="radio" name="sale_display_mode" value="percentage" {{ old('sale_display_mode', $product->sale_display_mode) === 'percentage' ? 'checked' : '' }} class="w-5 h-5 text-primary focus:ring-primary border-gray-300">
+                                <span class="text-sm font-bold text-gray-700 group-hover:text-primary transition-colors">Use Percentage (%)</span>
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div id="sale_tag_container">
+                                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Sale Badge Tag</label>
+                                <input type="text" name="sale_tag" value="{{ old('sale_tag', $product->sale_tag) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="HOT, SALE">
+                            </div>
+                            <div id="sale_percentage_container" class="hidden">
+                                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Sale Percentage (%)</label>
+                                <input type="number" name="sale_percentage" value="{{ old('sale_percentage', $product->sale_percentage) }}" min="0" max="100" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="e.g. 20">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-gray-100">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                                    <i class="fas fa-star text-amber-500"></i> Highlight Badge <span class="text-xs font-normal text-gray-400">(Optional)</span>
+                                </label>
+                                <input type="text" name="highlight_badge" value="{{ old('highlight_badge', $product->highlight_badge) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="e.g. Most Bought">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                                    <i class="fas fa-shapes text-primary"></i> Badge Shape
+                                </label>
+                                <select name="highlight_badge_shape" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
+                                    <option value="pill" {{ old('highlight_badge_shape', $product->highlight_badge_shape) == 'pill' ? 'selected' : '' }}>Pill (Rounded)</option>
+                                    <option value="soft_rectangle" {{ old('highlight_badge_shape', $product->highlight_badge_shape) == 'soft_rectangle' ? 'selected' : '' }}>Soft Rectangle</option>
+                                    <option value="tag" {{ old('highlight_badge_shape', $product->highlight_badge_shape) == 'tag' ? 'selected' : '' }}>Tag Style (Left-aligned)</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="md:col-span-2">
@@ -86,11 +128,11 @@
                                 <div class="flex text-sm text-gray-600">
                                     <label for="product_file" class="relative cursor-pointer rounded-md font-bold text-primary hover:text-amber-700 focus-within:outline-none">
                                         <span>Upload new file</span>
-                                        <input id="product_file" name="product_file" type="file" class="sr-only">
+                                        <input id="product_file" name="product_file" type="file" accept=".pdf" class="sr-only">
                                     </label>
                                     <p class="pl-1">or drag and drop</p>
                                 </div>
-                                <p class="text-xs text-gray-500">PDF, ZIP, DOC up to 300MB</p>
+                                <p class="text-xs text-gray-500">PDF ONLY up to 300MB</p>
                             </div>
                         </div>
                         <div id="file-name" class="mt-2 text-sm font-bold text-primary italic truncate">Current: {{ basename($product->file_path) }}</div>
@@ -176,15 +218,6 @@
                             </label>
                         </div>
 
-                        <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group">
-                            <div class="mt-1">
-                                <input type="checkbox" name="show_sale_tag" id="show_sale_tag" value="1" {{ $product->show_sale_tag ? 'checked' : '' }} class="w-5 h-5 rounded text-primary focus:ring-primary border-gray-300">
-                            </div>
-                            <label for="show_sale_tag" class="cursor-pointer">
-                                <span class="block text-sm font-bold text-gray-700">Show Sale Badge</span>
-                                <span class="text-[10px] text-gray-400 group-hover:text-gray-500">Display triangular ribbon on card</span>
-                            </label>
-                        </div>
 
                         <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer group">
                             <div class="mt-1">
@@ -241,5 +274,25 @@
     isDemoCheckbox.addEventListener('change', togglePrice);
     // Initialize
     togglePrice();
+
+    // Sale Display Mode Logic
+    const displayModeRadios = document.querySelectorAll('input[name="sale_display_mode"]');
+    const tagContainer = document.getElementById('sale_tag_container');
+    const percentageContainer = document.getElementById('sale_percentage_container');
+
+    function updateSaleFields() {
+        const selectedMode = document.querySelector('input[name="sale_display_mode"]:checked').value;
+        if (selectedMode === 'tag') {
+            tagContainer.classList.remove('hidden');
+            percentageContainer.classList.add('hidden');
+        } else {
+            tagContainer.classList.add('hidden');
+            percentageContainer.classList.remove('hidden');
+        }
+    }
+
+    displayModeRadios.forEach(radio => radio.addEventListener('change', updateSaleFields));
+    // Initialize
+    updateSaleFields();
 </script>
 @endsection

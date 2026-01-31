@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [UserProduct::class, 'home'])->name('home');
 Route::get('/products', [UserProduct::class, 'index'])->name('products.index');
 Route::get('/products/{product:slug}', [UserProduct::class, 'show'])->name('products.show');
+Route::get('/buy/{product}', [UserProduct::class, 'buy'])->name('products.buy')->middleware('auth');
 
 // Authenticated User Routes
 Route::middleware(['auth', 'verified'])->group(function () {

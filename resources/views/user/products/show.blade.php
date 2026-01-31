@@ -1,11 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    $isDiscounted = ($product->original_price > $product->selling_price);
+    $savings = $isDiscounted ? ($product->original_price - $product->selling_price) : 0;
+    
+    $saleTag = null;
+    if ($product->sale_display_mode === 'percentage' && $product->sale_percentage) {
+        $saleTag = $product->sale_percentage . '% OFF';
+    } else {
+        $saleTag = $product->sale_tag;
+    }
+
+    if ($saleTag && str_contains($saleTag, '%') && !str_contains(strtoupper($saleTag), 'OFF')) {
+        $saleTag .= ' OFF';
+    }
+@endphp
 <div class="max-w-7xl mx-auto px-4 py-12">
     <div class="flex flex-col lg:flex-row gap-12">
         <!-- Product Image/Preview -->
         <div class="w-full lg:w-1/2">
-            <div class="bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100">
+            <div class="bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100 relative">
+                @if($saleTag)
+                    <div class="absolute top-0 right-0 w-24 h-24 overflow-hidden z-20 pointer-events-none">
+                        <div class="absolute top-4 -right-8 w-32 bg-red-600 text-white text-[12px] font-black py-1.5 text-center transform rotate-45 shadow-lg border-b border-white/20 uppercase tracking-tighter">
+                            {{ $saleTag }}
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Highlight Badge (Selectable Shape) -->
+                @if($product->highlight_badge)
+                    <div class="absolute {{ ($product->highlight_badge_shape ?? 'pill') === 'tag' ? 'top-6 left-0' : 'top-6 left-6' }} z-20 pointer-events-none scale-125 origin-left w-fit max-w-[calc(100%-1.5rem)]">
+                        @php
+                            $shapeClass = 'rounded-full'; // Default Pill
+                            $containerClass = 'px-4 py-1.5';
+                            if (($product->highlight_badge_shape ?? 'pill') === 'soft_rectangle') {
+                                $shapeClass = 'rounded-xl';
+                            } elseif (($product->highlight_badge_shape ?? 'pill') === 'tag') {
+                                $shapeClass = 'rounded-r-full rounded-l-none';
+                                $containerClass = 'pl-6 pr-5 py-2 -ml-1';
+                            }
+                        @endphp
+                        <!-- Premium Golden Badge -->
+                        <div class="bg-amber-400 bg-gradient-to-br from-[#FDE68A] via-[#F59E0B] to-[#B45309] text-black text-[13px] font-black {{ $containerClass }} {{ $shapeClass }} shadow-[0_10px_25px_rgba(0,0,0,0.4)] border-t border-white/50 border-l border-white/30 uppercase tracking-widest flex items-center gap-2.5 transition-all duration-300">
+                            <i class="fas fa-star text-[12px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] text-amber-950 shrink-0"></i>
+                            <span class="drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)] whitespace-nowrap">{{ $product->highlight_badge }}</span>
+                        </div>
+                    </div>
+                @endif
                 @if($product->image_path)
                     <img src="{{ $product->image_url }}" class="w-full aspect-[4/3] object-cover">
                 @else
@@ -43,53 +86,62 @@
             <h1 class="text-4xl font-extrabold text-gray-900 mb-4 leading-tight">{{ $product->title }}</h1>
             
             <!-- Pricing & Badges (Refined) -->
-            @php
-                $isDiscounted = ($product->original_price > $product->selling_price);
-                $savings = $isDiscounted ? ($product->original_price - $product->selling_price) : 0;
-                $saleTag = $product->sale_tag;
-                if ($saleTag && str_contains($saleTag, '%') && !str_contains(strtoupper($saleTag), 'OFF')) {
-                    $saleTag .= ' OFF';
-                }
-            @endphp
-
             <div class="bg-white border border-gray-100 rounded-3xl p-6 mb-10 shadow-sm relative overflow-hidden group">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 items-start relative z-10">
-                    <div>
-                        <div class="flex items-center gap-3 mb-2">
-                             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Exclusive Access</span>
-                             @if($isDiscounted)
-                                <span class="bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded-sm uppercase transform -skew-x-12">
-                                    Special Deal
-                                </span>
-                             @endif
-                        </div>
-
-                        <div class="flex items-baseline gap-4">
-                            <span class="text-5xl font-black text-primary">₹{{ number_format($product->selling_price, 2) }}</span>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-2">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Exclusive Access</span>
                             @if($isDiscounted)
-                                <span class="text-xl text-gray-400 line-through font-bold decoration-red-500/50">₹{{ number_format($product->original_price, 2) }}</span>
+                            <span class="bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded-sm uppercase transform -skew-x-12">
+                                Special Deal
+                            </span>
+                            @endif
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex items-baseline gap-4">
+                            <span class="text-3xl md:text-5xl font-black text-primary">₹{{ number_format($product->selling_price, 2) }}</span>
+                            @if($isDiscounted)
+                                <span class="text-lg md:text-xl text-gray-400 line-through font-bold decoration-red-500/50">₹{{ number_format($product->original_price, 2) }}</span>
                             @endif
                         </div>
 
-                        @if($isDiscounted)
-                            <p class="text-emerald-700 font-bold mt-2 flex items-center gap-2 text-sm">
-                                <i class="fas fa-circle-check"></i> Instant Savings: ₹{{ number_format($savings, 2) }}
-                            </p>
-                        @endif
-                    </div>
-
-                    @if(($product->show_sale_tag ?? true) && $saleTag)
-                        <div class="flex flex-col items-center gap-1 bg-red-50 border border-red-100 px-6 py-3 rounded-2xl shadow-sm animate-bounce">
-                            <span class="text-2xl font-black text-red-600 leading-none">{{ $saleTag }}</span>
-                            <span class="text-[10px] uppercase font-bold text-red-700 tracking-tighter opacity-70 italic whitespace-nowrap">Offer Applied</span>
-                        </div>
-                    @else
-                        <div class="bg-green-50 text-green-700 border border-green-100 px-5 py-3 rounded-2xl">
-                            <span class="text-xs font-bold uppercase tracking-widest flex items-center gap-2 whitespace-nowrap">
+                        <div class="bg-green-50 text-green-700 border border-green-100 px-3 py-1.5 md:px-5 md:py-3 rounded-2xl flex items-center">
+                            <span class="text-[10px] md:text-xs font-bold uppercase tracking-widest flex items-center gap-2 whitespace-nowrap">
                                 <i class="fas fa-check-circle"></i> Lifetime Access
                             </span>
                         </div>
+                    </div>
+
+                    @if($isDiscounted)
+                        <p class="text-emerald-700 font-bold mt-2 flex items-center gap-2 text-sm">
+                            <i class="fas fa-circle-check"></i> Instant Savings: ₹{{ number_format($savings, 2) }}
+                        </p>
                     @endif
+                </div>
+
+                @php
+                    $activeMethod = $siteSettings['active_payment_method'] ?? 'razorpay';
+                @endphp
+
+                <!-- Buy Now Button -->
+                <div class="mt-8 relative z-10">
+                    @auth
+                        @if(!($product->price == 0 || $product->is_demo || auth()->user()->hasRole('Super Admin') || auth()->user()->hasPurchased($product->id)))
+                            @if($activeMethod == 'razorpay' || $activeMethod == 'both')
+                                <button id="rzp-button" class="w-full bg-primary text-white py-4 rounded-2xl font-bold hover:opacity-90 transition-all shadow-lg flex items-center justify-center gap-3 relative overflow-hidden group">
+                                    <span class="absolute inset-0 bg-white/20 group-hover:translate-x-full transition-transform duration-500 ease-out -skew-x-12"></span>
+                                    <span class="relative">Buy Now - ₹{{ number_format($product->selling_price, 2) }}</span>
+                                    <i class="fas fa-arrow-right relative"></i>
+                                </button>
+                            @endif
+                        @endif
+                    @else
+                        <a href="{{ route('products.buy', $product->id) }}" class="w-full bg-primary text-white py-4 rounded-2xl font-bold hover:opacity-90 transition-all shadow-lg flex items-center justify-center gap-3 relative overflow-hidden group">
+                            <span class="absolute inset-0 bg-white/20 group-hover:translate-x-full transition-transform duration-500 ease-out -skew-x-12"></span>
+                            <span class="relative">Buy Now - ₹{{ number_format($product->selling_price, 2) }}</span>
+                            <i class="fas fa-arrow-right relative"></i>
+                        </a>
+                    @endauth
                 </div>
                 
                 <!-- Background Decoration -->
@@ -117,49 +169,6 @@
                 @else
                     <!-- Payment Options -->
                     <div class="space-y-6" x-data="{ showManualForm: false }">
-                        @php
-                            $activeMethod = $siteSettings['active_payment_method'] ?? 'razorpay';
-                            $showUpiApps = $siteSettings['upi_apps_visibility'] ?? 'show';
-                        @endphp
-                        
-                        @if($activeMethod == 'razorpay' || $activeMethod == 'both')
-                            <!-- Razorpay Section -->
-                                <button id="rzp-button" class="w-full bg-primary text-white py-4 rounded-2xl font-bold hover:opacity-90 transition-all shadow-lg flex items-center justify-center gap-3 relative overflow-hidden group">
-                                    <span class="absolute inset-0 bg-white/20 group-hover:translate-x-full transition-transform duration-500 ease-out -skew-x-12"></span>
-                                    <span class="relative">Pay Now - ₹{{ number_format($product->selling_price, 2) }}</span>
-                                    <i class="fas fa-arrow-right relative"></i>
-                                </button>
-
-                                @if($showUpiApps == 'show')
-                                    <div class="mt-4 pt-4 border-t border-indigo-100">
-                                        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 text-center">Pay via UPI App</p>
-                                        <div class="flex justify-center gap-4 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all">
-                                            <!-- UPI App Icons (Simulated with text/FA for now as requested plan didn't provide assets) -->
-                                            <button class="flex flex-col items-center gap-1 group" onclick="document.getElementById('rzp-button').click()">
-                                                <div class="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center group-hover:border-primary transition-colors">
-                                                    <i class="fab fa-google-pay text-2xl text-gray-600 group-hover:text-primary"></i>
-                                                </div>
-                                                <span class="text-[10px] font-bold text-gray-400">GPay</span>
-                                            </button>
-                                            <button class="flex flex-col items-center gap-1 group" onclick="document.getElementById('rzp-button').click()">
-                                                <div class="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center group-hover:border-purple-500 transition-colors">
-                                                    <i class="fas fa-mobile-alt text-2xl text-gray-600 group-hover:text-purple-500"></i>
-                                                </div>
-                                                <span class="text-[10px] font-bold text-gray-400">PhonePe</span>
-                                            </button>
-                                            <button class="flex flex-col items-center gap-1 group" onclick="document.getElementById('rzp-button').click()">
-                                                <div class="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center group-hover:border-blue-400 transition-colors">
-                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg" class="h-4 opacity-60 group-hover:opacity-100"> 
-                                                    <!-- Fallback if img breaks or blocked -->
-                                                </div>
-                                                <span class="text-[10px] font-bold text-gray-400">Paytm</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                        @endif
-
                         @if($activeMethod == 'manual' || $activeMethod == 'both')
                             <!-- Manual Payment Manual -->
                             <div class="bg-gray-900 rounded-3xl p-6 text-white overflow-hidden relative">
@@ -269,12 +278,20 @@
                             e.preventDefault();
                         }
                     </script>
+
+                    @if(session('trigger_purchase'))
+                        <script>
+                            window.addEventListener('load', function() {
+                                setTimeout(function() {
+                                    const buyBtn = document.getElementById('rzp-button');
+                                    if (buyBtn) {
+                                        buyBtn.click();
+                                    }
+                                }, 800);
+                            });
+                        </script>
+                    @endif
                 @endif
-            @else
-                <div class="bg-gray-100 rounded-3xl p-8 text-center border-2 border-dashed border-gray-300">
-                    <p class="text-gray-600 mb-6 font-medium">Please login to access this content.</p>
-                    <a href="{{ route('login') }}" class="inline-block bg-primary text-white px-10 py-4 rounded-2xl font-bold hover:opacity-90 transition-all">Login / Register</a>
-                </div>
             @endauth
 
             <div class="mt-12 p-6 bg-red-50 rounded-2xl border border-red-100">

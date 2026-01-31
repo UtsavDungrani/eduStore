@@ -155,6 +155,6 @@
     };
 
     main({emitEvents: false});
-    setInterval(main, 2000); // Increased from 500ms to 2000ms
+    // setInterval(main, 2000); // Disabled aggressive checking for developer comfort
 
 })();

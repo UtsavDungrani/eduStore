@@ -24,6 +24,10 @@ class Product extends Model
         'is_recent',
         'is_demo',
         'show_sale_tag',
+        'sale_percentage',
+        'sale_display_mode',
+        'highlight_badge',
+        'highlight_badge_shape',
     ];
 
     public function instructor()
@@ -43,6 +47,7 @@ class Product extends Model
         'is_recent' => 'boolean',
         'is_demo' => 'boolean',
         'show_sale_tag' => 'boolean',
+        'sale_percentage' => 'integer',
     ];
 
     public function category()

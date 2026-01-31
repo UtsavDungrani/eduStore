@@ -10,16 +10,19 @@ class RecentContentController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->latest()->get();
+        $products = Product::with('category')->latest()->paginate(10);
         return view('admin.recent.index', compact('products'));
     }
 
     public function update(Request $request)
     {
+        $allIds = $request->input('all_ids', []);
         $recentIds = $request->input('recent_ids', []);
 
-        // Reset all recent status
-        Product::query()->update(['is_recent' => false]);
+        // Reset recent status ONLY for products on this page
+        if (!empty($allIds)) {
+            Product::whereIn('id', $allIds)->update(['is_recent' => false]);
+        }
 
         // Set selected as recent
         if (!empty($recentIds)) {
