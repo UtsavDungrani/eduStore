@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\PaymentRequest;
 use Illuminate\Http\Request;
+use App\Services\ImageService;
 
 class PaymentController extends Controller
 {
@@ -18,7 +19,7 @@ class PaymentController extends Controller
 
         $proofPath = null;
         if ($request->hasFile('payment_proof')) {
-            $proofPath = $request->file('payment_proof')->store('payments', 'public');
+            $proofPath = ImageService::compressAndStore($request->file('payment_proof'), 'payments', 'public');
         }
 
         PaymentRequest::create([

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Services\ImageService;
 
 class BannerController extends Controller
 {
@@ -23,7 +24,7 @@ class BannerController extends Controller
             'link' => 'nullable|string|max:255',
         ]);
 
-        $path = $request->file('image')->store('banners', 'public');
+        $path = ImageService::compressAndStore($request->file('image'), 'banners', 'public');
 
         Banner::create([
             'image_path' => $path,

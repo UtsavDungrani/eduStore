@@ -8,6 +8,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use App\Services\ImageService;
 
 class ProductController extends Controller
 {
@@ -53,7 +54,9 @@ class ProductController extends Controller
         ]);
 
         $filePath = $request->file('product_file')->store('products', 'private');
-        $imagePath = $request->hasFile('cover_image') ? $request->file('cover_image')->store('product_covers', 'public') : null;
+        $imagePath = $request->hasFile('cover_image') 
+            ? ImageService::compressAndStore($request->file('cover_image'), 'product_covers', 'public') 
+            : null;
 
         if (auth()->user()->hasRole('Instructor')) {
             $user_id = auth()->id();
@@ -160,7 +163,7 @@ class ProductController extends Controller
             if ($product->image_path) {
                 Storage::disk('public')->delete($product->image_path);
             }
-            $data['image_path'] = $request->file('cover_image')->store('product_covers', 'public');
+            $data['image_path'] = ImageService::compressAndStore($request->file('cover_image'), 'product_covers', 'public');
         }
 
         $product->update($data);
