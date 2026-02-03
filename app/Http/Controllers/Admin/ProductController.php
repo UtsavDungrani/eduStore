@@ -44,7 +44,8 @@ class ProductController extends Controller
             'sale_tag' => 'nullable|string|max:50',
             'product_file' => 'required|file|mimes:pdf|max:307200', // 300MB
             'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB
-            'demo_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'demo_images' => 'required|array|min:1',
+            'demo_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'is_active' => 'boolean',
             'is_downloadable' => 'boolean',
             'is_featured' => 'boolean',
@@ -136,6 +137,15 @@ class ProductController extends Controller
             'sale_display_mode' => 'nullable|string|in:tag,percentage',
             'highlight_badge' => 'nullable|string|in:' . implode(',', \App\Models\Product::HIGHLIGHT_BADGE_OPTIONS),
         ]);
+
+        // Custom Validation: Ensure at least one demo image remains
+        $currentImagesCount = $product->demoImages()->count();
+        $removeImagesCount = $request->has('remove_demo_images') ? count($request->remove_demo_images) : 0;
+        $newImagesCount = $request->hasFile('demo_images') ? count($request->file('demo_images')) : 0;
+
+        if (($currentImagesCount - $removeImagesCount + $newImagesCount) < 1) {
+            return back()->withErrors(['demo_images' => 'At least one demo image is required.'])->withInput();
+        }
 
         if (auth()->user()->hasRole('Instructor') && $product->user_id !== auth()->id()) {
             abort(403);

@@ -17,7 +17,7 @@
             class="fixed inset-0 z-[100] flex items-center justify-center px-4" x-cloak>
             <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" @click="showPreviewModal = false"></div>
             <div
-                class="bg-zinc-900 w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden relative shadow-2xl flex flex-col">
+                class="bg-zinc-900 w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden relative shadow-2xl flex flex-col -mt-16 md:mt-0">
                 <!-- Header -->
                 <div class="p-6 border-b border-white/10 flex items-center justify-between bg-zinc-900/50 backdrop-blur">
                     <div>
@@ -32,7 +32,7 @@
                 </div>
 
                 <!-- Content Area (Scrollable) -->
-                <div class="flex-1 overflow-y-auto p-6 bg-zinc-950/50 text-center" id="preview-container">
+                <div class="flex-1 overflow-y-auto p-6 pt-0 sm:pt-6 bg-zinc-950/50 text-center" id="preview-container">
                     <div x-show="loading" class="py-20">
                         <i class="fas fa-circle-notch fa-spin text-4xl text-primary"></i>
                         <p class="text-zinc-500 mt-4 text-sm font-medium animate-pulse">Loading preview...</p>
