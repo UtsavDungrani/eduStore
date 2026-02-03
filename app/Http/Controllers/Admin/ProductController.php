@@ -28,7 +28,9 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.products.create', compact('categories'));
+        $badge_options = Product::BADGE_STRIP_OPTIONS;
+        $badge_colors = Product::BADGE_STRIP_COLORS;
+        return view('admin.products.create', compact('categories', 'badge_options', 'badge_colors'));
     }
 
     public function store(Request $request)
@@ -53,7 +55,8 @@ class ProductController extends Controller
             'is_recent' => 'boolean',
             'sale_percentage' => 'nullable|integer|min:0|max:100',
             'sale_display_mode' => 'nullable|string|in:tag,percentage',
-            'highlight_badge' => 'nullable|string|in:' . implode(',', \App\Models\Product::HIGHLIGHT_BADGE_OPTIONS),
+            'badge_strip_text' => 'nullable|string|in:' . implode(',', \App\Models\Product::BADGE_STRIP_OPTIONS),
+            'badge_strip_color' => 'nullable|string|in:' . implode(',', array_keys(\App\Models\Product::BADGE_STRIP_COLORS)),
         ]);
 
         $filePath = $request->file('product_file')->store('products', 'private');
@@ -86,8 +89,8 @@ class ProductController extends Controller
             'is_recent' => $request->has('is_recent'),
             'sale_percentage' => $request->sale_percentage,
             'sale_display_mode' => 'percentage',
-            'highlight_badge' => $request->highlight_badge,
-            'highlight_badge_shape' => $request->highlight_badge_shape ?? 'pill',
+            'badge_strip_text' => $request->badge_strip_text,
+            'badge_strip_color' => $request->badge_strip_color ?? 'golden',
         ]);
 
         if ($request->hasFile('demo_images')) {
@@ -110,7 +113,9 @@ class ProductController extends Controller
         }
 
         $categories = Category::all();
-        return view('admin.products.edit', compact('product', 'categories'));
+        $badge_options = Product::BADGE_STRIP_OPTIONS;
+        $badge_colors = Product::BADGE_STRIP_COLORS;
+        return view('admin.products.edit', compact('product', 'categories', 'badge_options', 'badge_colors'));
     }
 
     public function update(Request $request, Product $product)
@@ -135,7 +140,8 @@ class ProductController extends Controller
             'is_recent' => 'boolean',
             'sale_percentage' => 'nullable|integer|min:0|max:100',
             'sale_display_mode' => 'nullable|string|in:tag,percentage',
-            'highlight_badge' => 'nullable|string|in:' . implode(',', \App\Models\Product::HIGHLIGHT_BADGE_OPTIONS),
+            'badge_strip_text' => 'nullable|string|in:' . implode(',', \App\Models\Product::BADGE_STRIP_OPTIONS),
+            'badge_strip_color' => 'nullable|string|in:' . implode(',', array_keys(\App\Models\Product::BADGE_STRIP_COLORS)),
         ]);
 
         // Custom Validation: Ensure at least one demo image remains
@@ -174,6 +180,8 @@ class ProductController extends Controller
             'is_recent' => $request->has('is_recent'),
             'sale_percentage' => $request->sale_percentage,
             'sale_display_mode' => 'percentage',
+            'badge_strip_text' => $request->badge_strip_text,
+            'badge_strip_color' => $request->badge_strip_color ?? 'golden',
         ];
 
         if ($request->hasFile('product_file')) {

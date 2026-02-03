@@ -79,32 +79,42 @@
             <!-- Product Image/Preview -->
             <div class="w-full lg:w-1/2">
                 <div class="bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100 relative">
-                    @if($saleTag)
-                        <div class="absolute top-0 right-0 w-24 h-24 overflow-hidden z-20 pointer-events-none">
-                            <div
-                                class="absolute top-4 -right-8 w-32 bg-red-600 text-white text-[12px] font-black py-1.5 text-center transform rotate-45 shadow-lg border-b border-white/20 uppercase tracking-tighter">
-                                {{ $saleTag }}
+                    <!-- Strips Container (both triangular, side by side) -->
+                    <div class="absolute top-0 right-0 flex gap-0 z-20 pointer-events-none">
+                        <!-- Badge Strip (Triangular - Strip 2) -->
+                        @if($product->badge_strip_text)
+                            @php
+                                $stripColor = $product->badge_strip_color ?? 'golden';
+                                $colorMap = [
+                                    'red' => '#DC2626',
+                                    'blue' => '#2563EB',
+                                    'green' => '#16A34A',
+                                    'golden' => '#D97706',
+                                    'black' => '#1F2937',
+                                    'pink' => '#EC4899',
+                                    'orange' => '#EA580C',
+                                ];
+                                $bgColor = $colorMap[$stripColor] ?? '#D97706';
+                            @endphp
+                            <!-- Badge Strip (Triangular - Strip 2) -->
+                            <div class="w-24 h-24 relative z-10">
+                                <div class="absolute top-4 -right-14 w-32 text-white text-[12px] font-black py-1.5 text-center transform rotate-45 shadow-lg border-b border-white/20 uppercase tracking-tighter"
+                                    style="background-color: {{ $bgColor }}; width:13rem; margin-right: -5.3125rem; margin-top: 1.6875rem;">
+                                    {{ $product->badge_strip_text }}
+                                </div>
                             </div>
-                        </div>
-                    @endif
+                        @endif
 
-                    <!-- Highlight Badge -->
-                    @if($product->highlight_badge)
-                        @php
-                            $shape = $product->highlight_badge_shape ?? 'pill';
-                            $color = $product->highlight_badge_color ?? 'golden';
-
-                            // Position Mapping
-                            $posClasses = 'top-6 left-6';
-                            if ($shape === 'banner')
-                                $posClasses = 'top-0 left-6';
-                            if ($shape === 'tag')
-                                $posClasses = 'top-6 left-0';
-                        @endphp
-                        <div class="absolute {{ $posClasses }} z-20 pointer-events-none">
-                            <span class="badge badge-{{ $shape }} badge-{{ $color }}">{{ $product->highlight_badge }}</span>
-                        </div>
-                    @endif
+                        <!-- Sale Strip (Triangular - Strip 1) -->
+                        @if($saleTag)
+                            <div class="w-24 h-24 overflow-hidden">
+                                <div
+                                    class="absolute top-4 -right-8 w-32 bg-red-600 text-white text-[12px] font-black py-1.5 text-center transform rotate-45 shadow-lg border-b border-white/20 uppercase tracking-tighter">
+                                    {{ $saleTag }}
+                                </div>
+                            </div>
+                        @endif
+                    </div>
                     @if($product->image_path)
                         <img src="{{ $product->image_url }}" class="w-full aspect-[4/3] object-cover">
                     @else
@@ -253,7 +263,8 @@
                                         <h3 class="text-xl font-bold mb-2 flex items-center gap-2 relative z-10"><i
                                                 class="fas fa-qrcode text-yellow-400"></i> Manual / QR Pay</h3>
                                         <p class="text-gray-400 mb-6 text-sm relative z-10">Scan QR or Transfer to
-                                            <strong>{{ $siteSettings['upi_id'] ?? 'N/A' }}</strong></p>
+                                            <strong>{{ $siteSettings['upi_id'] ?? 'N/A' }}</strong>
+                                        </p>
 
                                         @if(!empty($siteSettings['qr_code_url']))
                                             <div class="flex justify-center mb-6">
@@ -333,7 +344,7 @@
                                             @else
                                                 window.location.href = "{{ route('products.buy', $product->id) }}";
                                             @endauth
-                                                },
+                                                            },
 
                                         async loadPreview() {
                                             this.loading = true;

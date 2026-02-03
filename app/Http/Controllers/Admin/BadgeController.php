@@ -11,7 +11,7 @@ class BadgeController extends Controller
     public function index()
     {
         $query = Product::with('category');
-        
+
         if (auth()->user()->hasRole('Instructor')) {
             $query->where('user_id', auth()->id());
         }
@@ -32,9 +32,8 @@ class BadgeController extends Controller
     public function update(Request $request, Product $product)
     {
         $request->validate([
-            'highlight_badge' => 'nullable|string|in:' . implode(',', \App\Models\Product::HIGHLIGHT_BADGE_OPTIONS),
-            'highlight_badge_shape' => 'required|string|in:' . implode(',', array_keys(\App\Models\Product::HIGHLIGHT_BADGE_SHAPES)),
-            'highlight_badge_color' => 'required|string|in:' . implode(',', array_keys(\App\Models\Product::HIGHLIGHT_BADGE_COLORS)),
+            'badge_strip_text' => 'nullable|string|in:' . implode(',', \App\Models\Product::BADGE_STRIP_OPTIONS),
+            'badge_strip_color' => 'required_if:badge_strip_text,!null|string|in:' . implode(',', array_keys(\App\Models\Product::BADGE_STRIP_COLORS)),
         ]);
 
         if (auth()->user()->hasRole('Instructor') && $product->user_id !== auth()->id()) {
@@ -42,9 +41,8 @@ class BadgeController extends Controller
         }
 
         $product->update([
-            'highlight_badge' => $request->highlight_badge,
-            'highlight_badge_shape' => $request->highlight_badge_shape ?? 'pill',
-            'highlight_badge_color' => $request->highlight_badge_color ?? 'golden',
+            'badge_strip_text' => $request->badge_strip_text,
+            'badge_strip_color' => $request->badge_strip_color ?? 'golden',
         ]);
 
         return redirect()->route('admin.badges.index')->with('success', 'Badge updated successfully.');

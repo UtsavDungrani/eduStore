@@ -73,6 +73,26 @@
                                 <label class="block text-sm font-bold text-gray-700 mb-2">Sale Percentage (%)</label>
                                 <input type="number" name="sale_percentage" value="{{ old('sale_percentage') }}" min="0" max="100" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary" placeholder="e.g. 20">
                             </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Badge Text (Optional)</label>
+                                <select name="badge_strip_text" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
+                                    <option value="">None</option>
+                                    @foreach($badge_options as $option)
+                                        <option value="{{ $option }}" {{ old('badge_strip_text') == $option ? 'selected' : '' }}>{{ $option }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Badge Color</label>
+                                <select name="badge_strip_color" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
+                                    <option value="">None</option>
+                                    @foreach($badge_colors as $key => $label)
+                                        <option value="{{ $key }}" {{ old('badge_strip_color') == $key ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
 

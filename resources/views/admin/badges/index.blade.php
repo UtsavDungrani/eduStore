@@ -3,8 +3,8 @@
 @section('content')
     <div class="flex items-center justify-between mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Product Badges</h1>
-            <p class="text-gray-500">Manage badge settings for all products.</p>
+            <h1 class="text-3xl font-bold text-gray-900">Product Strips</h1>
+            <p class="text-gray-500">Manage sale and badge strips for all products.</p>
         </div>
     </div>
 
@@ -15,9 +15,9 @@
                     <tr class="bg-gray-50 text-gray-500 text-[10px] uppercase font-bold">
                         <th class="px-6 py-4">Product</th>
                         <th class="px-6 py-4">Category</th>
-                        <th class="px-6 py-4">Badge Text</th>
-                        <th class="px-6 py-4">Shape</th>
-                        <th class="px-6 py-4">Color</th>
+                        <th class="px-6 py-4 w-32">Sale Strip</th>
+                        <th class="px-6 py-4 w-40">Badge Strip Text</th>
+                        <th class="px-6 py-4 w-32">Badge Color</th>
                         <th class="px-6 py-4">Preview</th>
                         <th class="px-6 py-4 text-right">Actions</th>
                     </tr>
@@ -42,38 +42,44 @@
                                     class="bg-gray-100 text-gray-600 px-2.5 py-1 rounded-lg text-xs font-medium">{{ $product->category->name }}</span>
                             </td>
                             <td class="px-6 py-4">
-                                @if($product->highlight_badge)
-                                    <span class="font-medium text-gray-700">{{ $product->highlight_badge }}</span>
+                                @if($product->sale_percentage)
+                                    <span class="font-medium text-red-600">{{ $product->sale_percentage }}% OFF</span>
                                 @else
-                                    <span class="text-gray-400 italic">No Badge</span>
+                                    <span class="text-gray-400 text-xs italic">None</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4">
-                                @if($product->highlight_badge_shape)
+                                @if($product->badge_strip_text)
+                                    <span class="font-medium text-gray-700">{{ $product->badge_strip_text }}</span>
+                                @else
+                                    <span class="text-gray-400 italic text-xs">No Badge</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4">
+                                @if($product->badge_strip_color)
                                     <span
-                                        class="text-xs text-gray-600">{{ \App\Models\Product::HIGHLIGHT_BADGE_SHAPES[$product->highlight_badge_shape] ?? 'N/A' }}</span>
+                                        class="text-xs text-gray-600">{{ \App\Models\Product::BADGE_STRIP_COLORS[$product->badge_strip_color] ?? 'N/A' }}</span>
                                 @else
                                     <span class="text-gray-400 text-xs">-</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4">
-                                @if($product->highlight_badge_color)
-                                    <span
-                                        class="text-xs text-gray-600">{{ \App\Models\Product::HIGHLIGHT_BADGE_COLORS[$product->highlight_badge_color] ?? 'N/A' }}</span>
-                                @else
-                                    <span class="text-gray-400 text-xs">-</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4">
-                                @if($product->highlight_badge)
+                                @if($product->badge_strip_text)
                                     @php
-                                        $shape = $product->highlight_badge_shape ?? 'pill';
-                                        $badgeColor = $product->highlight_badge_color ?? 'golden';
+                                        $colorMap = [
+                                            'red' => '#DC2626',
+                                            'blue' => '#2563EB',
+                                            'green' => '#16A34A',
+                                            'golden' => '#D97706',
+                                            'black' => '#1F2937',
+                                            'pink' => '#EC4899',
+                                            'orange' => '#EA580C',
+                                        ];
+                                        $bgColor = $colorMap[$product->badge_strip_color] ?? '#D97706';
                                     @endphp
-                                    <div class="flex items-center scale-75 origin-left">
-                                        <span class="badge badge-{{ $shape }} badge-{{ $badgeColor }}">
-                                            {!! $shape === 'banner' ? str_replace(' ', '<br>', $product->highlight_badge) : $product->highlight_badge !!}
-                                        </span>
+                                    <div class="inline-block px-3 py-1 text-white text-xs font-bold rounded text-center"
+                                        style="background-color: {{ $bgColor }};">
+                                        {{ $product->badge_strip_text }}
                                     </div>
                                 @else
                                     <span class="text-gray-400 text-xs">-</span>
@@ -82,7 +88,7 @@
                             <td class="px-6 py-4 text-right">
                                 <a href="{{ route('admin.badges.edit', $product->id) }}"
                                     class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-amber-900 transition-colors text-xs font-bold">
-                                    <i class="fas fa-edit"></i> Edit Badge
+                                    <i class="fas fa-edit"></i> Edit Strips
                                 </a>
                             </td>
                         </tr>

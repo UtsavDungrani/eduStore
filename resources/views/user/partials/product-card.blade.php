@@ -12,45 +12,52 @@
         @endif
         <!-- Category Badge Moved to Title -->
 
-        <!-- Sale Ribbon (Triangular) -->
+        <!-- Strips Container (both triangular, side by side) -->
         @php
             $displayTag = $product->sale_percentage ? $product->sale_percentage . '% OFF' : null;
         @endphp
-        @if($displayTag)
-            <div class="absolute top-0 right-0 w-20 h-20 overflow-hidden z-30 pointer-events-none">
-                <div
-                    class="absolute top-4 -right-8 w-28 bg-red-600 text-white text-xs font-black py-1 text-center transform rotate-45 shadow-md border-b border-white/20 uppercase tracking-tight">
-                    {{ $displayTag }}
+        <div class="absolute top-0 right-0 flex gap-0 z-30 pointer-events-none">
+            <!-- Badge Strip (Triangular - Strip 2) -->
+            @if($product->badge_strip_text)
+                @php
+                    $stripColor = $product->badge_strip_color ?? 'golden';
+                    $colorMap = [
+                        'red' => '#DC2626',
+                        'blue' => '#2563EB',
+                        'green' => '#16A34A',
+                        'golden' => '#D97706',
+                        'black' => '#1F2937',
+                        'pink' => '#EC4899',
+                        'orange' => '#EA580C',
+                    ];
+                    $bgColor = $colorMap[$stripColor] ?? '#D97706';
+                @endphp
+                <!-- Badge Strip (Triangular - Strip 2) -->
+                <div class="w-20 h-20 relative z-10" style="margin-right: -4rem; margin-top: 1rem;">
+                     <div class="absolute top-4 -right-12 w-32 text-white text-xs font-black py-1 text-center transform rotate-45 shadow-md border-b border-white/20 uppercase tracking-tight"
+                        style="background-color: {{ $bgColor }}; width: 10rem;">
+                        {{ $product->badge_strip_text }}
+                    </div>
                 </div>
-            </div>
-        @endif
+            @endif
 
-        <!-- Highlight Badge (Advanced Customizable) -->
-        @if($product->highlight_badge)
-            @php
-                $shape = $product->highlight_badge_shape ?? 'pill';
-                $color = $product->highlight_badge_color ?? 'golden';
-
-                // Position Mapping
-                $posClasses = 'top-3 left-3';
-                if ($shape === 'banner')
-                    $posClasses = 'top-0 left-3';
-                if ($shape === 'tag')
-                    $posClasses = 'top-3 left-0';
-            @endphp
-            <div class="absolute {{ $posClasses }} z-30 pointer-events-none">
-                <span
-                    class="badge badge-{{ $shape }} badge-{{ $color }} text-[10px] md:text-[11px] font-black uppercase tracking-widest shadow-[0_4px_12px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-110">
-                    {!! $shape === 'banner' ? str_replace(' ', '<br>', $product->highlight_badge) : $product->highlight_badge !!}
-                </span>
-            </div>
-        @endif
+            <!-- Sale Strip (Triangular - Strip 1) -->
+            @if($displayTag)
+                <div class="w-20 h-20 overflow-hidden">
+                    <div
+                        class="absolute top-4 -right-8 w-28 bg-red-600 text-white text-xs font-black py-1 text-center transform rotate-45 shadow-md border-b border-white/20 uppercase tracking-tight">
+                        {{ $displayTag }}
+                    </div>
+                </div>
+            @endif
+        </div>
     </div>
     <div class="p-6 flex-1 flex flex-col">
         <div class="flex justify-between items-start gap-2 mb-2">
             <h3
                 class="font-bold text-lg text-[#2C1810] line-clamp-2 font-serif group-hover:text-[#8B4513] transition-colors leading-tight">
-                {{ $product->title }}</h3>
+                {{ $product->title }}
+            </h3>
             <span
                 class="shrink-0 bg-[#FDF6E3] border border-[#D4AF37] rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#8B4513] whitespace-nowrap mt-1">{{ $product->category->name }}</span>
         </div>
@@ -91,39 +98,39 @@
                 </a>
             @else
                 <div x-data="{ 
-                        adding: false,
-                        inCart: false,
-                        checkCart() {
-                            let cart = JSON.parse(localStorage.getItem(window.CART_KEY) || '[]');
-                            this.inCart = cart.some(i => i.id === {{ $product->id }});
-                        },
-                        init() {
-                            this.checkCart();
-                            window.addEventListener('cart-updated', () => this.checkCart());
-                        },
-                        addToCart(e) {
-                             // Stop propagation if passed manually, just in case
-                             if(e) e.stopPropagation();
-
-                            @auth
-                                if (this.inCart) return;
-                                this.adding = true;
+                            adding: false,
+                            inCart: false,
+                            checkCart() {
                                 let cart = JSON.parse(localStorage.getItem(window.CART_KEY) || '[]');
-                                cart.push({
-                                    id: {{ $product->id }},
-                                    title: '{{ addslashes($product->title) }}',
-                                    price: {{ $product->selling_price }},
-                                    thumbnail: '{{ $product->image_path ? $product->image_url : "https://placehold.co/100x100/2C1810/ffffff?text=" . urlencode(substr($product->title, 0, 2)) }}',
-                                    qty: 1
-                                });
-                                localStorage.setItem(window.CART_KEY, JSON.stringify(cart));
-                                window.dispatchEvent(new CustomEvent('cart-updated'));
-                                setTimeout(() => { this.adding = false; }, 1000);
-                            @else
-                                window.location.href = '{{ route('login') }}';
-                            @endauth
-                        }
-                    }" @click.stop>
+                                this.inCart = cart.some(i => i.id === {{ $product->id }});
+                            },
+                            init() {
+                                this.checkCart();
+                                window.addEventListener('cart-updated', () => this.checkCart());
+                            },
+                            addToCart(e) {
+                                 // Stop propagation if passed manually, just in case
+                                 if(e) e.stopPropagation();
+
+                                @auth
+                                    if (this.inCart) return;
+                                    this.adding = true;
+                                    let cart = JSON.parse(localStorage.getItem(window.CART_KEY) || '[]');
+                                    cart.push({
+                                        id: {{ $product->id }},
+                                        title: '{{ addslashes($product->title) }}',
+                                        price: {{ $product->selling_price }},
+                                        thumbnail: '{{ $product->image_path ? $product->image_url : "https://placehold.co/100x100/2C1810/ffffff?text=" . urlencode(substr($product->title, 0, 2)) }}',
+                                        qty: 1
+                                    });
+                                    localStorage.setItem(window.CART_KEY, JSON.stringify(cart));
+                                    window.dispatchEvent(new CustomEvent('cart-updated'));
+                                    setTimeout(() => { this.adding = false; }, 1000);
+                                @else
+                                    window.location.href = '{{ route('login') }}';
+                                @endauth
+                            }
+                        }" @click.stop>
                     <button @click="addToCart($event)"
                         :class="inCart ? 'bg-emerald-600 cursor-default' : (adding ? 'bg-emerald-600 scale-95' : 'bg-[#2C1810] hover:bg-[#1A0D00]')"
                         class="text-white p-3 rounded-xl transition-all duration-300 relative overflow-hidden group/btn shadow-md hover:shadow-lg active:scale-95 border border-[#D4AF37]">

@@ -1,12 +1,10 @@
 @extends('layouts.admin')
 
 @section('content')
-    <x-badge-styles />
-
     <div class="mb-8">
         <a href="{{ route('admin.badges.index') }}" class="text-sm text-gray-500 hover:text-primary mb-2 inline-block"><i
                 class="fas fa-arrow-left"></i> Back to Badges</a>
-        <h1 class="text-3xl font-bold text-gray-900">Edit Badge: {{ $product->title }}</h1>
+        <h1 class="text-3xl font-bold text-gray-900">Edit Product Strips: {{ $product->title }}</h1>
     </div>
 
     <div class="max-w-4xl">
@@ -35,7 +33,7 @@
                 </div>
             @endif
 
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-8">
                 <!-- Product Info (Read-only) -->
                 <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
                     <div class="flex items-center gap-4">
@@ -50,63 +48,83 @@
                     </div>
                 </div>
 
-                <!-- Badge Settings -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-star text-amber-500"></i> Badge Text
-                        </label>
-                        <select name="highlight_badge" id="badge_text"
-                            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
-                            <option value="">None (No Badge)</option>
-                            @foreach(\App\Models\Product::HIGHLIGHT_BADGE_OPTIONS as $option)
-                                <option value="{{ $option }}" {{ old('highlight_badge', $product->highlight_badge) == $option ? 'selected' : '' }}>{{ $option }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-shapes text-primary"></i> Badge Shape
-                        </label>
-                        <select name="highlight_badge_shape" id="badge_shape"
-                            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
-                            @foreach(\App\Models\Product::HIGHLIGHT_BADGE_SHAPES as $value => $label)
-                                <option value="{{ $value }}" {{ old('highlight_badge_shape', $product->highlight_badge_shape ?? 'pill') == $value ? 'selected' : '' }}>{{ $label }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                            <i class="fas fa-palette text-primary"></i> Badge Color
-                        </label>
-                        <select name="highlight_badge_color" id="badge_color"
-                            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
-                            @foreach(\App\Models\Product::HIGHLIGHT_BADGE_COLORS as $value => $label)
-                                <option value="{{ $value }}" {{ old('highlight_badge_color', $product->highlight_badge_color ?? 'golden') == $value ? 'selected' : '' }}>{{ $label }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Live Preview -->
-                <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-xl border border-gray-200">
-                    <h3 class="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2">
-                        <i class="fas fa-eye text-primary"></i> Badge Preview
+                <!-- Strip 2: Badge Strip (Customizable) -->
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-tag text-primary"></i> Badge Strip
                     </h3>
-                    <div class="flex items-center justify-center min-h-[120px]">
-                        <span id="badge_preview" class="badge badge-pill badge-golden text-sm font-bold">
-                            {{ $product->highlight_badge ?: 'No Badge' }}
-                        </span>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Badge Text Selection -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                                <i class="fas fa-star text-amber-500"></i> Badge Text
+                            </label>
+                            <select name="badge_strip_text" id="badge_text"
+                                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
+                                <option value="">None (No Badge Strip)</option>
+                                @foreach(\App\Models\Product::BADGE_STRIP_OPTIONS as $option)
+                                    <option value="{{ $option }}" {{ old('badge_strip_text', $product->badge_strip_text ?? '') == $option ? 'selected' : '' }}>
+                                        {{ $option }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Badge Color Selection -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                                <i class="fas fa-palette text-primary"></i> Badge Color
+                            </label>
+                            <select name="badge_strip_color" id="badge_color"
+                                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-primary focus:border-primary">
+                                @foreach(\App\Models\Product::BADGE_STRIP_COLORS as $value => $label)
+                                    <option value="{{ $value }}" {{ old('badge_strip_color', $product->badge_strip_color ?? 'golden') == $value ? 'selected' : '' }}>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Live Preview -->
+                    <div class="mt-6 bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-xl border border-gray-200">
+                        <h4 class="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2">
+                            <i class="fas fa-eye text-primary"></i> Preview
+                        </h4>
+                        <div class="flex items-center justify-center min-h-[80px]">
+                            <div id="preview_container" class="flex flex-col gap-4 items-center w-full max-w-xs">
+                                <!-- Sale Strip Preview -->
+                                <div
+                                    class="w-full relative h-24 bg-white rounded-lg border border-gray-200 overflow-hidden flex items-center justify-center">
+                                    <div class="absolute top-0 right-0 w-20 h-20 overflow-hidden z-10">
+                                        <div
+                                            class="absolute top-4 -right-8 w-28 bg-red-600 text-white text-xs font-black py-1 text-center transform rotate-45 shadow-md uppercase">
+                                            OFF
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-400">Sale Strip (Auto)</p>
+                                </div>
+
+                                <!-- Badge Strip Preview -->
+                                <div
+                                    class="w-full relative h-24 bg-white rounded-lg border border-gray-200 overflow-hidden flex items-center justify-center">
+                                    <div id="badge_preview"
+                                        class="badge-strip-preview text-white font-bold text-sm uppercase tracking-wide shadow-lg"
+                                        style="padding: 8px 20px; border-radius: 4px; background-color: #D97706;">
+                                        <span id="badge_preview_text">Most Bought</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex gap-3 pt-4">
+                <div class="flex gap-3 pt-4 border-t border-gray-100">
                     <button type="submit"
                         class="flex-1 bg-primary text-white py-4 rounded-2xl font-bold hover:bg-amber-900 transition-all shadow-lg flex items-center justify-center gap-2">
-                        <i class="fas fa-save"></i> Update Badge
+                        <i class="fas fa-save"></i> Save Strips
                     </button>
                     <a href="{{ route('admin.badges.index') }}"
                         class="flex-1 text-center py-4 rounded-2xl font-bold bg-gray-50 text-gray-500 hover:bg-gray-100 transition-all border border-gray-100">
@@ -118,36 +136,42 @@
     </div>
 
     <script>
+        // Color map for preview
+        const colorMap = {
+            'red': '#DC2626',
+            'blue': '#2563EB',
+            'green': '#16A34A',
+            'golden': '#D97706',
+            'black': '#1F2937',
+            'pink': '#EC4899',
+            'orange': '#EA580C',
+        };
+
         // Live preview update
         const badgeText = document.getElementById('badge_text');
-        const badgeShape = document.getElementById('badge_shape');
         const badgeColor = document.getElementById('badge_color');
         const badgePreview = document.getElementById('badge_preview');
+        const badgePreviewText = document.getElementById('badge_preview_text');
 
         function updatePreview() {
             const text = badgeText.value || 'No Badge';
-            const shape = badgeShape.value || 'pill';
             const color = badgeColor.value || 'golden';
 
-            // Update text content
-            badgePreview.textContent = text;
+            // Update text
+            badgePreviewText.textContent = text;
 
-            // Reset all classes
-            badgePreview.className = 'badge';
+            // Update color
+            badgePreview.style.backgroundColor = colorMap[color] || colorMap['golden'];
 
-            // Add shape and color classes
-            badgePreview.classList.add('badge-' + shape);
-            badgePreview.classList.add('badge-' + color);
-            badgePreview.classList.add('text-sm', 'font-bold');
+            // Hide preview if no text selected
+            if (!badgeText.value) {
+                badgePreview.style.opacity = '0.3';
+            } else {
+                badgePreview.style.opacity = '1';
+            }
         }
 
-        badgeText.addEventListener('input', updatePreview);
-        badgeShape.addEventListener('input', updatePreview);
-        badgeColor.addEventListener('input', updatePreview);
-
-        // Also listen to 'change' event for better compatibility
         badgeText.addEventListener('change', updatePreview);
-        badgeShape.addEventListener('change', updatePreview);
         badgeColor.addEventListener('change', updatePreview);
 
         // Initialize preview

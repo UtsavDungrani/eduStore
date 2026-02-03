@@ -6,45 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    public const HIGHLIGHT_BADGE_OPTIONS = [
+    // Strip 1: Sale Strip (Triangular, always red)
+    // Already handled by sale_percentage field
+
+    // Strip 2: Badge Strip (Simple, color configurable)
+    public const BADGE_STRIP_OPTIONS = [
         'Most Bought',
         'New Arrivals',
         'Trending',
         'Best Seller',
-        'SALE',
-        'OFFER',
     ];
 
-    public const HIGHLIGHT_BADGE_SHAPES = [
-        // Basic Shapes
-        'pill' => 'Pill (Rounded)',
-        'soft_rectangle' => 'Soft Rectangle',
-        'tag' => 'Tag Style (Left)',
-        'circle' => 'Circle',
-        'square' => 'Square',
-
-        // Angled & Ribbon Styles
-        'banner' => 'Banner Style',
-        'flag' => 'Flag Style',
-        'arrow' => 'Arrow Style',
-        'ribbon_left' => 'Ribbon (Left Side)',
-        'ribbon_right' => 'Ribbon (Right Side)',
-        'sticker' => 'Sticker (Rotated)',
-        'sticker_circle' => 'Sticker Circle',
-        'label' => 'Label (Folded)',
-        'stripe' => 'Stripe (Angled)',
-        'diamond' => 'Diamond Shape',
-        'star' => 'Star Burst',
-        'splat' => 'Paint Splat',
-    ];
-
-
-
-    public const HIGHLIGHT_BADGE_COLORS = [
-        'golden' => 'Golden (Premium)',
+    public const BADGE_STRIP_COLORS = [
         'red' => 'Red / Hot',
         'blue' => 'Blue / Info',
         'green' => 'Green / Success',
+        'golden' => 'Golden / Premium',
         'black' => 'Black / Dark',
         'pink' => 'Pink / Special',
         'orange' => 'Orange / Warning',
@@ -70,10 +47,8 @@ class Product extends Model
         'show_sale_tag',
         'sale_percentage',
         'sale_display_mode',
-        'highlight_badge',
-        'highlight_badge_shape',
-
-        'highlight_badge_color',
+        'badge_strip_text',
+        'badge_strip_color',
     ];
 
     public function instructor()
