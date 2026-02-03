@@ -94,7 +94,7 @@
                                         <span>Upload a file</span>
                                         <input id="product_file" name="product_file" type="file" required accept=".pdf" class="sr-only">
                                     </label>
-                                    <p class="pl-1">or drag and drop</p>y
+                                    <p class="pl-1">or drag and drop</p>
                                 </div>
                                 <p class="text-xs text-gray-500">PDF ONLY up to 300MB</p>
                             </div>
@@ -121,13 +121,32 @@
                         <div id="image-name" class="mt-2 text-sm text-primary font-bold"></div>
                         @error('cover_image')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
                     </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Demo/Sample Images <span class="text-xs font-normal text-gray-400">(Optional - Max 2MB each)</span></label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-2xl relative group hover:border-primary transition-colors">
+                            <div class="space-y-1 text-center">
+                                <i class="fas fa-images text-4xl text-gray-300 group-hover:text-primary transition-colors"></i>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="demo_images" class="relative cursor-pointer rounded-md font-bold text-primary hover:text-amber-700 focus-within:outline-none">
+                                        <span>Upload demo images</span>
+                                        <input id="demo_images" name="demo_images[]" type="file" multiple accept="image/*" class="sr-only">
+                                    </label>
+                                    <p class="pl-1">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">You can select multiple images</p>
+                            </div>
+                        </div>
+                        <div id="demo-images-list" class="mt-2 space-y-1"></div>
+                        @error('demo_images.*')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
+                    </div>
                 </div>
             </div>
 
             <!-- Sidebar -->
             <div class="w-full lg:w-80 space-y-6">
                 <!-- Status & Visibility Card -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 sticky top-24">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <h3 class="text-lg font-bold text-gray-900 mb-5 pb-2 border-b border-gray-50 flex items-center gap-2">
                         <i class="fas fa-cog text-primary"></i> settings
                     </h3>
@@ -209,6 +228,24 @@
     document.getElementById('cover_image').addEventListener('change', function(e) {
         if (e.target.files.length > 0) {
             document.getElementById('image-name').textContent = 'Selected Image: ' + e.target.files[0].name;
+        }
+    });
+
+    document.getElementById('demo_images').addEventListener('change', function(e) {
+        const list = document.getElementById('demo-images-list');
+        list.innerHTML = '';
+        if (e.target.files.length > 0) {
+            const count = document.createElement('div');
+            count.className = 'text-sm font-bold text-primary';
+            count.textContent = e.target.files.length + ' images selected:';
+            list.appendChild(count);
+            
+            Array.from(e.target.files).forEach(file => {
+                const item = document.createElement('div');
+                item.className = 'text-xs text-gray-500';
+                item.textContent = '- ' + file.name;
+                list.appendChild(item);
+            });
         }
     });
 

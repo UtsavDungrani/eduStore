@@ -131,13 +131,56 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="md:col-span-2 border-t border-gray-100 pt-6 mt-4">
+                        <label class="block text-sm font-bold text-gray-700 mb-4">Demo/Sample Images</label>
+                        
+                        @if($product->demoImages->count() > 0)
+                            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 mb-6">
+                                @foreach($product->demoImages as $image)
+                                    <div class="relative group">
+                                        <div class="aspect-square rounded-xl overflow-hidden border border-gray-200">
+                                            <img src="{{ route('product.demo.serve', $image->id) }}" alt="Demo image" class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                                            <label class="flex flex-col items-center cursor-pointer text-white">
+                                                <input type="checkbox" name="remove_demo_images[]" value="{{ $image->id }}" class="sr-only">
+                                                <i class="fas fa-trash-alt text-xl mb-1 text-red-400"></i>
+                                                <span class="text-[10px] font-bold">Remove</span>
+                                            </label>
+                                        </div>
+                                        <div class="hidden group-has-[:checked]:flex absolute inset-0 bg-red-500/20 border-2 border-red-500 rounded-xl items-center justify-center">
+                                            <i class="fas fa-trash text-white text-2xl"></i>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <p class="text-xs text-gray-400 mb-6 font-bold">* Click on an image to mark for removal</p>
+                        @endif
+
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-2xl relative group hover:border-primary transition-colors">
+                            <div class="space-y-1 text-center">
+                                <i class="fas fa-images text-4xl text-gray-300 group-hover:text-primary transition-colors"></i>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="demo_images" class="relative cursor-pointer rounded-md font-bold text-primary hover:text-amber-700 focus-within:outline-none">
+                                        <span>Upload more demo images</span>
+                                        <input id="demo_images" name="demo_images[]" type="file" multiple accept="image/*" class="sr-only">
+                                    </label>
+                                    <p class="pl-1">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">JPG, PNG up to 2MB each</p>
+                            </div>
+                        </div>
+                        <div id="demo-images-list" class="mt-2 space-y-1"></div>
+                        @error('demo_images.*')<p class="mt-1 text-xs text-red-500 font-bold">{{ $message }}</p>@enderror
+                    </div>
                 </div>
             </div>
 
             <!-- Sidebar -->
             <div class="w-full lg:w-80 space-y-6">
                 <!-- Status & Visibility Card -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 sticky top-24">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <h3 class="text-lg font-bold text-gray-900 mb-5 pb-2 border-b border-gray-50 flex items-center gap-2">
                         <i class="fas fa-cog text-primary"></i> settings
                     </h3>
@@ -219,6 +262,24 @@
     document.getElementById('cover_image').addEventListener('change', function(e) {
         if (e.target.files.length > 0) {
             document.getElementById('image-name').textContent = 'New Image: ' + e.target.files[0].name;
+        }
+    });
+
+    document.getElementById('demo_images').addEventListener('change', function(e) {
+        const list = document.getElementById('demo-images-list');
+        list.innerHTML = '';
+        if (e.target.files.length > 0) {
+            const count = document.createElement('div');
+            count.className = 'text-sm font-bold text-primary';
+            count.textContent = e.target.files.length + ' new images selected:';
+            list.appendChild(count);
+            
+            Array.from(e.target.files).forEach(file => {
+                const item = document.createElement('div');
+                item.className = 'text-xs text-gray-500';
+                item.textContent = '- ' + file.name;
+                list.appendChild(item);
+            });
         }
     });
 

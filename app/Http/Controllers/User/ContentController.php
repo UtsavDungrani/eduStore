@@ -176,4 +176,22 @@ class ContentController extends Controller
         // Return the file for PDF.js to consume
         return Storage::disk('private')->response($product->file_path);
     }
+
+    /**
+     * Serve product demo images from storage
+     */
+    public function serveDemoImage(\App\Models\ProductDemoImage $demoImage)
+    {
+        if (!Storage::disk('public')->exists($demoImage->image_path)) {
+            abort(404, 'Demo image not found');
+        }
+
+        $path = Storage::disk('public')->path($demoImage->image_path);
+        $mimeType = Storage::disk('public')->mimeType($demoImage->image_path);
+
+        return response()->file($path, [
+            'Content-Type' => $mimeType,
+            'Cache-Control' => 'public, max-age=31536000', // Cache for 1 year
+        ]);
+    }
 }

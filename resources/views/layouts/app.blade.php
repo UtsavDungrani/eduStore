@@ -14,18 +14,27 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <!-- Badge Styles -->
+    <x-badge-styles />
+
     <!-- Scripts -->
     <!-- Scripts -->
     <!-- Tailwind Moved to Footer for Performance -->
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inconsolata:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inconsolata:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
-            --primary: {{ $brandColor }};
-            --primary-light: {{ $brandColor }}22;
+            --primary:
+                {{ $brandColor }}
+            ;
+            --primary-light:
+                {{ $brandColor }}
+                22;
         }
 
         [x-cloak] {
@@ -41,8 +50,10 @@
             width: 100%;
             overflow-x: hidden;
         }
+
         body {
-            font-family: 'Lora', 'Merriweather', serif; /* Body Font */
+            font-family: 'Lora', 'Merriweather', serif;
+            /* Body Font */
             background-color: #F8F1E9;
             min-height: 100vh;
             width: 100%;
@@ -51,11 +62,19 @@
             position: relative;
         }
 
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'EB Garamond', 'Playfair Display', serif; /* Heading Font */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'EB Garamond', 'Playfair Display', serif;
+            /* Heading Font */
         }
-        
-        pre, code, .font-mono {
+
+        pre,
+        code,
+        .font-mono {
             font-family: 'Inconsolata', monospace;
         }
 
@@ -72,7 +91,7 @@
             pointer-events: none;
             z-index: -1;
         }
-        
+
         /* Corner Curls Visual Element */
         .corner-curl {
             position: absolute;
@@ -81,8 +100,9 @@
             border-width: 0 40px 40px 0;
             border-style: solid;
             border-color: #FDF6E3 #f4f4f4;
-            box-shadow: -5px 5px 5px rgba(0,0,0,0.05);
-            display: none; /* Add to cards individually if needed */
+            box-shadow: -5px 5px 5px rgba(0, 0, 0, 0.05);
+            display: none;
+            /* Add to cards individually if needed */
         }
 
         /* Quill Hover Effect */
@@ -101,14 +121,19 @@
         }
 
         .section-cloud-card {
-            background: rgba(255, 255, 255, 0.85); /* More opaque */
-            backdrop-filter: blur(20px); /* Deeper blur */
+            background: rgba(255, 255, 255, 0.85);
+            /* More opaque */
+            backdrop-filter: blur(20px);
+            /* Deeper blur */
             -webkit-backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.8); /* Pronounced white border */
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            /* Pronounced white border */
             border-radius: 3rem;
-            box-shadow: 
-                0 20px 50px rgba(0, 0, 0, 0.1), /* Outer deep shadow */
-                inset 0 0 20px rgba(255, 255, 255, 0.5); /* Inner glow */
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.1),
+                /* Outer deep shadow */
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
+            /* Inner glow */
             padding: 3rem 2rem;
             margin-top: 3rem;
             margin-bottom: 5rem;
@@ -126,25 +151,36 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent,
-                rgba(255, 255, 255, 0.1),
-                transparent
-            );
+            background: linear-gradient(45deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.1),
+                    transparent);
             transform: rotate(45deg);
             animation: cardShine 12s linear infinite;
             pointer-events: none;
         }
 
         @keyframes cloudFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         @keyframes cardShine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            20%, 100% { transform: translateX(100%) rotate(45deg); }
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+
+            20%,
+            100% {
+                transform: translateX(100%) rotate(45deg);
+            }
         }
 
         .section-cloud-card:hover {
@@ -212,8 +248,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #F8F1E9; /* Parchment */
-            background-image: 
+            background-color: #F8F1E9;
+            /* Parchment */
+            background-image:
                 radial-gradient(#D4AF37 0.5px, transparent 0.5px),
                 radial-gradient(#D4AF37 0.5px, #F8F1E9 0.5px);
             background-size: 20px 20px;
@@ -248,7 +285,10 @@
         }
 
         @keyframes fadeInContent {
-            to { opacity: 1; transform: translateY(0); }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .text-glow {
@@ -256,8 +296,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Prevent scroll during loading but keep navbar visible */
@@ -273,7 +320,8 @@
             left: 0;
             right: 0;
             width: 100%;
-            height: 72px; /* Fixed height for stability */
+            height: 72px;
+            /* Fixed height for stability */
             z-index: 2147483647 !important;
             background-color: white !important;
             border-top: 1px solid #e5e7eb !important;
@@ -421,12 +469,12 @@
                 loadBooks() {
                     try {
                         let stored = JSON.parse(localStorage.getItem('my_library_books') || '[]');
-                        
+
                         // Backend Validation (Active on Library Page)
                         if (window.VALID_PRODUCT_IDS && Array.isArray(window.VALID_PRODUCT_IDS)) {
                             const initialCount = stored.length;
                             stored = stored.filter(book => window.VALID_PRODUCT_IDS.includes(book.id));
-                            
+
                             // If items were removed, update storage immediately
                             if (stored.length !== initialCount) {
                                 localStorage.setItem('my_library_books', JSON.stringify(stored));
@@ -496,7 +544,7 @@
 
         function hideLoader() {
             if (loaderHidden) return;
-            
+
             const loader = document.getElementById('loading-screen');
             if (loader) {
                 loader.style.opacity = '0';
@@ -516,40 +564,46 @@
     <!-- Loading Screen / Intro -->
     <div id="loading-screen" onclick="hideLoader()">
         <!-- Close Button -->
-        <button onclick="event.stopPropagation(); hideLoader()" class="absolute top-6 right-6 z-[10000] p-2 text-[#2C1810]/50 hover:text-[#2C1810] transition-colors duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <button onclick="event.stopPropagation(); hideLoader()"
+            class="absolute top-6 right-6 z-[10000] p-2 text-[#2C1810]/50 hover:text-[#2C1810] transition-colors duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
         <div class="loader-content w-full max-w-4xl mx-auto px-4">
             @if(request()->routeIs('home'))
                 <!-- Logic: Default to Simple Loader to prevent flash on return visits. Inline JS switches to Intro if needed. -->
-                
+
                 <!-- Intro Content (Hidden by default) -->
                 <div id="intro-content" class="hidden relative z-10 transition-opacity duration-1000">
                     <!-- Logo/Icon (Open Book) -->
                     <div class="mb-8 opacity-0 animate-[fadeIn_1.2s_ease-out_forwards]">
                         <div class="relative inline-block">
                             <div class="absolute inset-0 bg-[#D4AF37] blur-3xl opacity-20 animate-pulse"></div>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-28 w-28 md:h-36 md:w-36 mx-auto text-[#2C1810] relative z-10 drop-shadow-2xl" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-28 w-28 md:h-36 md:w-36 mx-auto text-[#2C1810] relative z-10 drop-shadow-2xl"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                             </svg>
                         </div>
                     </div>
 
                     <div class="space-y-6 opacity-0 animate-[fadeIn_1.2s_ease-out_0.6s_forwards]">
-                        <h1 class="text-4xl md:text-7xl font-bold text-[#2C1810] tracking-tight leading-[1.1] text-glow font-serif">
-                            Upgrade your learning <br/>
+                        <h1
+                            class="text-4xl md:text-7xl font-bold text-[#2C1810] tracking-tight leading-[1.1] text-glow font-serif">
+                            Upgrade your learning <br />
                             <span class="text-[#D4AF37] italic block mt-2 md:mt-4">with {{ $siteName }}</span>
                         </h1>
-                        
+
                         <div class="h-1 w-24 md:w-32 bg-[#D4AF37] mx-auto rounded-full opacity-60"></div>
-                        
+
                         <p class="text-[#2C1810]/70 text-lg md:text-xl font-medium tracking-wide max-w-2xl mx-auto">
                             Premium assignments, E-books, and study notes at your fingertips.
                         </p>
                     </div>
-                    
+
                     <div class="mt-16 opacity-0 animate-[fadeIn_1.2s_ease-out_1.2s_forwards]">
                         <p class="text-[#8B4513] text-sm md:text-base font-bold uppercase tracking-[0.3em] animate-pulse">
                             Click anywhere to enter
@@ -570,7 +624,7 @@
                         document.getElementById('intro-content').classList.add('block');
                         document.getElementById('simple-content').classList.add('hidden');
                         document.getElementById('simple-content').classList.remove('flex'); // remove flex if used
-                        
+
                         sessionStorage.setItem('intro_shown', 'true');
                         window.showIntroDelay = true; // Flag for the load listener
                     }
@@ -589,21 +643,22 @@
 
     <!-- Ensure navbar is visible immediately -->
     <script>
-            (function () {
-                const nav = document.getElementById('mobile-bottom-nav');
-                if (nav) {
-                    nav.style.display = 'flex';
-                    nav.style.position = 'fixed';
-                    nav.style.bottom = '0';
-                    nav.style.height = '72px';
-                    nav.style.zIndex = '2147483647';
-                    nav.style.overflow = 'hidden';
-                }
-            })();
+        (function () {
+            const nav = document.getElementById('mobile-bottom-nav');
+            if (nav) {
+                nav.style.display = 'flex';
+                nav.style.position = 'fixed';
+                nav.style.bottom = '0';
+                nav.style.height = '72px';
+                nav.style.zIndex = '2147483647';
+                nav.style.overflow = 'hidden';
+            }
+        })();
     </script>
 
     <!-- Navbar -->
-    <nav class="bg-surface/80 backdrop-blur-md border-b border-white/50 fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300">
+    <nav
+        class="bg-surface/80 backdrop-blur-md border-b border-white/50 fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
@@ -612,20 +667,20 @@
 
                 <!-- Mobile Login/Profile Button -->
                 @unless(request()->routeIs('products.show'))
-                <div class="flex items-center md:hidden">
-                    @auth
-                        <a href="{{ route('profile.edit') }}" class="text-primary p-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
-                                <path fill-rule="evenodd"
-                                    d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}"
-                            class="text-primary font-bold px-4 py-1 border border-primary rounded-full text-sm">Login</a>
-                    @endauth
-                </div>
+                    <div class="flex items-center md:hidden">
+                        @auth
+                            <a href="{{ route('profile.edit') }}" class="text-primary p-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                                    <path fill-rule="evenodd"
+                                        d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        @else
+                            <a href="{{ route('login') }}"
+                                class="text-primary font-bold px-4 py-1 border border-primary rounded-full text-sm">Login</a>
+                        @endauth
+                    </div>
                 @endunless
 
                 <!-- Desktop Menu -->
@@ -634,7 +689,8 @@
                     <a href="{{ route('products.index') }}"
                         class="text-gray-600 hover:text-primary font-medium">Browse</a>
                     @auth
-                        <a href="{{ route('library', ['tab' => 'library']) }}" class="text-gray-600 hover:text-primary font-medium">Library</a>
+                        <a href="{{ route('library', ['tab' => 'library']) }}"
+                            class="text-gray-600 hover:text-primary font-medium">Library</a>
                         @if(auth()->user()->hasRole('Super Admin'))
                             <a href="{{ route('admin.dashboard') }}"
                                 class="text-gray-600 hover:text-primary font-medium">Admin</a>
@@ -689,7 +745,8 @@
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-gray-500">&copy; {{ date('Y') }} {{ $siteName }}. All rights reserved.</p>
             <p class="text-gray-500 text-sm mt-2">
-                Developed by <a href="https://mbixflow.com/" target="_blank" class="hover:text-primary transition-colors">Mbixflow</a>
+                Developed by <a href="https://mbixflow.com/" target="_blank"
+                    class="hover:text-primary transition-colors">Mbixflow</a>
             </p>
         </div>
     </footer>
@@ -701,7 +758,7 @@
 
     <script>
         // Logic for Hide Delay
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             if (window.showIntroDelay) {
                 // If it was the intro, wait 3 seconds
                 setTimeout(hideLoader, 3000);
@@ -711,7 +768,7 @@
         });
 
         // Backup for immediate hide on DOMContentLoaded for non-intro pages 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             if (!window.showIntroDelay && !loaderHidden) {
                 hideLoader();
             }

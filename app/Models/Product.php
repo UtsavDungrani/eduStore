@@ -16,15 +16,26 @@ class Product extends Model
     ];
 
     public const HIGHLIGHT_BADGE_SHAPES = [
+        // Basic Shapes
         'pill' => 'Pill (Rounded)',
         'soft_rectangle' => 'Soft Rectangle',
         'tag' => 'Tag Style (Left)',
         'circle' => 'Circle',
         'square' => 'Square',
 
+        // Angled & Ribbon Styles
         'banner' => 'Banner Style',
         'flag' => 'Flag Style',
         'arrow' => 'Arrow Style',
+        'ribbon_left' => 'Ribbon (Left Side)',
+        'ribbon_right' => 'Ribbon (Right Side)',
+        'sticker' => 'Sticker (Rotated)',
+        'sticker_circle' => 'Sticker Circle',
+        'label' => 'Label (Folded)',
+        'stripe' => 'Stripe (Angled)',
+        'diamond' => 'Diamond Shape',
+        'star' => 'Star Burst',
+        'splat' => 'Paint Splat',
     ];
 
 
@@ -115,5 +126,10 @@ class Product extends Model
             return route('product.cover.serve', ['product' => $this->id]) . '?v=' . $this->updated_at->timestamp;
         }
         return null;
+    }
+
+    public function demoImages()
+    {
+        return $this->hasMany(ProductDemoImage::class)->orderBy('order');
     }
 }

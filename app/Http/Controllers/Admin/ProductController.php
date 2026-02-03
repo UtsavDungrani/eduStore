@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use App\Services\ImageService;
+use App\Models\ProductDemoImage;
 
 class ProductController extends Controller
 {
@@ -43,6 +44,7 @@ class ProductController extends Controller
             'sale_tag' => 'nullable|string|max:50',
             'product_file' => 'required|file|mimes:pdf|max:307200', // 300MB
             'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB
+            'demo_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'is_active' => 'boolean',
             'is_downloadable' => 'boolean',
             'is_featured' => 'boolean',
@@ -64,7 +66,7 @@ class ProductController extends Controller
             $user_id = $request->user_id;
         }
 
-        Product::create([
+        $product = Product::create([
             'category_id' => $request->category_id,
             'user_id' => $user_id,
             'title' => $request->title,
@@ -86,6 +88,16 @@ class ProductController extends Controller
             'highlight_badge' => $request->highlight_badge,
             'highlight_badge_shape' => $request->highlight_badge_shape ?? 'pill',
         ]);
+
+        if ($request->hasFile('demo_images')) {
+            foreach ($request->file('demo_images') as $index => $image) {
+                $path = ImageService::compressAndStore($image, 'product_demos', 'public');
+                $product->demoImages()->create([
+                    'image_path' => $path,
+                    'order' => $index,
+                ]);
+            }
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
     }
@@ -113,6 +125,8 @@ class ProductController extends Controller
             'sale_tag' => 'nullable|string|max:50',
             'product_file' => 'nullable|file|mimes:pdf|max:307200',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'demo_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'remove_demo_images.*' => 'nullable|exists:product_demo_images,id',
             'is_active' => 'boolean',
             'is_downloadable' => 'boolean',
             'is_featured' => 'boolean',
@@ -167,6 +181,30 @@ class ProductController extends Controller
         }
 
         $product->update($data);
+
+        // Remove selected demo images
+        if ($request->has('remove_demo_images')) {
+            $imagesToRemove = ProductDemoImage::whereIn('id', $request->remove_demo_images)
+                ->where('product_id', $product->id)
+                ->get();
+
+            foreach ($imagesToRemove as $image) {
+                Storage::disk('public')->delete($image->image_path);
+                $image->delete();
+            }
+        }
+
+        // Upload new demo images
+        if ($request->hasFile('demo_images')) {
+            $lastOrder = $product->demoImages()->max('order') ?? -1;
+            foreach ($request->file('demo_images') as $index => $image) {
+                $path = ImageService::compressAndStore($image, 'product_demos', 'public');
+                $product->demoImages()->create([
+                    'image_path' => $path,
+                    'order' => $lastOrder + $index + 1,
+                ]);
+            }
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }

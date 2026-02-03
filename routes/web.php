@@ -22,6 +22,7 @@ Route::get('/', [UserProduct::class, 'home'])->name('home');
 Route::get('/products', [UserProduct::class, 'index'])->name('products.index');
 Route::get('/products/{product:slug}', [UserProduct::class, 'show'])->name('products.show');
 Route::get('/buy/{product}', [UserProduct::class, 'buy'])->name('products.buy')->middleware('auth');
+
 Route::get('/demo-view/{product}', [UserContent::class, 'demoView'])->name('content.demo.view')->middleware('auth');
 Route::get('/demo-stream/{product}', [UserContent::class, 'demoStream'])->name('content.demo.stream')->middleware('auth');
 
@@ -57,31 +58,32 @@ Route::get('/stream/{product}', [UserContent::class, 'stream'])->name('content.s
 // Banner & Product Cover Image Serving (No symlink required)
 Route::get('/banner/{banner}', [UserContent::class, 'serveBanner'])->name('banner.serve');
 Route::get('/product-cover/{product}', [UserContent::class, 'serveCover'])->name('product.cover.serve');
+Route::get('/product-demo/{demoImage}', [UserContent::class, 'serveDemoImage'])->name('product.demo.serve');
 
 // Admin Routes (using roles)
 Route::middleware(['auth', 'role:Super Admin|Instructor'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminDashboard::class, 'index'])->name('dashboard');
-    
+
     // Analytics
     Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('analytics');
 
     // Instructor Payouts
     Route::get('/instructors/payouts', [\App\Http\Controllers\Admin\PayoutController::class, 'index'])->name('instructors.payouts');
-    
+
     Route::resource('products', AdminProduct::class);
-    
+
     // Badge Management
     Route::get('/badges', [AdminBadge::class, 'index'])->name('badges.index');
     Route::get('/badges/{product}/edit', [AdminBadge::class, 'edit'])->name('badges.edit');
     Route::patch('/badges/{product}', [AdminBadge::class, 'update'])->name('badges.update');
-    
+
     Route::resource('orders', AdminOrder::class)->only(['index', 'show']);
     Route::resource('payment-requests', \App\Http\Controllers\Admin\PaymentRequestController::class)->only(['index', 'show', 'update']);
 
     // Super Admin Only
     Route::middleware('role:Super Admin')->group(function () {
         Route::get('/logs', [AdminDashboard::class, 'index'])->name('logs');
-        
+
         // Featured Content Management
         Route::get('/featured', [\App\Http\Controllers\Admin\FeaturedContentController::class, 'index'])->name('featured.index');
         Route::post('/featured', [\App\Http\Controllers\Admin\FeaturedContentController::class, 'update'])->name('featured.update');
@@ -101,4 +103,4 @@ Route::middleware(['auth', 'role:Super Admin|Instructor'])->prefix('admin')->nam
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
